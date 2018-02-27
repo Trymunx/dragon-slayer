@@ -8,20 +8,10 @@
 import Message from "./Message";
 
 export default {
-  data() {
-    return {
-      messages: [
-        { entity: "Alpvax", message: "I'm helping you develop your game." },
-        { entity: "p-Dandy", message: "I'm fixing your broken shit." },
-        {
-          entity:
-            "This is a really long name that should break over a few lines",
-          message:
-            "I'm trying to help fix your broken shit. I'm trying to help fix your broken shit. I'm trying to help fix your broken shit. I'm trying to help fix your broken shit. I'm trying to help fix your broken shit."
-        },
-        { entity: "Me", message: "Thanks guys." }
-      ]
-    };
+  computed: {
+    messages() {
+      return this.$store.getters.messages;
+    }
   },
   components: {
     Message

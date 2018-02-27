@@ -1,11 +1,28 @@
 <template>
   <div id="input-bar">
-    > <input type="text" id="input-text"/>
+    > <input type="text" id="input-text" v-model="inputText" @keypress.enter="submit"/>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      inputText: ""
+    };
+  },
+  methods: {
+    submit() {
+      if (this.inputText) {
+        this.$store.dispatch("addMessage", {
+          entity: this.$store.getters.playerName,
+          message: this.inputText
+        });
+        this.inputText = "";
+      }
+    }
+  }
+};
 </script>
 
 <style scoped>
