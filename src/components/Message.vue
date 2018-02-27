@@ -17,6 +17,7 @@ export default {
   flex-shrink: 0;
   overflow-y: auto;
   min-width: 500px;
+  overflow-x: hidden;
 }
 
 .messages:last-child {
