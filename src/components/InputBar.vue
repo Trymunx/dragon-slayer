@@ -1,6 +1,6 @@
 <template>
   <div id="input-bar">
-    > <input type="text" id="input-text" v-model="inputText" @keypress.enter="submit"/>
+    > <input type="text" id="input-text" placeholder="Enter commands here..." v-model="inputText" @keypress.enter="submit"/>
   </div>
 </template>
 
