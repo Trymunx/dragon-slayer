@@ -16,17 +16,18 @@ export default {
 
 <style>
 .messages {
-  display: grid;
-  grid-template-columns: 160px 1fr;
-  grid-template-areas: "entity message";
+  display: flex;
+  flex-shrink: 0;
   overflow-y: auto;
   min-width: 500px;
 }
 
+.messages:last-child {
+  flex-grow: 1;
+}
+
 .entity {
-  grid-area: entity;
-  width: 140px;
-  vertical-align: top;
+  flex: 0 0 160px;
   padding: 3px 10px;
   color: var(--text-blur);
   background-color: var(--ui-dark);
@@ -34,9 +35,7 @@ export default {
 }
 
 .message {
-  grid-area: message;
-  width: 1fr;
-  vertical-align: top;
+  flex: 1 1;
   padding: 3px 10px;
   margin: none;
   color: var(--text);

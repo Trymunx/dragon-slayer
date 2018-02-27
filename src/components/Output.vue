@@ -1,7 +1,6 @@
 <template>
   <div id="output">
     <message v-for="(msg, i) in messages" :entity="msg.entity" :message="msg.message" :key="i"/>
-    <!-- <div id="messagesBg"></div> -->
   </div>
 </template>
 
@@ -34,6 +33,8 @@ export default {
 <style>
 #output {
   grid-area: output;
+  display: flex;
+  flex-flow: column;
   overflow-y: auto;
   min-width: 500px;
 }
@@ -48,12 +49,5 @@ export default {
 
 #output::-webkit-scrollbar-thumb {
   background-color: var(--ui-border);
-}
-#messagesBg {
-  grid-column: 2;
-  grid-row: 1;
-  background-color: var(--ui);
-  width: 100%;
-  height: 100%;
 }
 </style>
