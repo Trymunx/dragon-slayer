@@ -1,5 +1,5 @@
 <template>
-  <div class="messages">
+  <div class="messages"><!-- @mouseover="hovered=true" @mouseout="hovered=false" :class="{hovered: hovered}"> -->
     <div class="entity">{{entity}}</div>
     <div class="message">{{message}}</div>
   </div>
@@ -7,6 +7,7 @@
 
 <script>
 export default {
+  data() { return {hovered: false}},
   props: ["entity", "message"]
 };
 </script>
@@ -16,13 +17,12 @@ export default {
   display: flex;
   flex-shrink: 0;
   overflow-y: auto;
-  min-width: 500px;
   overflow-x: hidden;
 }
 
-.messages:last-child {
+/*.messages:last-child {
   flex-grow: 1;
-}
+}*/
 
 .entity {
   flex: 0 0 160px;
@@ -39,4 +39,9 @@ export default {
   color: var(--text);
   background-color: var(--ui);
 }
+
+.messages:hover div {
+  background-color: var(--ui-darker);
+}
+
 </style>

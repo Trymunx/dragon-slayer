@@ -44,9 +44,8 @@ export default {
 }
 
 .wrapper {
-  display: flex;
   display: grid;
-  grid-template-columns: 6fr 425px;
+  grid-template-columns: 6fr 2fr;
   grid-template-rows: auto 4fr 30px;
   grid-template-areas:
     "output map"
@@ -54,6 +53,22 @@ export default {
     "input inventory";
   background-color: var(--ui-dark);
   font-size: 0.95em;
+}
+
+#output {
+  grid-area: output;
+}
+
+#input-bar {
+  grid-area: input;
+}
+
+#map {
+  grid-area: map;
+}
+
+#inventory {
+  grid-area: inventory;
 }
 
 .wrapper,

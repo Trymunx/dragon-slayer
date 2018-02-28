@@ -24,7 +24,6 @@ export default {
 }
 
 #inventory {
-  grid-area: inventory;
   padding: 10px;
   overflow-y: auto;
   color: var(--text-blur);
@@ -33,7 +32,6 @@ export default {
   font-family: "Ubuntu Mono", monospace;
   font-size: 0.85em;
   white-space: pre-wrap;
-  min-width: 70px;
 }
 
 #inventory::-webkit-scrollbar {

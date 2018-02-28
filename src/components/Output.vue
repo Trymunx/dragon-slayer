@@ -1,6 +1,10 @@
 <template>
   <div id="output">
     <message v-for="(msg, i) in messages" :entity="msg.entity" :message="msg.message" :key="i"/>
+    <div id="messagebg">
+      <div class="entity"/>
+      <div class="message"/>
+    </div>
   </div>
 </template>
 
@@ -22,11 +26,17 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 #output {
-  grid-area: output;
   display: flex;
   flex-flow: column;
   overflow-y: auto;
-  min-width: 500px;
+}
+
+#messagebg {
+  flex-grow: 1;
+  display: flex;
+  flex-shrink: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #output::-webkit-scrollbar {
