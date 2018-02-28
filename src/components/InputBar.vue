@@ -27,7 +27,6 @@ export default {
 
 <style scoped>
 #input-bar {
-  grid-area: input;
   padding: 4px 10px 4px 10px;
   color: var(--text);
   background-color: var(--ui-darker);
@@ -35,7 +34,6 @@ export default {
 }
 
 #input-text {
-  grid-area: input;
   width: 92%;
   resize: auto;
   padding: 4px 0px 4px 0px;

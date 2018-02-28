@@ -24,7 +24,6 @@ export default {
 }
 
 #map {
-  grid-area: map;
   padding: 2px 10px 10px 10px;
   margin-bottom: 2px;
   color: var(--text-blur);
@@ -34,7 +33,6 @@ export default {
   font-size: 0.9em;
   white-space: pre-wrap;
   text-align: center;
-  min-width: 70px;
   max-height: 75vh;
   overflow-y: auto;
 }
