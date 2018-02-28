@@ -1,7 +1,7 @@
 <template>
-  <div id="app" class="wrapper">
+  <div id="app">
     <Output/>
-    <Map/>
+    <Overview/>
     <Inventory/>
     <input-bar/>
   </div>
@@ -9,7 +9,7 @@
 
 <script>
 import Output from "./components/Output";
-import Map from "./components/Map";
+import Overview from "./components/Overview";
 import Inventory from "./components/Inventory";
 import InputBar from "./components/InputBar";
 
@@ -17,7 +17,7 @@ export default {
   name: "App",
   components: {
     Output,
-    Map,
+    Overview,
     Inventory,
     InputBar
   }
@@ -41,22 +41,49 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-}
-
-.wrapper {
-  display: flex;
   display: grid;
-  grid-template-columns: 6fr 425px;
-  grid-template-rows: auto 4fr 30px;
+  grid-template-columns: 1fr 425px;
+  grid-template-rows: auto 1fr 30px;
   grid-template-areas:
-    "output map"
+    "output overview"
     "output inventory"
     "input inventory";
   background-color: var(--ui-dark);
   font-size: 0.95em;
 }
 
-.wrapper,
+@media (max-width: 850px) {
+  #app {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 30px;
+    grid-template-areas:
+      "output"
+      "input";
+  }
+
+  #overview,
+  #inventory {
+    display: none;
+  }
+}
+
+#output {
+  grid-area: output;
+}
+
+#overview {
+  grid-area: overview;
+}
+
+#input-bar {
+  grid-area: input;
+}
+
+#inventory {
+  grid-area: inventory;
+}
+
+#app,
 html,
 body {
   height: 100%;

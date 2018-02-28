@@ -15,13 +15,19 @@ export default {
 .messages {
   display: flex;
   flex-shrink: 0;
-  overflow-y: auto;
-  min-width: 500px;
   overflow-x: hidden;
 }
 
-.messages:last-child {
-  flex-grow: 1;
+.messages:hover div {
+  background-color: var(--ui-darker);
+}
+
+.messages:hover .entity {
+  color: var(--text);
+}
+
+.messages:hover .message {
+  background-color: var(--ui-dark);
 }
 
 .entity {
@@ -30,6 +36,12 @@ export default {
   color: var(--text-blur);
   background-color: var(--ui-dark);
   text-transform: capitalize;
+}
+
+@media (max-width: 500px) {
+  .entity {
+    display: none;
+  }
 }
 
 .message {

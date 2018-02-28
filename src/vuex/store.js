@@ -7,7 +7,6 @@ export default new Vuex.Store({
   state: {
     messages: [
       { entity: "Test messages follow:", message: "" },
-      { entity: "", message: "" },
       { entity: "Alpvax", message: "I'm helping you develop your game." },
       { entity: "p-Dandy", message: "I'm fixing your broken shit." },
       {
