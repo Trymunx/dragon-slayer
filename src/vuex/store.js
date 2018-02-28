@@ -15,9 +15,16 @@ export default new Vuex.Store({
         message:
           "I'm trying to help fix your broken shit. I'm trying to help fix your broken shit. I'm trying to help fix your broken shit. I'm trying to help fix your broken shit. I'm trying to help fix your broken shit."
       },
-      { entity: "Me", message: "Thanks guys." }
+      { entity: "Me", message: "Thanks guys." },
+      { entity: "Quest giver", message: "You receive a quest, it's to go and pick up a whole load of shit then fight some monsters and collect something from them and craft that stuff together to make an item." },
+      { entity: "", message: "You collect the stuff." },
+      { entity: "", message: "You hit the rat for so much damage, numbers etc." },
+      { entity: "Rat", message: "The rat attacks you." },
+      { entity: "", message: "You fight the creatures, gathering their whatever." },
+      { entity: "Update", message: "You craft the item." },
+      { entity: "Quest giver", message: "You hand the item to the quest giver and they give you some gold and a life lesson." }
     ],
-    playerName: "(no player name set)"
+    playerName: "Player Name"
   },
 
   getters: {
