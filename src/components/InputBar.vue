@@ -19,6 +19,11 @@ export default {
           message: this.inputText
         });
         this.inputText = "";
+
+        // Have to wait for DOM to be updated before scrolling
+        this.$nextTick(() => {
+          document.getElementById("output").lastChild.scrollIntoView();
+        });
       }
     }
   }
