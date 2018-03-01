@@ -18,12 +18,9 @@ export default {
   overflow-x: hidden;
 }
 
-.messages:hover div {
-  background-color: var(--ui-darker);
-}
-
 .messages:hover .entity {
   color: var(--text);
+  background-color: var(--ui-darker);
 }
 
 .messages:hover .message {

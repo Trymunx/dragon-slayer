@@ -43,7 +43,8 @@ export default {
 #messageBg {
   display: flex;
   flex: 1 1;
-  margin: none;
-  padding: none;
+}
+#messageBg div {
+  padding: 0 10px;
 }
 </style>
