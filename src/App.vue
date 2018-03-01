@@ -42,6 +42,7 @@ export default {
   /* Text colours */
   --text: #daddd8;
   --text-blur: #bababa;
+  --select: #323336;
 }
 
 #app {
@@ -58,6 +59,22 @@ export default {
     "input inventory";
   background-color: var(--ui-dark);
   font-size: 0.95em;
+}
+
+::-moz-selection {
+  background: var(--select);
+}
+::selection {
+  background: var(--select);
+}
+::-o-selection {
+  background: var(--select);
+}
+::-webkit-selection {
+  background: var(--select);
+}
+::-ms-selection {
+  background: var(--select);
 }
 
 @media (max-width: 850px) {
