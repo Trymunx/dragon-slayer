@@ -20,6 +20,14 @@ export default {
     Overview,
     Inventory,
     InputBar
+  },
+  created: function() {
+    window.addEventListener("keydown", this.focusInput);
+  },
+  methods: {
+    focusInput(event) {
+      document.getElementById("input-text").focus();
+    }
   }
 };
 </script>
