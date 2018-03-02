@@ -1,9 +1,10 @@
 <template>
-  <div id="app">
+  <div id="app" @click.right.prevent="showContextMenu">
     <Output/>
     <Overview/>
     <Inventory/>
     <input-bar/>
+    <context-menu v-show="contextMenuVisible"/>
   </div>
 </template>
 
@@ -12,6 +13,7 @@ import Output from "./components/Output";
 import Overview from "./components/Overview";
 import Inventory from "./components/Inventory";
 import InputBar from "./components/InputBar";
+import ContextMenu from "./components/ContextMenu";
 
 export default {
   name: "App",
@@ -19,15 +21,45 @@ export default {
     Output,
     Overview,
     Inventory,
-    InputBar
+    InputBar,
+    ContextMenu
   },
   created: function() {
     window.addEventListener("keydown", this.focusInput);
+    window.addEventListener("click", this.showContextMenu);
   },
   methods: {
     focusInput(event) {
       document.getElementById("input-text").focus();
+    },
+    showContextMenu(event) {
+      if (event.button === 2) {
+        this.contextMenuVisible = true;
+        let menu = document.getElementsByClassName("context-menu")[0];
+
+        this.$nextTick(() => {
+          let menuWidth = menu.offsetWidth;
+          let menuHeight = menu.offsetHeight;
+          if (event.x + menuWidth < window.innerWidth) {
+            menu.style.left = event.x + "px";
+          } else {
+            menu.style.left = event.x - menuWidth + "px";
+          }
+          if (event.y + menuHeight < window.innerHeight) {
+            menu.style.top = event.y + "px";
+          } else {
+            menu.style.top = event.y - menuHeight + "px";
+          }
+        });
+      } else {
+        this.contextMenuVisible = false;
+      }
     }
+  },
+  data() {
+    return {
+      contextMenuVisible: false
+    };
   }
 };
 </script>
@@ -51,7 +83,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   display: grid;
-  grid-template-columns: 1fr 425px;
+  grid-template-columns: 1fr 410px;
   grid-template-rows: auto 1fr 30px;
   grid-template-areas:
     "output overview"
@@ -77,7 +109,7 @@ export default {
   background: var(--select);
 }
 
-@media (max-width: 850px) {
+@media (max-width: 900px) {
   #app {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 30px;
