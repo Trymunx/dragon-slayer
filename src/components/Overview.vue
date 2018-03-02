@@ -1,18 +1,22 @@
 <template>
-  <div id="overview">Overview</div>
+  <div id="overview">
+    <canvas width="400" height="400" id="overview-canvas">
+      Canvas unsupported, use a newer browser.
+    </canvas>
+  </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {};
-  }
-};
+export default {};
 </script>
 
 <style>
+#overview-canvas {
+  background-color: var(--ui-darker);
+}
+
 #overview {
-  padding: 2px 10px 10px 10px;
+  padding: 5px;
   margin-bottom: 2px;
   color: var(--text-blur);
   background-color: var(--ui-darker);
