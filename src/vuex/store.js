@@ -24,17 +24,32 @@ export default new Vuex.Store({
       { entity: "Update", message: "You craft the item." },
       { entity: "Quest giver", message: "You hand the item to the quest giver and they give you some gold and a life lesson." }
     ],
-    playerName: "Player Name"
+    playerName: "Player Name",
+    contextMenu: {
+      show: false,
+      pos: {x: 0, y: 0},
+      items: () => []
+    }
   },
 
   getters: {
     playerName: (state) => state.playerName,
-    messages: (state) => state.messages
+    messages: (state) => state.messages,
+    contextMenu: (state) => state.contextMenu
   },
 
   actions: {
     addMessage({ commit }, data) {
       commit("ADD_MESSAGE", data);
+    },
+    setContextMenuItems({ commit }, items) {
+      commit("SET_CONTEXT_MENU_ITEMS", items);
+    },
+    showContextMenu({ commit }, pos) {
+      commit("SHOW_CONTEXT_MENU", pos);
+    },
+    hideContextMenu({ commit }) {
+      commit("HIDE_CONTEXT_MENU");
     }
   },
 
@@ -44,6 +59,16 @@ export default new Vuex.Store({
         entity: data.entity,
         message: data.message
       });
+    },
+    SET_CONTEXT_MENU_ITEMS(state, items) {
+      state.contextMenu.items = items;
+    },
+    SHOW_CONTEXT_MENU(state, pos) {
+      state.contextMenu.show = true;
+      state.contextMenu.pos = pos;
+    },
+    HIDE_CONTEXT_MENU(state) {
+      state.contextMenu.show = false;
     }
   }
 });

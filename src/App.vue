@@ -1,10 +1,10 @@
 <template>
-  <div id="app" @click.right.prevent="showContextMenu">
+  <div id="app" @click="hideContextMenu">
     <Output/>
     <Overview/>
     <Inventory/>
     <input-bar/>
-    <context-menu v-show="contextMenuVisible"/>
+    <context-menu v-show="contextMenuData.show" :items="contextMenuData.items" :pos="contextMenuData.pos"/>
   </div>
 </template>
 
@@ -26,40 +26,19 @@ export default {
   },
   created: function() {
     window.addEventListener("keydown", this.focusInput);
-    window.addEventListener("click", this.showContextMenu);
   },
   methods: {
     focusInput(event) {
       document.getElementById("input-text").focus();
     },
-    showContextMenu(event) {
-      if (event.button === 2) {
-        this.contextMenuVisible = true;
-        let menu = document.getElementsByClassName("context-menu")[0];
-
-        this.$nextTick(() => {
-          let menuWidth = menu.offsetWidth;
-          let menuHeight = menu.offsetHeight;
-          if (event.x + menuWidth < window.innerWidth) {
-            menu.style.left = event.x + "px";
-          } else {
-            menu.style.left = event.x - menuWidth + "px";
-          }
-          if (event.y + menuHeight < window.innerHeight) {
-            menu.style.top = event.y + "px";
-          } else {
-            menu.style.top = event.y - menuHeight + "px";
-          }
-        });
-      } else {
-        this.contextMenuVisible = false;
-      }
+    hideContextMenu(event) {
+      this.$store.dispatch("hideContextMenu");
     }
   },
-  data() {
-    return {
-      contextMenuVisible: false
-    };
+  computed: {
+    contextMenuData() {
+      return this.$store.getters.contextMenu;
+    }
   }
 };
 </script>

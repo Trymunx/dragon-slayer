@@ -1,5 +1,5 @@
 <template>
-  <div class="messages">
+  <div class="messages" @click.right.prevent="showContextMenu">
     <div class="entity">{{entity}}</div>
     <div class="message">{{message}}</div>
   </div>
@@ -7,7 +7,42 @@
 
 <script>
 export default {
-  props: ["entity", "message"]
+  props: ["entity", "message"],
+  methods: {
+    showContextMenu(event) {
+      this.$store.dispatch("showContextMenu", {x: event.x, y: event.y});
+      let items = [
+        {
+          text: "Resend message",
+          call: () => {
+            this.$store.dispatch("addMessage", {
+              entity: this.entity,
+              message: this.message
+            })
+          }
+        },
+        {
+          text: "Another context item (does nothing)",
+          call: () => {
+            console.log("This context item does nothing.")
+          }
+        },
+        {
+          text: "Test context item",
+          call: () => {
+            console.log("This context item does nothing.")
+          }
+        },
+        {
+          text: "Context items are cool I guess",
+          call: () => {
+            console.log("This context item does nothing.")
+          }
+        },
+      ];
+      this.$store.dispatch("setContextMenuItems", items);
+    }
+  }
 };
 </script>
 
