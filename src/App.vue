@@ -1,5 +1,5 @@
 <template>
-  <div id="app" @click="hideContextMenu">
+  <div id="app" @click="hideContextMenu" @keydown="focusInput">
     <Output/>
     <Overview/>
     <Inventory/>
@@ -23,9 +23,6 @@ export default {
     Inventory,
     InputBar,
     ContextMenu
-  },
-  created: function() {
-    window.addEventListener("keydown", this.focusInput);
   },
   methods: {
     focusInput(event) {
