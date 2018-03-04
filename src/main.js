@@ -3,13 +3,16 @@
 import Vue from "vue";
 import App from "./App";
 import store from "./vuex/store";
+import game from "./game/vue-game-plugin";
 
 Vue.config.productionTip = false;
+Vue.use(game);
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   store,
+  game,
   components: { App },
   template: '<App/>'
 })

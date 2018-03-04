@@ -24,6 +24,9 @@ export default {
     InputBar,
     ContextMenu
   },
+  created() {
+    this.$game.startGame();
+  },
   methods: {
     focusInput(event) {
       document.getElementById("input-text").focus();
@@ -63,8 +66,8 @@ export default {
   grid-template-rows: auto 1fr 30px;
   grid-template-areas:
     "output overview"
-    "output inventory"
-    "input inventory";
+    "output player-data"
+    "input player-data";
   background-color: var(--ui-dark);
   font-size: 0.95em;
 }
@@ -95,7 +98,7 @@ export default {
   }
 
   #overview,
-  #inventory {
+  #player-data {
     display: none;
   }
 }
@@ -112,8 +115,8 @@ export default {
   grid-area: input;
 }
 
-#inventory {
-  grid-area: inventory;
+#player-data {
+  grid-area: player-data;
 }
 
 #app,

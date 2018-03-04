@@ -18,6 +18,7 @@ export default {
           entity: this.$store.getters.playerName,
           message: this.inputText
         });
+        this.$game.parseCommand(this.inputText);
         this.inputText = "";
 
         // Have to wait for DOM to be updated before scrolling
