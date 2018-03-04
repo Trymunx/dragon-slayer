@@ -46,7 +46,8 @@ export default new Vuex.Store({
       commit("SET_CONTEXT_MENU_ITEMS", items);
     },
     showContextMenu({ commit }, pos) {
-      commit("SHOW_CONTEXT_MENU", pos);
+      commit("SET_CONTEXT_MENU_POS", pos);
+      commit("SHOW_CONTEXT_MENU");
     },
     hideContextMenu({ commit }) {
       commit("HIDE_CONTEXT_MENU");
@@ -63,9 +64,11 @@ export default new Vuex.Store({
     SET_CONTEXT_MENU_ITEMS(state, items) {
       state.contextMenu.items = items;
     },
-    SHOW_CONTEXT_MENU(state, pos) {
-      state.contextMenu.show = true;
+    SET_CONTEXT_MENU_POS(state, pos) {
       state.contextMenu.pos = pos;
+    },
+    SHOW_CONTEXT_MENU(state) {
+      state.contextMenu.show = true;
     },
     HIDE_CONTEXT_MENU(state) {
       state.contextMenu.show = false;
