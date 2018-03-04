@@ -2,7 +2,7 @@
   <div id="app" @click="hideContextMenu" @keydown="focusInput">
     <Output/>
     <Overview/>
-    <Inventory/>
+    <player-data/>
     <input-bar/>
     <context-menu v-show="contextMenuData.show" :items="contextMenuData.items" :pos="contextMenuData.pos"/>
   </div>
@@ -11,7 +11,7 @@
 <script>
 import Output from "./components/Output";
 import Overview from "./components/Overview";
-import Inventory from "./components/Inventory";
+import PlayerData from "./components/PlayerData";
 import InputBar from "./components/InputBar";
 import ContextMenu from "./components/ContextMenu";
 
@@ -20,7 +20,7 @@ export default {
   components: {
     Output,
     Overview,
-    Inventory,
+    PlayerData,
     InputBar,
     ContextMenu
   },

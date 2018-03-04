@@ -1,17 +1,26 @@
 <template>
-  <div id="inventory">Inventory</div>
+  <div id="player-data">
+    <player-stats/>
+    <player-inventory/>
+  </div>
 </template>
 
 <script>
+import PlayerInventory from "./PlayerInventory.vue";
+import PlayerStats from "./PlayerStats.vue"
 export default {
   data() {
     return {};
+  },
+  components: {
+    PlayerStats,
+    PlayerInventory
   }
 };
 </script>
 
 <style>
-#inventory {
+#player-data {
   padding: 10px;
   overflow-y: auto;
   color: var(--text-blur);
@@ -22,15 +31,15 @@ export default {
   white-space: pre-wrap;
 }
 
-#inventory::-webkit-scrollbar {
+#player-data::-webkit-scrollbar {
   width: 8px;
 }
 
-#inventory::-webkit-scrollbar-track {
+#player-data::-webkit-scrollbar-track {
   background-color: var(--ui-darker);
 }
 
-#inventory::-webkit-scrollbar-thumb {
+#player-data::-webkit-scrollbar-thumb {
   background-color: var(--ui-border);
 }
 </style>
