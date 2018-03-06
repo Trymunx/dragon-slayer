@@ -25,8 +25,8 @@ export default {};
   background: var(--ui-border);
   padding: 10px;
   z-index: 1;
-  border-radius: 5px;
-  box-shadow: 0px 2px 15px -1px black;
+  border-radius: 4px;
+  box-shadow: 0px 2px 15px 0px #232323;
 }
 
 h4 {
