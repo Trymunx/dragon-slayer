@@ -17,19 +17,27 @@ export default {
         top: 0,
         left: 0
       }
-    }
+    };
   },
   watch: {
     pos(newPos) {
       this.updateStyle(newPos.x, newPos.y);
-    }    
+    }
   },
   methods: {
     updateStyle(posX, posY) {
-      const { offsetWidth, offsetHeight } = document.getElementById('context-menu') || { offsetWidth: 0, offsetHeight: 0 };
+      const { offsetWidth, offsetHeight } = document.getElementById(
+        "context-menu"
+      ) || { offsetWidth: 0, offsetHeight: 0 };
       this.style = {
-        left: posX + offsetWidth < window.innerWidth ? `${posX}px` : `${posX - offsetWidth}px`,
-        top: posY + offsetHeight < window.innerHeight ? `${posY}px` : `${posY - offsetHeight}px`
+        left:
+          posX + offsetWidth < window.innerWidth
+            ? `${posX}px`
+            : `${posX - offsetWidth}px`,
+        top:
+          posY + offsetHeight < window.innerHeight
+            ? `${posY}px`
+            : `${posY - offsetHeight}px`
       };
     },
     handleAction(item) {
@@ -51,14 +59,15 @@ export default {
   max-height: 90vh;
   color: var(--text-blur);
   background: var(--ui-border);
-  padding: 10px;
+  padding: 10px 0px;
   z-index: 1;
-  border-radius: 5px;
-  box-shadow: 0px 2px 15px -1px black;
+  border-radius: 4px;
+  box-shadow: 0px 2px 15px 0px #232323;
 }
 
 .context-item {
   padding: 10px;
+  margin: 0;
   cursor: pointer;
 }
 

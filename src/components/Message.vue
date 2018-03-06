@@ -10,7 +10,7 @@ export default {
   props: ["entity", "message"],
   methods: {
     showContextMenu(event) {
-      this.$store.dispatch("showContextMenu", {x: event.x, y: event.y});
+      this.$store.dispatch("showContextMenu", { x: event.x, y: event.y });
       let items = [
         {
           text: "Resend message",
@@ -18,7 +18,7 @@ export default {
             this.$store.dispatch("addMessage", {
               entity: this.$store.getters.playerName,
               message: this.message
-            })
+            });
           }
         }
       ];
