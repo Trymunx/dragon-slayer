@@ -1,0 +1,28 @@
+{
+  "name": "",
+  "attributes": {
+    "experience": 0,
+    "level": 1,
+    "strength": 10,
+    "strEXP": 0,
+    "armour": 0
+  },
+  "inventory": [
+    {
+      "key": "potion",
+      "quantity": 3
+    }
+  ],
+  "equipped": {
+    "head": "None",
+    "torso": "None",
+    "legs": "None",
+    "rightHand": "None",
+    "leftHand": "None",
+    "gloves": "None",
+    "boots": "None"
+  },
+  "creaturesSlain": {
+    "slainNonDragon": false
+  }
+}
