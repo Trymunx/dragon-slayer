@@ -1,13 +1,21 @@
 <template>
   <div id="overview">
-    <canvas width="400" height="400" id="overview-canvas">
+    <canvas width="400" height="400" id="overview-canvas" @click="drawMap">
       Canvas unsupported, use a newer browser.
     </canvas>
   </div>
 </template>
 
 <script>
-export default {};
+import DisplayMap from "../game/utils/DisplayMap";
+
+export default {
+  methods: {
+    drawMap() {
+      DisplayMap();
+    }
+  }
+};
 </script>
 
 <style>
