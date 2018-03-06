@@ -1,26 +1,54 @@
 <template>
-  <div class="context-menu">
-    <h4>Context Menu</h4>
-      <li>1st item</li>
-      <li>longer item goes here</li>
-      <li>3rd item</li>
-      <li>1st item</li>
-      <li>longer item goes here</li>
-      <li>3rd item</li>
-      <li>1st item</li>
-      <li>longer item goes here</li>
-      <li>3rd item</li>
+  <div id="context-menu" ref="menu" :style="style">
+    <div v-for="(item, i) in items" :key="i">
+      <div @click.stop="handleAction(item)" class="context-item">
+        {{item.text}}
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props: ["items", "pos"],
+  data() {
+    return {
+      style: {
+        top: 0,
+        left: 0
+      }
+    }
+  },
+  watch: {
+    pos(newPos) {
+      this.updateStyle(newPos.x, newPos.y);
+    }    
+  },
+  methods: {
+    updateStyle(posX, posY) {
+      const { offsetWidth, offsetHeight } = document.getElementById('context-menu') || { offsetWidth: 0, offsetHeight: 0 };
+      this.style = {
+        left: posX + offsetWidth < window.innerWidth ? `${posX}px` : `${posX - offsetWidth}px`,
+        top: posY + offsetHeight < window.innerHeight ? `${posY}px` : `${posY - offsetHeight}px`
+      };
+    },
+    handleAction(item) {
+      if (item.isParent) {
+        item.call();
+      } else {
+        item.call();
+        this.$store.dispatch("hideContextMenu");
+      }
+    }
+  }
+};
 </script>
 
 <style>
-.context-menu {
+#context-menu {
   position: absolute;
   max-width: 160px;
+  max-height: 90vh;
   color: var(--text-blur);
   background: var(--ui-border);
   padding: 10px;
@@ -29,9 +57,12 @@ export default {};
   box-shadow: 0px 2px 15px 0px #232323;
 }
 
-h4 {
-  padding: 2px 4px 6px;
-  margin: 0px 2px 8px;
-  border-bottom: 1px solid var(--ui);
+.context-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.context-item:hover {
+  background: var(--ui-dark);
 }
 </style>

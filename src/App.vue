@@ -1,17 +1,17 @@
 <template>
-  <div id="app" @click.right.prevent="showContextMenu">
+  <div id="app" @click="hideContextMenu" @keydown="focusInput">
     <Output/>
     <Overview/>
-    <Inventory/>
+    <player-data/>
     <input-bar/>
-    <context-menu v-show="contextMenuVisible"/>
+    <context-menu v-show="contextMenuData.show" :items="contextMenuData.items" :pos="contextMenuData.pos"/>
   </div>
 </template>
 
 <script>
 import Output from "./components/Output";
 import Overview from "./components/Overview";
-import Inventory from "./components/Inventory";
+import PlayerData from "./components/PlayerData";
 import InputBar from "./components/InputBar";
 import ContextMenu from "./components/ContextMenu";
 
@@ -20,46 +20,25 @@ export default {
   components: {
     Output,
     Overview,
-    Inventory,
+    PlayerData,
     InputBar,
     ContextMenu
   },
-  created: function() {
-    window.addEventListener("keydown", this.focusInput);
-    window.addEventListener("click", this.showContextMenu);
+  created() {
+    this.$game.startGame();
   },
   methods: {
     focusInput(event) {
       document.getElementById("input-text").focus();
     },
-    showContextMenu(event) {
-      if (event.button === 2) {
-        this.contextMenuVisible = true;
-        let menu = document.getElementsByClassName("context-menu")[0];
-
-        this.$nextTick(() => {
-          let menuWidth = menu.offsetWidth;
-          let menuHeight = menu.offsetHeight;
-          if (event.x + menuWidth < window.innerWidth) {
-            menu.style.left = event.x + "px";
-          } else {
-            menu.style.left = event.x - menuWidth + "px";
-          }
-          if (event.y + menuHeight < window.innerHeight) {
-            menu.style.top = event.y + "px";
-          } else {
-            menu.style.top = event.y - menuHeight + "px";
-          }
-        });
-      } else {
-        this.contextMenuVisible = false;
-      }
+    hideContextMenu(event) {
+      this.$store.dispatch("hideContextMenu");
     }
   },
-  data() {
-    return {
-      contextMenuVisible: false
-    };
+  computed: {
+    contextMenuData() {
+      return this.$store.getters.contextMenu;
+    }
   }
 };
 </script>
@@ -87,8 +66,8 @@ export default {
   grid-template-rows: auto 1fr 30px;
   grid-template-areas:
     "output overview"
-    "output inventory"
-    "input inventory";
+    "output player-data"
+    "input player-data";
   background-color: var(--ui-dark);
   font-size: 0.95em;
 }
@@ -119,7 +98,7 @@ export default {
   }
 
   #overview,
-  #inventory {
+  #player-data {
     display: none;
   }
 }
@@ -136,8 +115,8 @@ export default {
   grid-area: input;
 }
 
-#inventory {
-  grid-area: inventory;
+#player-data {
+  grid-area: player-data;
 }
 
 #app,
