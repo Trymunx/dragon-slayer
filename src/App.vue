@@ -1,5 +1,5 @@
 <template>
-  <div id="app" @click="hideContextMenu" @keydown="focusInput">
+  <div id="app" @click="hideContextMenu">
     <Output/>
     <Overview/>
     <player-data/>
@@ -26,6 +26,7 @@ export default {
   },
   created() {
     this.$game.startGame();
+    window.addEventListener("keydown", this.focusInput);
   },
   methods: {
     focusInput(event) {
