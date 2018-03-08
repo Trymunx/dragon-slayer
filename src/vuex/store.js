@@ -64,6 +64,11 @@ export default new Vuex.Store({
         entity: data.entity,
         message: data.message
       });
+
+      // Have to wait for DOM to be updated before scrolling
+      Vue.nextTick(() => {
+        document.getElementById("output").lastChild.scrollIntoView();
+      });
     },
     SET_CONTEXT_MENU_ITEMS(state, items) {
       state.contextMenu.items = items;
