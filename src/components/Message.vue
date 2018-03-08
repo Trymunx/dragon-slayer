@@ -1,5 +1,5 @@
 <template>
-  <div class="messages" @click.right.prevent="showContextMenu">
+  <div class="messages" @click.right.stop.prevent="showContextMenu">
     <div class="entity">{{entity}}</div>
     <div class="message">{{message}}</div>
   </div>
@@ -9,20 +9,16 @@
 export default {
   props: ["entity", "message"],
   methods: {
-    showContextMenu(event) {
-      this.$store.dispatch("showContextMenu", { x: event.x, y: event.y });
-      let items = [
-        {
-          text: "Resend message",
-          call: () => {
-            this.$store.dispatch("addMessage", {
-              entity: this.$store.getters.playerName,
-              message: this.message
-            });
-          }
+    contextMenuItems(vm) {
+      return {
+        text: "Resend message",
+        call: () => {
+          vm.$store.dispatch("addMessage", {
+            entity: vm.entity,
+            message: vm.message
+          });
         }
-      ];
-      this.$store.dispatch("setContextMenuItems", items);
+      };
     }
   }
 };

@@ -16,6 +16,22 @@ export default {
   },
   components: {
     Message
+  },
+  methods: {
+    contextMenuItems(vm) {
+      return [
+        {
+          text: "Log vuex",
+          call(){
+            console.log(vm.$store);
+          }
+        },
+        {
+          text: "Do Nothing",
+          call(){}
+        }
+      ];
+    }
   }
 };
 </script>

@@ -63,6 +63,10 @@ export default new Vuex.Store({
     },
     SET_CONTEXT_MENU_ITEMS(state, items) {
       state.contextMenu.items = items;
+      if(items.length < 1)
+      {
+        state.contextMenu.show = false;
+      }
     },
     SET_CONTEXT_MENU_POS(state, pos) {
       state.contextMenu.pos = pos;
