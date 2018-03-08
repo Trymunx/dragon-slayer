@@ -2,7 +2,8 @@
   <div id="app" @click="hideContextMenu">
     <Output/>
     <Overview/>
-    <player-data/>
+    <player-stats/>
+    <player-inventory/>
     <input-bar/>
     <context-menu v-show="contextMenuData.show" :items="contextMenuData.items" :pos="contextMenuData.pos"/>
   </div>
@@ -11,16 +12,18 @@
 <script>
 import Output from "./components/Output";
 import Overview from "./components/Overview";
-import PlayerData from "./components/PlayerData";
 import InputBar from "./components/InputBar";
 import ContextMenu from "./components/ContextMenu";
+import PlayerStats from "./components/PlayerStats";
+import PlayerInventory from "./components/PlayerInventory";
 
 export default {
   name: "App",
   components: {
     Output,
     Overview,
-    PlayerData,
+    PlayerStats,
+    PlayerInventory,
     InputBar,
     ContextMenu
   },
@@ -64,11 +67,12 @@ export default {
   color: #2c3e50;
   display: grid;
   grid-template-columns: 1fr 410px;
-  grid-template-rows: auto 1fr 30px;
+  grid-template-rows: auto 1fr 2fr 30px;
   grid-template-areas:
     "output overview"
-    "output player-data"
-    "input player-data";
+    "output player-stats"
+    "output player-inventory"
+    "input player-inventory";
   background-color: var(--ui-dark);
   font-size: 0.95em;
 }
@@ -92,14 +96,15 @@ export default {
 @media (max-width: 900px) {
   #app {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 30px;
+    grid-template-rows: 60px 1fr 30px;
     grid-template-areas:
+      "player-stats"
       "output"
       "input";
   }
 
   #overview,
-  #player-data {
+  #player-inventory {
     display: none;
   }
 }
@@ -116,8 +121,12 @@ export default {
   grid-area: input;
 }
 
-#player-data {
-  grid-area: player-data;
+#player-stats {
+  grid-area: player-stats;
+}
+
+#player-inventory {
+  grid-area: player-inventory;
 }
 
 #app,
