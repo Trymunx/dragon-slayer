@@ -1,5 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import createGamePlugin from "./gamePlugin"
+import { eventBus } from "../game/api";
 
 Vue.use(Vuex);
 
@@ -31,6 +33,8 @@ export default new Vuex.Store({
       items: () => []
     }
   },
+
+  plugins: [createGamePlugin(eventBus, [["evt", "TEST_EVENT"], ["event1", "event2", "event3"], "ADD_MESSAGE", new Map([["mapE", "mapM"]]), {"obE": "obM"}], {"ADD_MESSAGE": (m) => eventBus.emit("evt", m)})],
 
   getters: {
     playerName: (state) => state.playerName,
@@ -76,6 +80,9 @@ export default new Vuex.Store({
     },
     HIDE_CONTEXT_MENU(state) {
       state.contextMenu.show = false;
+    },
+    TEST_EVENT(state) {
+      console.log("TEST_EVENT mutation committed");
     }
   }
 });
