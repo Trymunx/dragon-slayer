@@ -1,5 +1,5 @@
 <template>
-  <div id="app" @click="hideContextMenu">
+  <div id="app" @click="hideContextMenu" @click.right.prevent="showContextMenu">
     <Output/>
     <Overview/>
     <player-stats/>

@@ -27,30 +27,35 @@ export default new Vuex.Store({
     playerName: "Player Name",
     contextMenu: {
       show: false,
-      pos: {x: 0, y: 0},
+      pos: { x: 0, y: 0 },
       items: () => []
-    }
+    },
+    inputText: ""
   },
 
   getters: {
     playerName: (state) => state.playerName,
     messages: (state) => state.messages,
-    contextMenu: (state) => state.contextMenu
+    contextMenu: (state) => state.contextMenu,
+    inputText: (state) => state.inputText
   },
 
   actions: {
     addMessage({ commit }, data) {
       commit("ADD_MESSAGE", data);
     },
-    setContextMenuItems({ commit }, items) {
-      commit("SET_CONTEXT_MENU_ITEMS", items);
-    },
-    showContextMenu({ commit }, pos) {
+    showContextMenu({ commit }, { pos, items }) {
       commit("SET_CONTEXT_MENU_POS", pos);
-      commit("SHOW_CONTEXT_MENU");
+      if (items.length > 1) {
+        commit("SHOW_CONTEXT_MENU");
+        commit("SET_CONTEXT_MENU_ITEMS", items);
+      }
     },
     hideContextMenu({ commit }) {
       commit("HIDE_CONTEXT_MENU");
+    },
+    setInputText({ commit }, text) {
+      commit("SET_INPUT_TEXT", text);
     }
   },
 
@@ -72,6 +77,9 @@ export default new Vuex.Store({
     },
     HIDE_CONTEXT_MENU(state) {
       state.contextMenu.show = false;
+    },
+    SET_INPUT_TEXT(state, text) {
+      state.inputText = text;
     }
   }
 });

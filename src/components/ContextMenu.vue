@@ -9,6 +9,33 @@
 </template>
 
 <script>
+export const mixin = {
+  methods: {
+    showContextMenu(event) {
+      let pos = { x: event.x, y: event.y };
+      var items = [];
+      let comp = this;
+      while (comp) {
+        let e = comp.contextMenuItems(comp, items);
+        items = [].concat(items, e);
+        comp = comp.$parent;
+      }
+      this.$store.dispatch("showContextMenu", { pos, items });
+    },
+    contextMenuItems(vm, menuItems) {
+      return menuItems.map(v => v.text).includes("WhoAmI?")
+        ? []
+        : [
+            {
+              text: "WhoAmI?",
+              action: () => {
+                console.log(vm);
+              }
+            }
+          ];
+    }
+  }
+};
 export default {
   props: ["items", "pos"],
   data() {
@@ -42,9 +69,9 @@ export default {
     },
     handleAction(item) {
       if (item.isParent) {
-        item.call();
+        item.action();
       } else {
-        item.call();
+        item.action();
         this.$store.dispatch("hideContextMenu");
       }
     }
