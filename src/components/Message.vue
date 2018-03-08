@@ -24,6 +24,13 @@ export default {
         {
           text: `Reply to ${vm.entity}`,
           action: () => {
+            let entityName;
+            if (vm.entity.split(" ").length > 1) {
+              entityName = `@'${vm.entity}' `;
+            } else {
+              entityName = `@${vm.entity} `;
+            }
+            vm.$store.dispatch("setInputText", entityName);
             console.log("TODO: Change input text value to `@entity`");
           }
         }
