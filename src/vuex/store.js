@@ -46,7 +46,7 @@ export default new Vuex.Store({
     },
     showContextMenu({ commit }, { pos, items }) {
       commit("SET_CONTEXT_MENU_POS", pos);
-      if (items.length > 1) {
+      if (items.length > 0) {
         commit("SHOW_CONTEXT_MENU");
         commit("SET_CONTEXT_MENU_ITEMS", items);
       }
