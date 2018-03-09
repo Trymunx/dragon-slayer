@@ -13,27 +13,16 @@ export const mixin = {
   methods: {
     showContextMenu(event) {
       let pos = { x: event.x, y: event.y };
-      var items = [];
+      let items = [];
       let comp = this;
       while (comp) {
-        let e = comp.contextMenuItems(comp, items);
+        let e = comp.contextMenuItems(comp, items) || [];
         items = [].concat(items, e);
         comp = comp.$parent;
       }
       this.$store.dispatch("showContextMenu", { pos, items });
     },
-    contextMenuItems(vm, menuItems) {
-      return menuItems.map(v => v.text).includes("WhoAmI?")
-        ? []
-        : [
-            {
-              text: "WhoAmI?",
-              action: () => {
-                console.log(vm);
-              }
-            }
-          ];
-    }
+    contextMenuItems(vm, menuItems) {}
   }
 };
 export default {
