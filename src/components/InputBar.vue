@@ -1,15 +1,31 @@
 <template>
   <div id="input-bar">
-    > <input type="text" id="input-text" placeholder="Enter commands here..." v-model="inputText" @keypress.enter="submit"/>
+    > <input type="text" id="input-text" placeholder="_"
+     v-model="inputText" @keypress.enter="submit"/>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      inputText: ""
-    };
+  // data() {
+  //   return {
+  //     inputText: ""
+  //   };
+  // },
+  watch: {
+    inputText() {
+      inputText.set();
+    }
+  },
+  computed: {
+    inputText: {
+      get() {
+        return this.$store.getters.inputText;
+      },
+      set() {
+        this.$store.dispatch("setInputText", this.inputText);
+      }
+    }
   },
   methods: {
     submit() {

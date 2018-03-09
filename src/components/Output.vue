@@ -22,13 +22,13 @@ export default {
       return [
         {
           text: "Log vuex",
-          call(){
+          action: () => {
             console.log(vm.$store);
           }
         },
         {
           text: "Do Nothing",
-          call(){}
+          action: () => {}
         }
       ];
     }

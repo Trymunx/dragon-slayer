@@ -29,9 +29,10 @@ export default new Vuex.Store({
     playerName: "Player Name",
     contextMenu: {
       show: false,
-      pos: {x: 0, y: 0},
+      pos: { x: 0, y: 0 },
       items: () => []
-    }
+    },
+    inputText: ""
   },
 
   plugins: [createGamePlugin(eventBus, [["evt", "TEST_EVENT"], ["event1", "event2", "event3"], "ADD_MESSAGE", new Map([["mapE", "mapM"]]), {"obE": "obM"}], {"ADD_MESSAGE": (m) => eventBus.emit("evt", m)})],
@@ -39,22 +40,26 @@ export default new Vuex.Store({
   getters: {
     playerName: (state) => state.playerName,
     messages: (state) => state.messages,
-    contextMenu: (state) => state.contextMenu
+    contextMenu: (state) => state.contextMenu,
+    inputText: (state) => state.inputText
   },
 
   actions: {
     addMessage({ commit }, data) {
       commit("ADD_MESSAGE", data);
     },
-    setContextMenuItems({ commit }, items) {
-      commit("SET_CONTEXT_MENU_ITEMS", items);
-    },
-    showContextMenu({ commit }, pos) {
+    showContextMenu({ commit }, { pos, items }) {
       commit("SET_CONTEXT_MENU_POS", pos);
-      commit("SHOW_CONTEXT_MENU");
+      if (items.length > 1) {
+        commit("SHOW_CONTEXT_MENU");
+        commit("SET_CONTEXT_MENU_ITEMS", items);
+      }
     },
     hideContextMenu({ commit }) {
       commit("HIDE_CONTEXT_MENU");
+    },
+    setInputText({ commit }, text) {
+      commit("SET_INPUT_TEXT", text);
     }
   },
 
@@ -85,6 +90,9 @@ export default new Vuex.Store({
     },
     HIDE_CONTEXT_MENU(state) {
       state.contextMenu.show = false;
+    },
+    SET_INPUT_TEXT(state, text) {
+      state.inputText = text;
     },
     TEST_EVENT(state) {
       console.log("TEST_EVENT mutation committed");

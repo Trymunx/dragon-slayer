@@ -10,15 +10,31 @@ export default {
   props: ["entity", "message"],
   methods: {
     contextMenuItems(vm) {
-      return {
-        text: "Resend message",
-        call: () => {
-          vm.$store.dispatch("addMessage", {
-            entity: vm.entity,
-            message: vm.message
-          });
+      return [
+        {
+          text: "Resend message",
+          action: () => {
+            vm.$store.dispatch("addMessage", {
+              entity: vm.$store.getters.playerName,
+              message: vm.message
+            });
+            this.$game.parseCommand(vm.message);
+          }
+        },
+        {
+          text: `Reply to ${vm.entity}`,
+          action: () => {
+            let entityName;
+            if (vm.entity.split(" ").length > 1) {
+              entityName = `@'${vm.entity}' `;
+            } else {
+              entityName = `@${vm.entity} `;
+            }
+            vm.$store.dispatch("setInputText", entityName);
+            console.log("TODO: Change input text value to `@entity`");
+          }
         }
-      };
+      ];
     }
   }
 };
