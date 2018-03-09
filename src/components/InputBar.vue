@@ -12,30 +12,30 @@ export default {
   //     inputText: ""
   //   };
   // },
-  watch: {
-    inputText() {
-      inputText.set();
-    }
-  },
+  // watch: {
+  //   inputText() {
+  //     inputText.set();
+  //   }
+  // },
   computed: {
     inputText: {
       get() {
         return this.$store.getters.inputText;
       },
-      set() {
-        this.$store.dispatch("setInputText", this.inputText);
+      set(newValue) {
+        this.$store.dispatch("setInputText", newValue);
       }
     }
   },
   methods: {
     submit() {
-      if (this.inputText) {
+      if (this.$store.getters.inputText !== "") {
         this.$store.dispatch("addMessage", {
           entity: this.$store.getters.playerName,
-          message: this.inputText
+          message: this.$store.getters.inputText
         });
-        this.$game.parseCommand(this.inputText);
-        this.inputText = "";
+        this.$game.parseCommand(this.$store.getters.inputText);
+        this.$store.dispatch("setInputText", "");
 
         // Have to wait for DOM to be updated before scrolling
         this.$nextTick(() => {
