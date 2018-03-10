@@ -25,34 +25,18 @@ export default new Vuex.Store({
       { entity: "Quest giver", message: "You hand the item to the quest giver and they give you some gold and a life lesson." }
     ],
     playerName: "Player Name",
-    contextMenu: {
-      show: false,
-      pos: { x: 0, y: 0 },
-      items: () => []
-    },
     inputText: ""
   },
 
   getters: {
     playerName: (state) => state.playerName,
     messages: (state) => state.messages,
-    contextMenu: (state) => state.contextMenu,
     inputText: (state) => state.inputText
   },
 
   actions: {
     addMessage({ commit }, data) {
       commit("ADD_MESSAGE", data);
-    },
-    showContextMenu({ commit }, { pos, items }) {
-      commit("SET_CONTEXT_MENU_POS", pos);
-      if (items.length > 0) {
-        commit("SHOW_CONTEXT_MENU");
-        commit("SET_CONTEXT_MENU_ITEMS", items);
-      }
-    },
-    hideContextMenu({ commit }) {
-      commit("HIDE_CONTEXT_MENU");
     },
     setInputText({ commit }, text) {
       commit("SET_INPUT_TEXT", text);
@@ -65,18 +49,6 @@ export default new Vuex.Store({
         entity: data.entity,
         message: data.message
       });
-    },
-    SET_CONTEXT_MENU_ITEMS(state, items) {
-      state.contextMenu.items = items;
-    },
-    SET_CONTEXT_MENU_POS(state, pos) {
-      state.contextMenu.pos = pos;
-    },
-    SHOW_CONTEXT_MENU(state) {
-      state.contextMenu.show = true;
-    },
-    HIDE_CONTEXT_MENU(state) {
-      state.contextMenu.show = false;
     },
     SET_INPUT_TEXT(state, text) {
       state.inputText = text;

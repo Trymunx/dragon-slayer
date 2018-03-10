@@ -1,6 +1,6 @@
 <template>
-  <div id="context-menu" ref="menu" :style="style">
-    <div v-for="(item, i) in items" :key="i">
+  <div id="context-menu" v-show="show" ref="menu" :style="style">
+    <div v-for="(item, i) in this.items" :key="i">
       <div @click.stop="handleAction(item)" class="context-item">
         {{item.text}}
       </div>
@@ -9,6 +9,14 @@
 </template>
 
 <script>
+let data = {
+  items: [],
+  pos: {
+    x: 0,
+    y: 0
+  }
+};
+
 export const mixin = {
   methods: {
     showContextMenu(event) {
@@ -20,32 +28,39 @@ export const mixin = {
         items = [].concat(items, e);
         comp = comp.$parent;
       }
-      this.$store.dispatch("showContextMenu", { pos, items });
+      data.items = items;
+      this.$nextTick(() => data.pos = pos);
     },
-    contextMenuItems(vm, menuItems) {}
+    contextMenuItems(vm, menuItems) {},
+    hideContextMenu() {
+      data.items = [];
+    }
   }
 };
 export default {
-  props: ["items", "pos"],
   data() {
-    return {
-      style: {
-        top: 0,
-        left: 0
-      }
-    };
-  },
-  watch: {
-    pos(newPos) {
-      this.updateStyle(newPos.x, newPos.y);
-    }
+    return data;
   },
   methods: {
-    updateStyle(posX, posY) {
+    handleAction(item) {
+      if (item.isParent) {
+        item.action();
+      } else {
+        item.action();
+        this.hideContextMenu();
+      }
+    }
+  },
+  computed: {
+    show() {
+      return this.items.length > 0
+    },
+    style() {
       const { offsetWidth, offsetHeight } = document.getElementById(
         "context-menu"
       ) || { offsetWidth: 0, offsetHeight: 0 };
-      this.style = {
+      const [posX, posY] = [this.pos.x, this.pos.y];
+      return {
         left:
           posX + offsetWidth < window.innerWidth
             ? `${posX}px`
@@ -55,14 +70,6 @@ export default {
             ? `${posY}px`
             : `${posY - offsetHeight}px`
       };
-    },
-    handleAction(item) {
-      if (item.isParent) {
-        item.action();
-      } else {
-        item.action();
-        this.$store.dispatch("hideContextMenu");
-      }
     }
   }
 };

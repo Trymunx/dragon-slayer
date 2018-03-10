@@ -5,7 +5,7 @@
     <player-stats/>
     <player-inventory/>
     <input-bar/>
-    <context-menu v-show="contextMenuData.show" :items="contextMenuData.items" :pos="contextMenuData.pos"/>
+    <context-menu/>
   </div>
 </template>
 
@@ -35,9 +35,6 @@ export default {
     focusInput(event) {
       document.getElementById("input-text").focus();
     },
-    hideContextMenu(event) {
-      this.$store.dispatch("hideContextMenu");
-    },
     contextMenuItems(vm, menuItems) {
       return [{
               text: "WhoAmI?",
@@ -45,11 +42,6 @@ export default {
                 console.log(vm);
               }
             }];
-    }
-  },
-  computed: {
-    contextMenuData() {
-      return this.$store.getters.contextMenu;
     }
   }
 };
