@@ -14,11 +14,9 @@ export default {
         {
           text: "Resend message",
           action: () => {
-            vm.$store.dispatch("addMessage", {
-              entity: vm.$store.getters.playerName,
-              message: vm.message
-            });
-            this.$game.parseCommand(vm.message);
+            vm.$store.dispatch("setInputText",
+              vm.message
+            );
           }
         },
         {
@@ -31,6 +29,12 @@ export default {
               entityName = `@${vm.entity}`;
             }
             vm.$store.dispatch("setInputText", `${entityName} `);
+          }
+        },
+        {
+          text: `Inspect ${vm.entity}`,
+          action: () => {
+            console.log("TODO: pass more than just the name into the message to inspect.");
           }
         }
       ];
