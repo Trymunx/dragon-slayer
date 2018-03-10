@@ -37,6 +37,10 @@ export default new Vuex.Store({
   actions: {
     addMessage({ commit }, data) {
       commit("ADD_MESSAGE", data);
+      // Have to wait for DOM to be updated before scrolling
+      Vue.nextTick(() => {
+        document.getElementById("output").lastChild.scrollIntoView();
+      });
     },
     setInputText({ commit }, text) {
       commit("SET_INPUT_TEXT", text);

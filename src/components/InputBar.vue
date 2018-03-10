@@ -19,18 +19,13 @@ export default {
   },
   methods: {
     submit() {
-      if (this.$store.getters.inputText !== "") {
+      if (this.inputText !== "") {
         this.$store.dispatch("addMessage", {
           entity: this.$store.getters.playerName,
-          message: this.$store.getters.inputText
+          message: this.inputText
         });
-        this.$game.parseCommand(this.$store.getters.inputText);
+        this.$game.parseCommand(this.inputText);
         this.$store.dispatch("setInputText", "");
-
-        // Have to wait for DOM to be updated before scrolling
-        this.$nextTick(() => {
-          document.getElementById("output").lastChild.scrollIntoView();
-        });
       }
     }
   }
