@@ -3,28 +3,10 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
-    messages: [
-      { entity: "Test messages follow:", message: "" },
-      { entity: "Alpvax", message: "I'm helping you develop your game." },
-      { entity: "p-Dandy", message: "I'm fixing your broken shit." },
-      {
-        entity:
-          "This is a really long name that should break over a few lines",
-        message:
-          "I'm trying to help fix your broken shit. I'm trying to help fix your broken shit. I'm trying to help fix your broken shit. I'm trying to help fix your broken shit. I'm trying to help fix your broken shit."
-      },
-      { entity: "Me", message: "Thanks guys." },
-      { entity: "Quest giver", message: "You receive a quest, it's to go and pick up a whole load of shit then fight some monsters and collect something from them and craft that stuff together to make an item." },
-      { entity: "", message: "You collect the stuff." },
-      { entity: "", message: "You hit the rat for so much damage, numbers etc." },
-      { entity: "Rat", message: "The rat attacks you." },
-      { entity: "", message: "You fight the creatures, gathering their whatever." },
-      { entity: "Update", message: "You craft the item." },
-      { entity: "Quest giver", message: "You hand the item to the quest giver and they give you some gold and a life lesson." }
-    ],
-    playerName: "Player Name",
+    messages: [],
+    playerName: "",
     inputText: ""
   },
 
@@ -35,6 +17,9 @@ export default new Vuex.Store({
   },
 
   actions: {
+    setPlayerName({ commit }, name) {
+      commit("SET_PLAYER_NAME", name);
+    },
     addMessage({ commit }, data) {
       commit("ADD_MESSAGE", data);
     },
@@ -44,6 +29,9 @@ export default new Vuex.Store({
   },
 
   mutations: {
+    SET_PLAYER_NAME(state, name) {
+      state.playerName = name;
+    },
     ADD_MESSAGE(state, data) {
       state.messages.push({
         entity: data.entity,
@@ -55,3 +43,5 @@ export default new Vuex.Store({
     }
   }
 });
+
+export default store;

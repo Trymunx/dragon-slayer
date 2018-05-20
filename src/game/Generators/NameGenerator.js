@@ -416,15 +416,15 @@ const fullNames = [
   "Countess Isota"
 ];
 
-const getName = () => {
+const genName = () => {
   let name = "";
 
   if (Math.random() < 0.1) {
-    let n = Math.floor(Math.random() * fullNames.length);
+    let n = ~~(Math.random() * fullNames.length);
     name = fullNames[n];
   } else {
-    let f = Math.floor(Math.random() * fullNames.length);
-    let l = Math.floor(Math.random() * fullNames.length);
+    let f = ~~(Math.random() * firstNames.length);
+    let l = ~~(Math.random() * lastNames.length);
     name = `${firstNames[f]} ${lastNames[l]}`;
   }
   return name;

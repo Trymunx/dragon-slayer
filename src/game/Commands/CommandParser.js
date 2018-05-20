@@ -2,5 +2,9 @@
 export default {
   ParseCommand(command) {
     console.log("Parsing: " + command);
+    return {
+      entity: "Game",
+      message: "Response to " + command
+    }
   }
 }
