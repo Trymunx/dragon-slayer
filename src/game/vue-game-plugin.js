@@ -1,14 +1,18 @@
 import GameStateManager from "./GameStates/GameStateManager";
 import CommandParser from "./Commands/CommandParser";
+import GenerateName from "./Generators/NameGenerator";
 
 export default {
   install: (Vue) => {
     Vue.prototype.$game = {
       startGame() {
-        GameStateManager.StartGame();
+        return GameStateManager.StartGame();
+      },
+      generateName() {
+        return GenerateName();
       },
       parseCommand(command) {
-        CommandParser.ParseCommand(command);
+        return CommandParser.ParseCommand(command);
       }
     }
   }
