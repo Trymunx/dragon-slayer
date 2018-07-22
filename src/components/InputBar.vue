@@ -19,45 +19,8 @@ export default {
   },
   methods: {
     submit() {
-      if (!this.$store.getters.playerName) {
-        if (this.$store.getters.inputText) {
-          this.$store.dispatch("setPlayerName", this.$store.getters.inputText)
-          this.$store.dispatch("addMessage", {
-            entity: this.$store.getters.playerName,
-            message: this.$store.getters.inputText
-          });
-          this.$store.dispatch("setInputText", "");
-        } else {
-          this.$store.dispatch("setPlayerName", this.$game.generateName());
-          this.$store.dispatch("addMessage", {
-            entity: "Generated name:",
-            message: this.$store.getters.playerName
-          });
-        }
-      } else if (this.$store.getters.inputText !== "") {
-        this.$store.dispatch("addMessage", {
-          entity: this.$store.getters.playerName,
-          message: this.inputText
-        });
-
-        // Returns a response object
-        let response = this.$game.parseCommand(this.$store.getters.inputText);
-
-        this.$store.dispatch("setInputText", "");
-
-        // Have to wait for DOM to be updated before scrolling
-        this.$nextTick(() => {
-          document.getElementById("output").lastChild.scrollIntoView();
-        });
-
-        setTimeout(() => {
-          this.$store.dispatch("addMessage", response);
-
-          // Have to wait for DOM to be updated before scrolling
-          this.$nextTick(() => {
-            document.getElementById("output").lastChild.scrollIntoView();
-          });
-        }, 250);
+      if (this.inputText !== "") {
+        this.$store.dispatch("enterCommand", this.inputText);
       }
     }
   }
