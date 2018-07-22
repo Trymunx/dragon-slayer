@@ -22,10 +22,14 @@ const store = new Vuex.Store({
     },
     addMessage({ commit }, data) {
       commit("ADD_MESSAGE", data);
-      // Have to wait for DOM to be updated before scrolling
-      Vue.nextTick(() => {
-        document.getElementById("output").lastChild.scrollIntoView();
+    },
+    enterCommand({ commit, state }, text) {
+      commit("ADD_MESSAGE", {
+        entity: state.playerName,
+        message: text
       });
+      commit("SET_INPUT_TEXT", "");
+      console.log(`Parsing ${text}`);
     },
     setInputText({ commit }, text) {
       commit("SET_INPUT_TEXT", text);
