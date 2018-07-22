@@ -14,6 +14,13 @@ export default {
       return this.$store.getters.messages;
     }
   },
+  watch: {
+    messages() {
+      this.$nextTick(() => {
+        document.querySelector("#output").lastChild.scrollIntoView();
+      });
+    }
+  },
   components: {
     Message
   },
