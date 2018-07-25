@@ -1,5 +1,5 @@
 import GameStateManager from "./GameStates/GameStateManager";
-import CommandParser from "./Commands/CommandParser";
+// import CommandParser from "./Commands/CommandParser";
 import GenerateName from "./Generators/NameGenerator";
 
 export default {
@@ -12,7 +12,8 @@ export default {
         return GenerateName();
       },
       parseCommand(command) {
-        return CommandParser.ParseCommand(command);
+        // return CommandParser.ParseCommand(command);
+        console.log("Parsing " + command);
       }
     }
   }
