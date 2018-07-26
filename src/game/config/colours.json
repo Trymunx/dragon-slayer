@@ -1,0 +1,9 @@
+{
+  "creatures": {
+    "aggressive": "#C62F39",
+    "passive": "#587F26"
+  },
+  "items": "#FDCA40",
+  "blue": "#3772FF",
+  "lightGreen": "#60992D"
+}
