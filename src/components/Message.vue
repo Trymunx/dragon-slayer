@@ -51,7 +51,7 @@ export default {
 }
 
 .messages:first-child > div {
-  padding-top: 5px;
+  padding-top: 8px;
 }
 
 .messages:hover .entity {
