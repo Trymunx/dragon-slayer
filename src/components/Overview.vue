@@ -1,31 +1,15 @@
 <template>
-  <div id="overview" @click="resizeOverview">
-    <!-- <canvas width="400" height="400" id="overview-canvas">
-      Canvas unsupported, use a newer browser.
-    </canvas> -->
+  <div id="overview">
   </div>
 </template>
 
 <script>
-import DisplayMap from "../game/utils/DisplayMap";
-import * as ROT from "rot-js";
 import _ from "lodash";
+import display from "../game/overview/Display.js";
 
 export default {
-  data() {
-    return {
-      display: new ROT.Display({
-        fontSize: 10,
-        fg: "#daddd8",
-        bg: "#1e1e1e",
-        forceSquareRatio: true
-      })
-    }
-  },
   mounted() {
-    // DisplayMap();
-
-    document.querySelector("#overview").appendChild(this.display.getContainer());
+    document.querySelector("#overview").appendChild(display.getContainer());
 
     this.resizeOverview();
 
@@ -35,9 +19,9 @@ export default {
     resizeOverview() {
       let overviewDiv = document.querySelector("#overview");
 
-      this.display.setOptions({
-        width: ~~(overviewDiv.offsetWidth / 10),
-        height: ~~(overviewDiv.offsetHeight / 10)
+      display.setOptions({
+        width: ~~(overviewDiv.offsetWidth / display._options.fontSize),
+        height: ~~(overviewDiv.offsetHeight / display._options.fontSize)
       });
     }
   }
@@ -51,6 +35,7 @@ export default {
 
 #overview {
   color: var(--text-blur);
+  /* background-color: #47681D; */
   background-color: #1e1e1e;
   border-color: var(--ui-border);
   font-family: "Ubuntu Mono", monospace;
