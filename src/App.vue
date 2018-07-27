@@ -29,11 +29,15 @@ export default {
   },
   created() {
     this.$game.start();
-    window.addEventListener("keydown", this.focusInput);
+    window.addEventListener("keyup", this.focusInput);
   },
   methods: {
     focusInput(event) {
-      document.getElementById("input-text").focus();
+      if (event.key === "Enter") {
+        document.querySelector("#input-text").focus();
+      } else if (event.key === "Escape") {
+        document.querySelector("#input-text").blur();
+      }
     },
     contextMenuItems(vm, menuItems) {
       return [{
