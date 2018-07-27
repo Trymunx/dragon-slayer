@@ -19,8 +19,11 @@ export default {
   },
   methods: {
     submit() {
-      if (this.inputText !== "") {
-        this.$store.dispatch("enterCommand", this.inputText);
+      // Only submit if there are non-whitespace chars
+      if (!/^\s*$/.test(this.inputText)) {
+        let input = this.inputText.trim();
+        this.$store.dispatch("enterCommand", input);
+        this.$game.receiveInput(input);
       }
     }
   }
