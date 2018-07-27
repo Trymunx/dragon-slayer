@@ -29,7 +29,6 @@ const store = new Vuex.Store({
         message: text
       });
       commit("SET_INPUT_TEXT", "");
-      console.log(`Parsing ${text}`);
     },
     setInputText({ commit }, text) {
       commit("SET_INPUT_TEXT", text);
