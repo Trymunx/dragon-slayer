@@ -18,6 +18,9 @@ export default {
       }
     }
   },
+  mounted() {
+    document.querySelector("#input-text").focus();
+  },
   methods: {
     submit() {
       // Only submit if there are non-whitespace chars
