@@ -11,18 +11,19 @@ export default {
   mounted() {
     document.querySelector("#overview").appendChild(display.getContainer());
 
-    this.resizeOverview();
-
     window.addEventListener("resize", _.debounce(this.resizeOverview, 100));
   },
   methods: {
     resizeOverview() {
-      let overviewDiv = document.querySelector("#overview");
+      if (!this.$game.getCurrentState().displaySplash) {
+        let overviewDiv = document.querySelector("#overview");
+        let [width, height] = display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
 
-      display.setOptions({
-        width: ~~(overviewDiv.offsetWidth / display._options.fontSize),
-        height: ~~(overviewDiv.offsetHeight / display._options.fontSize)
-      });
+        display.setOptions({
+          width: width,
+          height: height
+        });
+      }
     }
   }
 };
