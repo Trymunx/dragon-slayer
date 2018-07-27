@@ -28,7 +28,7 @@ export default {
     ContextMenu
   },
   created() {
-    this.$store.dispatch("addMessage", this.$game.startGame());
+    this.$game.start();
     window.addEventListener("keydown", this.focusInput);
   },
   methods: {
