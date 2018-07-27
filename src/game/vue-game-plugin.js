@@ -5,8 +5,12 @@ import GenerateName from "./Generators/NameGenerator";
 export default {
   install: (Vue) => {
     Vue.prototype.$game = {
-      startGame() {
-        return GameStateManager.StartGame();
+      start() {
+        GameStateManager.StartGame();
+      },
+      receiveInput(input) {
+        console.log(input);
+        GameStateManager.receiveInput(input);
       },
       generateName() {
         return GenerateName();
@@ -14,6 +18,9 @@ export default {
       parseCommand(command) {
         // return CommandParser.ParseCommand(command);
         console.log("Parsing " + command);
+      },
+      getCurrentState() {
+        return GameStateManager.currentState;
       }
     }
   }
