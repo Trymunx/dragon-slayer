@@ -1,7 +1,8 @@
 <template>
   <div id="input-bar">
     > <input type="text" id="input-text" placeholder="_"
-     v-model="inputText" @keypress.enter="submit"/>
+     v-model="inputText" @keypress.enter="submit"
+     @focus="inputBar('focus')" @blur="inputBar('blur')"/>
   </div>
 </template>
 
@@ -25,6 +26,21 @@ export default {
         this.$store.dispatch("enterCommand", input);
         this.$game.receiveInput(input);
       }
+    },
+    inputBar(state) {
+      let colour = ["#434241", "#262626"];
+
+      switch (state) {
+        case "focus":
+          colour = colour[0];
+          break;
+        case "blur":
+          colour = colour[1];
+          break;
+      }
+
+      document.querySelector("#input-bar").style["background-color"] = colour;
+      document.querySelector("#input-text").style["background-color"] = colour;
     }
   }
 };
