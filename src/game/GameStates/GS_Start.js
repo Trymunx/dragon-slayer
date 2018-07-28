@@ -62,7 +62,7 @@ GS_Start.confirmPlayerName = function(input) {
       store.dispatch("setPlayerName", input);
       store.dispatch("addMessage", {
         entity: "Confirm name:",
-        message: `Setting name to ${input}. Use this name? [yes/no]`
+        message: `Your name is ${input}. Use this name? [yes/no]`
       });
   }
 }
