@@ -41,10 +41,15 @@ GS_Main.setPlayer = function(player) {
 }
 
 GS_Main.receiveInput = function(input) {
-  store.dispatch("addMessage", {
-    entity: "Main state",
-    message: "Response to " + input
-  });
+  if (store.getters.instantMode) {
+    // Handle as an instant command
+  } else {
+    // Handle as text command
+    store.dispatch("addMessage", {
+      entity: "Main state",
+      message: "Response to " + input
+    });
+  }
 }
 
 export default GS_Main;

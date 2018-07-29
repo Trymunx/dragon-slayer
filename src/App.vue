@@ -29,14 +29,16 @@ export default {
   },
   created() {
     this.$game.start();
-    window.addEventListener("keyup", this.focusInput);
+    window.addEventListener("keyup", this.handleInput);
   },
   methods: {
-    focusInput(event) {
+    handleInput(event) {
       if (event.key === "Enter") {
         document.querySelector("#input-text").focus();
       } else if (event.key === "Escape") {
         document.querySelector("#input-text").blur();
+      } else if (this.$store.getters.instantMode) {
+        this.$game.receiveInput(event.key);
       }
     },
     contextMenuItems(vm, menuItems) {

@@ -36,9 +36,11 @@ export default {
       switch (state) {
         case "focus":
           colour = colour[0];
+          this.$store.dispatch("setCommandMode", "text");
           break;
         case "blur":
           colour = colour[1];
+          this.$store.dispatch("setCommandMode", "instant");
           break;
       }
 
