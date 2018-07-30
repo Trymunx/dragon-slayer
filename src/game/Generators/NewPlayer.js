@@ -35,7 +35,7 @@ class Player {
     this.name = name || GenerateName();
     this.attributes = Object.assign({}, PlayerTemplate.attributes);
     this.attributes.level = level || this.attributes.level;
-    this.attributes.currentHP = this.attributes.totalHP = (5 * this.attributes.level ** 2 + 95);
+    this.attributes.currentHP = this.attributes.totalHP = this.calcMaxHP();
 
     this.inventory = new Inventory();
 
@@ -54,10 +54,14 @@ class Player {
     return healed;
   }
 
+  calcMaxHP(level = this.attributes.level) {
+    return 10 * ~~((10 * level ** 1.3 + 90) / 10);
+  }
+
   get expToNextLevel() {
     return Math.round(50 * this.attributes.level ** 1.3);
   }
 }
 
-const newPlayer = (name) => new Player(name);
+const newPlayer = (name, level) => new Player(name, level);
 export default newPlayer;
