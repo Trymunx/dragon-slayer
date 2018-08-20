@@ -6,7 +6,7 @@ export default class World {
     this.chunks = new Map();
 
     // Generate starting chunk
-    this.spawnChunk = genChunk(0, 0);
+    this.spawnChunk = this.genChunk(0, 0);
     // Generate surrounding chunks
     [[0, 1], [0, -1], [1, 0], [-1, 0]].forEach(c => {
       this.genChunk(c[0], c[1]);
