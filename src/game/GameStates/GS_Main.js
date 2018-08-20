@@ -3,6 +3,7 @@ import store from "../../vuex/store";
 import GameStateManager from "./GameStateManager";
 import GameState from "./GameState";
 import config from "../config/display";
+import World from "../Generators/world/World";
 
 var GS_Main = new GameState("main", false);
 
@@ -14,6 +15,9 @@ GS_Main.init = function() {
     fontSize: config.fontSize
   });
 
+  let world = new World();
+  console.log(world);
+
   // Resize only after resetting font size to default
   let overviewDiv = document.querySelector("#overview");
   let [width, height] = display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
@@ -24,6 +28,8 @@ GS_Main.init = function() {
 
   display.drawText(0, 0, "Main state initialised");
   display.drawText(2, 2, "Player: " + this.player.name);
+
+  display.drawWorld(world, {x: 0, y: 0});
 
   store.dispatch("addMessage", {
     entity: "",
