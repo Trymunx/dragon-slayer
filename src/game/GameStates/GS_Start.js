@@ -4,16 +4,12 @@ import GameStateManager from "./GameStateManager";
 import GameState from "./GameState";
 import generateName from "../Generators/NameGenerator";
 import newPlayer from "../Generators/NewPlayer";
+import displayConf from "../config/display";
 
 var GS_Start = new GameState("start", true);
 
 GS_Start.init = function() {
-  display.setOptions({
-    fontFamily: "Cinzel",
-    width: 9,
-    height: 4,
-    fontSize: 55
-  });
+  display.setOptions(displayConf.start);
   display.draw(4, 1, "Trymunx's", "#8a8c89");
   display.draw(4, 2, "Dragon Slayer", "#086623");
 

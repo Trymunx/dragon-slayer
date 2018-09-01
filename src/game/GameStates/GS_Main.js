@@ -2,18 +2,14 @@ import display from "../overview/Display";
 import store from "../../vuex/store";
 import GameStateManager from "./GameStateManager";
 import GameState from "./GameState";
-import config from "../config/display";
+import displayConf from "../config/display";
 import World from "../Generators/world/World";
 
 var GS_Main = new GameState("main", false);
 
 GS_Main.init = function() {
   display.clear();
-  display.setOptions({
-    bg: "transparent",
-    fontFamily: "monospace",
-    fontSize: config.fontSize
-  });
+  display.setOptions(displayConf.main);
 
   let world = new World();
   console.log(world);

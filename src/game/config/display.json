@@ -1,3 +1,13 @@
 {
-  "fontSize": 18
+  "main": {
+    "bg": "transparent",
+    "fontFamily": "monospace",
+    "fontSize": 18
+  },
+  "start": {
+    "fontFamily": "Cinzel",
+    "width": 9,
+    "height": 4,
+    "fontSize": 55
+  }
 }
