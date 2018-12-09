@@ -7,7 +7,7 @@ import World from "../Generators/world/World";
 
 var GS_Main = new GameState("main", false);
 
-GS_Main.init = function() {
+GS_Main.init = () => {
   display.clear();
   display.setOptions(displayConf.main);
 
@@ -38,11 +38,11 @@ GS_Main.init = function() {
   });
 }
 
-GS_Main.setPlayer = function(player) {
+GS_Main.setPlayer = player => {
   this.player = player;
 }
 
-GS_Main.receiveInput = function(input) {
+GS_Main.receiveInput = input => {
   if (store.getters.instantMode) {
     // Handle as an instant command
   } else {
