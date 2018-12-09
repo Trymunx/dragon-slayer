@@ -4,14 +4,14 @@ const trees = [
     "symbol": "↟",
     "prob": 20
   },
-  {
-    "symbol": "🌲",
-    "prob": 20
-  },
-  {
-    "symbol": "🌳",
-    "prob": 15
-  },
+  // {
+  //   "symbol": "🌲",
+  //   "prob": 20
+  // },
+  // {
+  //   "symbol": "🌳",
+  //   "prob": 15
+  // },
   {
     "symbol": "⇞",
     "prob": 12
@@ -62,10 +62,8 @@ const trees = [
   }
 ]
 
-let total = trees.reduce((sum, el) => {
-  return sum += el.prob;
-}, 0);
-console.log(total);
+trees.sort((a, b) => b.prob - a.prob);
+let total = trees.reduce((acc, el, i) => (el.prob += acc), 0);
 
 ROT.Display.prototype.drawWorld = function(world, playerPos) {
   let pChunk = world.getChunkFromTile(playerPos.x, playerPos.y);
@@ -78,28 +76,11 @@ ROT.Display.prototype.drawWorld = function(world, playerPos) {
       // } else {
         let rand = ~~(Math.random() * total);
         let tree = 0;
-        while (rand <= tprobs[tree + 1]) {
+        while (rand >= trees[tree + 1].prob) {
           tree++
         }
 
-        display.draw(i, j, trees[tree], "#086623");
-
-        // display.draw(i, j, "🌲");
-        // display.draw(i, j, "🌳");
-        // display.draw(i, j, "⇈");
-        // display.draw(i, j, "⇞");
-        // display.draw(i, j, "↑");
-        // display.draw(i, j, "⇑");
-        // display.draw(i, j, "⭫");
-        // display.draw(i, j, "𐇲");
-        // display.draw(i, j, "⇡");
-        // display.draw(i, j, "⭎");
-        // display.draw(i, j, "⭚");
-        // display.draw(i, j, "⭜");
-        // display.draw(i, j, "⭂");
-        // display.draw(i, j, "⤒");
-        // display.draw(i, j, "⤊");
-        // display.draw(i, j, "⥉");
+        display.draw(i, j, trees[tree].symbol, "#086623");
       // }
     }
   }
