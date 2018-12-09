@@ -10,7 +10,7 @@ export default class World {
     // Generate surrounding chunks
     [[0, 1], [0, -1], [1, 0], [-1, 0]].forEach(c => {
       this.genChunk(c[0], c[1]);
-    })
+    });
 
   // constructor(type, size) {
   //   this.chunks = new Map();

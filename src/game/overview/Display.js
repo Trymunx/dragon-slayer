@@ -66,7 +66,21 @@ trees.sort((a, b) => b.prob - a.prob);
 let total = trees.reduce((acc, el, i) => (el.prob += acc), 0);
 
 ROT.Display.prototype.drawWorld = function(world, playerPos) {
+  let zoom = 20;
+  let top = playerPos.y - zoom;
+  let bot = playerPos.y + zoom;
+  let left = playerPos.x - zoom;
+  let right = playerPos.x + zoom;
+
   let pChunk = world.getChunkFromTile(playerPos.x, playerPos.y);
+  let topLChunk = world.getChunkFromTile(left, top);
+  let botLChunk = world.getChunkFromTile(left, bot);
+  let topRChunk = world.getChunkFromTile(right, top);
+  let botRChunk = world.getChunkFromTile(right, bot);
+
+  [topLChunk, topRChunk, botLChunk, botRChunk].forEach(chunk => console.log(chunk === pChunk));
+
+
   // for (let i = 0; i < pChunk.tiles.length; i++) {
   //   for (let j = 0; j < pChunk.tiles[i].length; j++) {
   for (let i = 0; i < 30; i++) {

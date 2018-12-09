@@ -21,7 +21,7 @@ export default class Chunk {
   }
 
   static chunkKey(x, y) {
-    return toString(x + "," + y);
+    return x + "," + y;
   }
 
   static get size() {
