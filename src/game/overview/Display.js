@@ -66,28 +66,19 @@ trees.sort((a, b) => b.prob - a.prob);
 let total = trees.reduce((acc, el, i) => (el.prob += acc), 0);
 
 ROT.Display.prototype.drawWorld = function(world, playerPos) {
-  let zoom = 20;
+  let zoom = 15;
   let top = playerPos.y - zoom;
   let bot = playerPos.y + zoom;
   let left = playerPos.x - zoom;
   let right = playerPos.x + zoom;
 
-  let pChunk = world.getChunkFromTile(playerPos.x, playerPos.y);
-  let topLChunk = world.getChunkFromTile(left, top);
-  let botLChunk = world.getChunkFromTile(left, bot);
-  let topRChunk = world.getChunkFromTile(right, top);
-  let botRChunk = world.getChunkFromTile(right, bot);
-
-  [topLChunk, topRChunk, botLChunk, botRChunk].forEach(chunk => console.log(chunk === pChunk));
-
-
-  // for (let i = 0; i < pChunk.tiles.length; i++) {
-  //   for (let j = 0; j < pChunk.tiles[i].length; j++) {
-  for (let i = 0; i < 30; i++) {
-    for (let j = 0; j < 40; j++) {
-      // if (pChunk.tiles[i][j].creatures.length) {
-      //   display.draw(i, j, "@");
-      // } else {
+  for (let i = 0, y = top; y < bot; y++) {
+    for (let j = 0, x = left; x < right; x++) {
+      let chunk = world.getChunkFromTile(x, y);
+      let tile = chunk.getTileFromWorldCoords(x, y);
+      if (tile.creatures.length) {
+        display.draw(i, j, "@");
+      } else {
         let rand = ~~(Math.random() * total);
         let tree = 0;
         while (rand >= trees[tree + 1].prob) {
@@ -95,8 +86,10 @@ ROT.Display.prototype.drawWorld = function(world, playerPos) {
         }
 
         display.draw(i, j, trees[tree].symbol, "#086623");
-      // }
+      }
+      j++;
     }
+    i++;
   }
 }
 
