@@ -38,7 +38,10 @@ export default class Chunk {
   }
 
   getTileFromWorldCoords(tile_x, tile_y) {
-    return this.getTile(tile_x % Chunk.size, tile_y % Chunk.size);
+    return this.getTile(
+      Math.abs((Chunk.size + tile_x) % Chunk.size),
+      Math.abs((Chunk.size + tile_y) % Chunk.size)
+    );
   }
 
   generate() {

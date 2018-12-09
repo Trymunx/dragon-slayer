@@ -31,7 +31,12 @@ export default class World {
   }
   getChunkFromTile(tile_x, tile_y) {
     // Can't use ~~ here because values can be negative
-    return this.getChunk(Math.floor(tile_x / Chunk.size), Math.floor(tile_y / Chunk.size));
+    let chunkCoords = [Math.floor(tile_x / Chunk.size), Math.floor(tile_y / Chunk.size)];
+    if (this.chunkExists(...chunkCoords)) {
+      return this.getChunk(...chunkCoords);
+    } else {
+      return this.genChunk(...chunkCoords);
+    }
   }
   placePlayer(player, chunk = this.spawnChunk) {
     let playerPos = randomPosition();
