@@ -13,7 +13,7 @@ export default class Chunk {
     for (let i = 0; i < chunkSize; i++) {
       this.tiles[i] = [];
       for (let j = 0; j < chunkSize; j++) {
-        this.tiles[i][j] = new Tile(i, j, this);
+        this.tiles[i][j] = new Tile(i, j, this, "forest");
       }
     }
 

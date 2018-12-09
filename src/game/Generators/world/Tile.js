@@ -1,5 +1,7 @@
+import genTree from "../../utils/GenerateTree.js";
+
 export default class Tile {
-  constructor(x, y, chunk) {
+  constructor(x, y, chunk, terrain) {
     this.relx = x; // x relative to chunk
     this.rely = y; // y relative to chunk
     this.chunk = chunk;
@@ -8,8 +10,16 @@ export default class Tile {
     this.creatures = [];
     this.items = [];
     // this.structures = [];
-    this.terrain = "none"; // No terrain features, eg. rivers or hills
     this.display;
+    this.terrain = terrain; // No terrain features, eg. rivers or hills
+    switch (this.terrain) {
+      case "forest":
+        this.display = genTree();
+        break;
+      default:
+        this.display = ".";
+        break;
+    }
     // this.generators = [];
     this.spawnRateModifiers = new Map();
   }
