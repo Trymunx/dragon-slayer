@@ -66,26 +66,27 @@ trees.sort((a, b) => b.prob - a.prob);
 let total = trees.reduce((acc, el, i) => (el.prob += acc), 0);
 
 ROT.Display.prototype.drawWorld = function(world, playerPos) {
-  let zoom = 15;
-  let top = playerPos.y - zoom;
-  let bot = playerPos.y + zoom;
-  let left = playerPos.x - zoom;
-  let right = playerPos.x + zoom;
+  let curOpts = display.getOptions();
+  let top = Math.floor(playerPos.y - curOpts.height / 2);
+  let bot = Math.floor(playerPos.y + curOpts.height / 2);
+  let left = Math.floor(playerPos.x - curOpts.width / 2);
+  let right = Math.floor(playerPos.x + curOpts.width / 2);
 
   for (let i = 0, y = top; y < bot; y++) {
     for (let j = 0, x = left; x < right; x++) {
       let chunk = world.getChunkFromTile(x, y);
       let tile = chunk.getTileFromWorldCoords(x, y);
-      if (tile.creatures.length) {
-        display.draw(i, j, "@");
+      if (x === playerPos.x && y === playerPos.y) {
+        display.draw(j, i, "X", "#fff");
+      } else if (tile.creatures.length) {
+        display.draw(j, i, "@");
       } else {
         let rand = ~~(Math.random() * total);
         let tree = 0;
         while (rand >= trees[tree + 1].prob) {
           tree++
         }
-
-        display.draw(i, j, trees[tree].symbol, "#086623");
+        display.draw(j, i, trees[tree].symbol, "#086623");
       }
       j++;
     }
