@@ -8,24 +8,25 @@ import World from "../Generators/world/World";
 var GS_Main = new GameState("main", false);
 
 GS_Main.init = () => {
-  display.clear();
-  display.setOptions(displayConf.main);
+  this.display = display;
+  this.display.clear();
+  this.display.setOptions(displayConf.main);
 
-  let world = new World();
-  console.log(world);
+  this.world = new World();
+  console.log(this.world);
 
   // Resize only after resetting font size to default
   let overviewDiv = document.querySelector("#overview");
-  let [width, height] = display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
-  display.setOptions({
+  let [width, height] = this.display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
+  this.display.setOptions({
     width: width,
     height: height
   });
 
-  display.drawText(0, 0, "Main state initialised");
-  display.drawText(2, 2, "Player: " + this.player.name);
+  this.display.drawText(0, 0, "Main state initialised");
+  this.display.drawText(2, 2, "Player: " + this.player.name);
 
-  display.drawWorld(world, {x: 0, y: 0});
+  this.display.drawWorld(this.world, this.player.pos);
 
   store.dispatch("addMessage", {
     entity: "",
@@ -45,6 +46,30 @@ GS_Main.setPlayer = player => {
 GS_Main.receiveInput = input => {
   if (store.getters.instantMode) {
     // Handle as an instant command
+    switch (input) {
+      case "ArrowUp":
+        this.player.pos.y--;
+        this.display.setOptions(displayConf.main)
+        this.display.drawWorld(this.world, this.player.pos);
+        break;
+      case "ArrowDown":
+        this.player.pos.y++;
+        this.display.setOptions(displayConf.main)
+        this.display.drawWorld(this.world, this.player.pos);
+        break;
+      case "ArrowLeft":
+        this.player.pos.x--;
+        this.display.setOptions(displayConf.main)
+        this.display.drawWorld(this.world, this.player.pos);
+        break;
+      case "ArrowRight":
+        this.player.pos.x++;
+        this.display.setOptions(displayConf.main)
+        this.display.drawWorld(this.world, this.player.pos);
+        break;
+      default:
+        break;
+    }
   } else {
     // Handle as text command
     store.dispatch("addMessage", {
@@ -53,5 +78,7 @@ GS_Main.receiveInput = input => {
     });
   }
 }
+
+GS_Main.redraw = () => this.display.drawWorld(this.world, this.player.pos);
 
 export default GS_Main;
