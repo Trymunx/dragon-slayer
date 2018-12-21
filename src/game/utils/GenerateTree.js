@@ -2,7 +2,7 @@ const genTree = () => {
   const trees = [
     {
       "symbol": "↟",
-      "prob": 20
+      "prob": 40
     },
     // {
     //   "symbol": "🌲",
@@ -14,11 +14,11 @@ const genTree = () => {
     // },
     {
       "symbol": "⇞",
-      "prob": 12
+      "prob": 22
     },
     {
       "symbol": "↑",
-      "prob": 8
+      "prob": 18
     },
     {
       "symbol": "⇈",
@@ -30,7 +30,7 @@ const genTree = () => {
     },
     {
       "symbol": "𐇲",
-      "prob": 5
+      "prob": 10
     },
     {
       "symbol": "⇡",
@@ -52,10 +52,10 @@ const genTree = () => {
       "symbol": "⤒",
       "prob": 2
     },
-    {
-      "symbol": "⭂",
-      "prob": 1
-    },
+    // {
+    //   "symbol": "⭂",
+    //   "prob": 1
+    // },
     {
       "symbol": "⭜",
       "prob": 1
