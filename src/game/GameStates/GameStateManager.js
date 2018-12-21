@@ -26,6 +26,12 @@ class GameStateManager {
     }
   }
 
+  redraw() {
+    if (this.state && this.state.redraw) {
+      this.state.redraw();
+    }
+  }
+
   nextState(caller, player) {
     switch (caller) {
       case "start":
