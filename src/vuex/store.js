@@ -7,12 +7,14 @@ const store = new Vuex.Store({
   state: {
     messages: [],
     playerName: "",
-    inputText: ""
+    inputText: "",
+    commandMode: "text"
   },
 
   getters: {
     playerName: (state) => state.playerName,
     messages: (state) => state.messages,
+    instantMode: (state) => state.commandMode === "instant" ? true : false,
     inputText: (state) => state.inputText
   },
 
@@ -29,7 +31,9 @@ const store = new Vuex.Store({
         message: text
       });
       commit("SET_INPUT_TEXT", "");
-      console.log(`Parsing ${text}`);
+    },
+    setCommandMode({ commit }, mode) {
+      commit("SET_COMMAND_MODE", mode);
     },
     setInputText({ commit }, text) {
       commit("SET_INPUT_TEXT", text);
@@ -45,6 +49,9 @@ const store = new Vuex.Store({
         entity: data.entity,
         message: data.message
       });
+    },
+    SET_COMMAND_MODE(state, mode) {
+      state.commandMode = mode;
     },
     SET_INPUT_TEXT(state, text) {
       state.inputText = text;

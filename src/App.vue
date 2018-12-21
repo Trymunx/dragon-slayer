@@ -28,12 +28,18 @@ export default {
     ContextMenu
   },
   created() {
-    this.$store.dispatch("addMessage", this.$game.startGame());
-    window.addEventListener("keydown", this.focusInput);
+    this.$game.start();
+    window.addEventListener("keyup", this.handleInput);
   },
   methods: {
-    focusInput(event) {
-      document.getElementById("input-text").focus();
+    handleInput(event) {
+      if (event.key === "Enter") {
+        document.querySelector("#input-text").focus();
+      } else if (event.key === "Escape") {
+        document.querySelector("#input-text").blur();
+      } else if (this.$store.getters.instantMode) {
+        this.$game.receiveInput(event.key);
+      }
     },
     contextMenuItems(vm, menuItems) {
       return [{
@@ -66,11 +72,11 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   display: grid;
-  grid-template-columns: 1fr 410px;
-  grid-template-rows: auto 1fr 2fr 30px;
+  grid-template-columns: 1fr 350px;
+  grid-template-rows: auto 2fr 1fr 30px;
   grid-template-areas:
-    "output overview"
-    "output player-stats"
+    "overview player-stats"
+    "overview player-stats"
     "output player-inventory"
     "input player-inventory";
   background-color: var(--ui-dark);

@@ -1,17 +1,28 @@
 <template>
   <div id="overview">
-    <canvas width="400" height="400" id="overview-canvas">
-      Canvas unsupported, use a newer browser.
-    </canvas>
   </div>
 </template>
 
 <script>
-import DisplayMap from "../game/utils/DisplayMap";
+import _ from "lodash";
 
 export default {
   mounted() {
-    DisplayMap();
+    document.querySelector("#overview").appendChild(this.$game.display.getContainer());
+
+    window.addEventListener("resize", _.debounce(this.resizeOverview, 100));
+  },
+  methods: {
+    resizeOverview() {
+      if (!this.$game.getCurrentState().displaySplash) {
+        let overviewDiv = document.querySelector("#overview");
+        let [width, height] =
+          this.$game.display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
+
+        this.$game.display.setOptions({width, height});
+        this.$game.redraw();
+      }
+    }
   }
 };
 </script>
@@ -22,16 +33,19 @@ export default {
 }
 
 #overview {
-  padding: 5px;
-  margin-bottom: 2px;
   color: var(--text-blur);
-  background-color: var(--ui-darker);
+  /* background-color: #47681D; */
+  background-color: #1e1e1e;
   border-color: var(--ui-border);
   font-family: "Ubuntu Mono", monospace;
   font-size: 0.9em;
   white-space: pre-wrap;
   text-align: center;
   overflow-y: auto;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #overview::-webkit-scrollbar {

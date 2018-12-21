@@ -1,6 +1,5 @@
 import PlayerTemplate from "../db/Player.json";
 import GenerateName from "./NameGenerator";
-// const CreatureDb = require("../db/Creatures.json");
 
 class Inventory {
   constructor() {
@@ -9,9 +8,11 @@ class Inventory {
       this.items[item.key] = Object.assign({}, item);
     }
   }
+
   getItem(key) {
     return this.items[key];
   }
+
   addItem(item) {
     let key = item.key;
     let quantity = item.quantity;
@@ -21,6 +22,7 @@ class Inventory {
       this.items[key] = Object.assign({ "key": key, "quantity": quantity });
     }
   }
+
   *[Symbol.iterator]() {
     for (let item of Object.values(this.items)) {
       yield item;
@@ -29,50 +31,38 @@ class Inventory {
 }
 
 class Player {
-  constructor(name) {
-    if (!name) {
-      name = genName();
-    }
-    this.name = name;
+  constructor(name, level) {
+    this.name = name || GenerateName();
+    this.pos = {x: 0, y: 0};
     this.attributes = Object.assign({}, PlayerTemplate.attributes);
-    this.attributes.currentHP = this.attributes.totalHP = (5 * this.attributes.level * this.attributes.level + 95);
-
-    this.creaturesSlain = {};
-    this.creaturesSlain.total = 0;
-    this.creaturesSlain.byType = {};
-    /* for (let key in CreatureDb) {
-      this.creaturesSlain.byType[key] = 0;
-    } */
+    this.attributes.level = level || this.attributes.level;
+    this.attributes.currentHP = this.attributes.totalHP = this.calcMaxHP();
 
     this.inventory = new Inventory();
 
     // TODO: Fix equipment list
     this.equipped = Object.assign({}, PlayerTemplate.equipped);
   }
+
   get isFullHealth() {
     return this.attributes.currentHP >= this.attributes.totalHP;
   }
-  heal(amount, simulate) {
-    var amountHealed;
-    if (this.isFullHealth) {
-      amountHealed = 0; // Don't heal at full HP
-    }
-    let newHP = this.attributes.currentHP + amount;
-    if (newHP > this.attributes.totalHP) {
-      amountHealed = this.attributes.totalHP - this.attributes.currentHP;
-      newHP = this.attributes.totalHP;
-    } else {
-      amountHealed = amount;
-    }
-    if (!simulate) {
-      this.attributes.currentHP = newHP;
-    }
-    return amountHealed;
+
+  heal(amount) {
+    let healed = Math.min(this.attributes.totalHP - this.attributes.currentHP, amount);
+    this.attributes.currentHP += healed;
+
+    return healed;
   }
+
+  calcMaxHP(level = this.attributes.level) {
+    return 10 * ~~((10 * level ** 1.3 + 90) / 10);
+  }
+
   get expToNextLevel() {
-    return Math.round(50 * Math.pow(this.attributes.level, 1.3));
+    return Math.round(50 * this.attributes.level ** 1.3);
   }
 }
 
-const newPlayer = (name) => new Player(name);
+const newPlayer = (name, level) => new Player(name, level);
 export default newPlayer;

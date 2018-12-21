@@ -1,7 +1,8 @@
 <template>
   <div id="input-bar">
     > <input type="text" id="input-text" placeholder="_"
-     v-model="inputText" @keypress.enter="submit"/>
+     v-model="inputText" @keypress.enter="submit"
+     @focus="inputBar('focus')" @blur="inputBar('blur')"/>
   </div>
 </template>
 
@@ -17,11 +18,34 @@ export default {
       }
     }
   },
+  mounted() {
+    document.querySelector("#input-text").focus();
+  },
   methods: {
     submit() {
-      if (this.inputText !== "") {
-        this.$store.dispatch("enterCommand", this.inputText);
+      // Only submit if there are non-whitespace chars
+      if (!/^\s*$/.test(this.inputText)) {
+        let input = this.inputText.trim();
+        this.$store.dispatch("enterCommand", input);
+        this.$game.receiveInput(input);
       }
+    },
+    inputBar(state) {
+      let colour = ["#434241", "#262626"];
+
+      switch (state) {
+        case "focus":
+          colour = colour[0];
+          this.$store.dispatch("setCommandMode", "text");
+          break;
+        case "blur":
+          colour = colour[1];
+          this.$store.dispatch("setCommandMode", "instant");
+          break;
+      }
+
+      document.querySelector("#input-bar").style["background-color"] = colour;
+      document.querySelector("#input-text").style["background-color"] = colour;
     }
   }
 };

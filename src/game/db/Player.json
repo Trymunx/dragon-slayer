@@ -23,6 +23,7 @@
     "boots": "None"
   },
   "creaturesSlain": {
-    "slainNonDragon": false
+    "dragons": 0,
+    "other": []
   }
 }

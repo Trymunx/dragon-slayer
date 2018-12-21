@@ -50,6 +50,10 @@ export default {
   overflow-x: hidden;
 }
 
+.messages:first-child > div {
+  padding-top: 8px;
+}
+
 .messages:hover .entity {
   color: var(--text);
   background-color: var(--ui-darker);
