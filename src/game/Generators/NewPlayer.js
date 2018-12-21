@@ -31,8 +31,9 @@ class Inventory {
 }
 
 class Player {
-  constructor(name, level) {
+  constructor(name, level = 1) {
     this.name = name || GenerateName();
+    this.level = level;
     this.pos = {x: 0, y: 0};
     this.attributes = Object.assign({}, PlayerTemplate.attributes);
     this.attributes.level = level || this.attributes.level;
