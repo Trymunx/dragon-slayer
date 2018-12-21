@@ -5,11 +5,10 @@
 
 <script>
 import _ from "lodash";
-import display from "../game/overview/Display.js";
 
 export default {
   mounted() {
-    document.querySelector("#overview").appendChild(display.getContainer());
+    document.querySelector("#overview").appendChild(this.$game.display.getContainer());
 
     window.addEventListener("resize", _.debounce(this.resizeOverview, 100));
   },
@@ -17,12 +16,11 @@ export default {
     resizeOverview() {
       if (!this.$game.getCurrentState().displaySplash) {
         let overviewDiv = document.querySelector("#overview");
-        let [width, height] = display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
+        let [width, height] =
+          this.$game.display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
 
-        display.setOptions({
-          width: width,
-          height: height
-        });
+        this.$game.display.setOptions({width, height});
+        this.$game.redraw();
       }
     }
   }
