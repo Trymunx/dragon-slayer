@@ -11,13 +11,15 @@ export default class Tile {
     this.items = [];
     // this.structures = [];
     this.display;
-    this.terrain = terrain; // No terrain features, eg. rivers or hills
+    this.terrain = terrain; // terrain features, eg. forest, rivers or hills
     switch (this.terrain) {
       case "forest":
         this.display = genTree();
+        this.foreground = "#086623";
         break;
       default:
         this.display = ".";
+        this.foreground = "#855e40"
         break;
     }
     // this.generators = [];
