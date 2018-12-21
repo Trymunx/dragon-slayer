@@ -1,6 +1,7 @@
 import GameStateManager from "./GameStates/GameStateManager";
 // import CommandParser from "./Commands/CommandParser";
 import GenerateName from "./Generators/NameGenerator";
+import display from "./overview/Display.js";
 
 export default {
   install: (Vue) => {
@@ -21,7 +22,11 @@ export default {
       },
       getCurrentState() {
         return GameStateManager.currentState;
-      }
+      },
+      redraw() {
+        return GameStateManager.redraw();
+      },
+      display: display,
     }
   }
 }
