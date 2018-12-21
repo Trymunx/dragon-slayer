@@ -1,10 +1,11 @@
-import display from "../overview/Display";
-import store from "../../vuex/store";
-import GameStateManager from "./GameStateManager";
-import GameState from "./GameState";
-import generateName from "../Generators/NameGenerator";
-import newPlayer from "../Generators/NewPlayer";
-import displayConf from "../config/display";
+import display from "../../overview/Display";
+import store from "../../../vuex/store";
+import gsMan from "../gsMan";
+import GameState from "../GameState";
+import gData from "../data";
+import generateName from "../../Generators/NameGenerator";
+import newPlayer from "../../Generators/NewPlayer";
+import displayConf from "../../config/display";
 
 var GS_Start = new GameState("start", true);
 
@@ -26,8 +27,8 @@ GS_Start.receiveInput = function(input) {
     switch (input.toUpperCase()) {
       case "YES":
       case "Y":
-        let player = newPlayer(this.playerName);
-        GameStateManager.nextState(this.name, player);
+        gData.player = newPlayer(this.playerName);
+        gsMan.nextState(this.name);
         break;
       case "NO":
       case "N":

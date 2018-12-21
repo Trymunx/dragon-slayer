@@ -1,6 +1,6 @@
-import genTree from "../../utils/GenerateTree.js";
-import genCreatures from "../genCreatures.js";
-import GData from "../../db/GameData.js";
+import genTree from "../../utils/GenerateTree";
+import genCreatures from "../genCreatures";
+import GData from "../../state/data";
 
 export default class Tile {
   constructor(x, y, chunk, terrain) {

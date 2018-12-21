@@ -1,5 +1,6 @@
-import GS_Start from "./GS_Start";
-import GS_Main from "./GS_Main";
+import gsStart from "./gStates/gsStart";
+import gsMain from "./gStates/gsMain";
+import gData from "./data";
 
 class GameStateManager {
   constructor() {
@@ -15,8 +16,7 @@ class GameStateManager {
   }
 
   StartGame() {
-    this.currentState = GS_Start;
-    // GS_Start.init();
+    this.currentState = gsStart;
     this.state.init();
   }
 
@@ -32,24 +32,23 @@ class GameStateManager {
     }
   }
 
-  nextState(caller, player) {
+  nextState(caller) {
     switch (caller) {
       case "start":
-        this.currentState = GS_Main;
+        this.currentState = gsMain;
         break;
       case "main":
         break;
       case "end":
-        this.currentState = GS_Start;
+        this.currentState = gsStart;
         break;
       default:
         console.error(`${caller} is not a registered game state.`);
     }
-    this.state.setPlayer(player);
     this.state.init();
   }
 }
 
-let GS_Manager = new GameStateManager();
+let gsMan = new GameStateManager();
 
-export default GS_Manager;
+export default gsMan;

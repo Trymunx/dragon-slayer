@@ -1,4 +1,4 @@
-import GameStateManager from "./GameStates/GameStateManager";
+import GameStateManager from "./state/gsMan";
 // import CommandParser from "./Commands/CommandParser";
 import GenerateName from "./Generators/NameGenerator";
 import display from "./overview/Display.js";

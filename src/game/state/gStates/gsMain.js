@@ -1,19 +1,19 @@
-import display from "../overview/Display";
-import store from "../../vuex/store";
-import GameStateManager from "./GameStateManager";
-import GameState from "./GameState";
-import displayConf from "../config/display";
-import World from "../Generators/world/World";
+import display from "../../overview/Display";
+import store from "../../../vuex/store";
+import gsMan from "../gsMan";
+import GameState from "../GameState";
+import gData from "../data";
+import displayConf from "../../config/display";
+import World from "../../Generators/world/World";
 
-var GS_Main = new GameState("main", false);
+var gsMain = new GameState("main", false);
 
-GS_Main.init = () => {
+gsMain.init = () => {
   this.display = display;
   this.display.clear();
   this.display.setOptions(displayConf.main);
 
-  this.world = new World();
-  console.log(this.world);
+  gData.world = new World();
 
   // Resize only after resetting font size to default
   let overviewDiv = document.querySelector("#overview");
@@ -24,9 +24,9 @@ GS_Main.init = () => {
   });
 
   this.display.drawText(0, 0, "Main state initialised");
-  this.display.drawText(2, 2, "Player: " + this.player.name);
+  this.display.drawText(2, 2, "Player: " + gData.player.name);
 
-  this.display.drawWorld(this.world, this.player.pos);
+  this.display.drawWorld(gData.world, gData.player);
 
   store.dispatch("addMessage", {
     entity: "",
@@ -39,33 +39,29 @@ GS_Main.init = () => {
   });
 }
 
-GS_Main.setPlayer = player => {
-  this.player = player;
-}
-
-GS_Main.receiveInput = input => {
+gsMain.receiveInput = input => {
   if (store.getters.instantMode) {
     // Handle as an instant command
     switch (input) {
       case "ArrowUp":
-        this.player.pos.y--;
+        gData.player.pos.y--;
         this.display.setOptions(displayConf.main)
-        this.display.drawWorld(this.world, this.player.pos);
+        this.display.drawWorld(gData.world, gData.player);
         break;
       case "ArrowDown":
-        this.player.pos.y++;
+        gData.player.pos.y++;
         this.display.setOptions(displayConf.main)
-        this.display.drawWorld(this.world, this.player.pos);
+        this.display.drawWorld(gData.world, gData.player);
         break;
       case "ArrowLeft":
-        this.player.pos.x--;
+        gData.player.pos.x--;
         this.display.setOptions(displayConf.main)
-        this.display.drawWorld(this.world, this.player.pos);
+        this.display.drawWorld(gData.world, gData.player);
         break;
       case "ArrowRight":
-        this.player.pos.x++;
+        gData.player.pos.x++;
         this.display.setOptions(displayConf.main)
-        this.display.drawWorld(this.world, this.player.pos);
+        this.display.drawWorld(gData.world, gData.player);
         break;
       default:
         break;
@@ -79,6 +75,6 @@ GS_Main.receiveInput = input => {
   }
 }
 
-GS_Main.redraw = () => this.display.drawWorld(this.world, this.player.pos);
+gsMain.redraw = () => this.display.drawWorld(gData.world, gData.player);
 
-export default GS_Main;
+export default gsMain;
