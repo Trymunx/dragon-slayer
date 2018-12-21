@@ -1,22 +1,30 @@
 import ROT from "rot-js";
 ROT.Display.prototype.drawWorld = function(world, playerPos) {
-  let curOpts = display.getOptions();
-  let top = Math.floor(playerPos.y - curOpts.height / 2);
-  let bot = Math.floor(playerPos.y + curOpts.height / 2);
-  let left = Math.floor(playerPos.x - curOpts.width / 2);
-  let right = Math.floor(playerPos.x + curOpts.width / 2);
+  this.clear();
+  let curOpts = this.getOptions();
+  let top = Math.ceil(playerPos.y - curOpts.height / 2);
+  let bot = Math.ceil(playerPos.y + curOpts.height / 2);
+  let left = Math.ceil(playerPos.x - curOpts.width / 2);
+  let right = Math.ceil(playerPos.x + curOpts.width / 2);
 
   for (let i = 0, y = top; y < bot; y++) {
     for (let j = 0, x = left; x < right; x++) {
       let chunk = world.getChunkFromTile(x, y);
       let tile = chunk.getTileFromWorldCoords(x, y);
+
+      let symbol, foreground, background;
+
       if (x === playerPos.x && y === playerPos.y) {
-        display.draw(j, i, "X", "#fff");
+        foreground = "#fff";
+        symbol = "X";
       } else if (tile.creatures.length) {
-        display.draw(j, i, "@");
+        symbol = "@";
       } else {
-        display.draw(j, i, tile.display, "#086623");
+        foreground = tile.foreground;
+        symbol = tile.display;
       }
+
+      this.draw(j, i, symbol, foreground, background);
       j++;
     }
     i++;
