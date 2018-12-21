@@ -2,7 +2,7 @@
   "main": {
     "bg": "transparent",
     "fontFamily": "monospace",
-    "fontSize": 28
+    "fontSize": 32
   },
   "start": {
     "fontFamily": "Cinzel",
