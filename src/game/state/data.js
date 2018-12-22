@@ -2,25 +2,36 @@ class GameData {
     constructor () {
         this._player = null;
         this._world = null;
+        this._splash = true;
     }
+
     getPlayerTile () {
         return this._player != null && this.currentMap != null ?
             this.currentMap[this._player.position] : null;
     }
-    set player(player) {
-        this._player = player;
+
+    get player() {
+        return this._player;
     }
 
-    set world(map) {
-        this._world = map;
+    set player(player) {
+        this._player = player;
     }
 
     get world() {
         return this._world;
     }
 
-    get player() {
-        return this._player;
+    set world(map) {
+        this._world = map;
+    }
+
+    get displaySplash() {
+        return this._splash;
+    }
+
+    set displaySplash(bool) {
+        this._splash = bool;
     }
 };
 let data = new GameData();

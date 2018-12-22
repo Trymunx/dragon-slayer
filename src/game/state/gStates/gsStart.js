@@ -7,9 +7,9 @@ import generateName from "../../Generators/NameGenerator";
 import newPlayer from "../../Generators/NewPlayer";
 import displayConf from "../../config/display";
 
-var GS_Start = new GameState("start", true);
+var gsStart = new GameState("start");
 
-GS_Start.init = function() {
+gsStart.init = function() {
   display.setOptions(displayConf.start);
   display.draw(4, 1, "Trymunx's", "#8a8c89");
   display.draw(4, 2, "Dragon Slayer", "#086623");
@@ -20,7 +20,7 @@ GS_Start.init = function() {
   });
 }
 
-GS_Start.receiveInput = function(input) {
+gsStart.receiveInput = function(input) {
   if (!this.playerName) {
     this.confirmPlayerName(input)
   } else {
@@ -28,6 +28,7 @@ GS_Start.receiveInput = function(input) {
       case "YES":
       case "Y":
         gData.player = newPlayer(this.playerName);
+        gData.displaySplash = false; // Stop displaying splash screen
         gsMan.nextState(this.name);
         break;
       case "NO":
@@ -49,7 +50,7 @@ GS_Start.receiveInput = function(input) {
   }
 }
 
-GS_Start.confirmPlayerName = function(input) {
+gsStart.confirmPlayerName = function(input) {
   switch (input) {
     case "/gen":
     case "/generate":
@@ -64,4 +65,4 @@ GS_Start.confirmPlayerName = function(input) {
   }
 }
 
-export default GS_Start;
+export default gsStart;

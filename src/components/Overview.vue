@@ -14,13 +14,13 @@ export default {
   },
   methods: {
     resizeOverview() {
-      if (!this.$game.getCurrentState().displaySplash) {
+      if (!this.$game.displaySplash()) {
         let overviewDiv = document.querySelector("#overview");
         let [width, height] =
           this.$game.display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
 
         this.$game.display.setOptions({width, height});
-        this.$game.redraw();
+        this.$game.display.drawWorld();
       }
     }
   }

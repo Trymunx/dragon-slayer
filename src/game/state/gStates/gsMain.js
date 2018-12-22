@@ -6,7 +6,7 @@ import gData from "../data";
 import displayConf from "../../config/display";
 import World from "../../Generators/world/World";
 
-var gsMain = new GameState("main", false);
+var gsMain = new GameState("main");
 
 gsMain.init = () => {
   this.display = display;
@@ -26,7 +26,7 @@ gsMain.init = () => {
   this.display.drawText(0, 0, "Main state initialised");
   this.display.drawText(2, 2, "Player: " + gData.player.name);
 
-  this.display.drawWorld(gData.world, gData.player);
+  this.display.drawWorld();
 
   store.dispatch("addMessage", {
     entity: "",
@@ -46,22 +46,22 @@ gsMain.receiveInput = input => {
       case "ArrowUp":
         gData.player.pos.y--;
         this.display.setOptions(displayConf.main)
-        this.display.drawWorld(gData.world, gData.player);
+        this.display.drawWorld();
         break;
       case "ArrowDown":
         gData.player.pos.y++;
         this.display.setOptions(displayConf.main)
-        this.display.drawWorld(gData.world, gData.player);
+        this.display.drawWorld();
         break;
       case "ArrowLeft":
         gData.player.pos.x--;
         this.display.setOptions(displayConf.main)
-        this.display.drawWorld(gData.world, gData.player);
+        this.display.drawWorld();
         break;
       case "ArrowRight":
         gData.player.pos.x++;
         this.display.setOptions(displayConf.main)
-        this.display.drawWorld(gData.world, gData.player);
+        this.display.drawWorld();
         break;
       default:
         break;
@@ -74,7 +74,5 @@ gsMain.receiveInput = input => {
     });
   }
 }
-
-gsMain.redraw = () => this.display.drawWorld(gData.world, gData.player);
 
 export default gsMain;

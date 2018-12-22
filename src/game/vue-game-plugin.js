@@ -1,30 +1,25 @@
-import GameStateManager from "./state/gsMan";
+import gsMan from "./state/gsMan";
+import gData from "./state/data";
 // import CommandParser from "./Commands/CommandParser";
 import GenerateName from "./Generators/NameGenerator";
-import display from "./overview/Display.js";
+import display from "./overview/Display";
 
 export default {
   install: (Vue) => {
     Vue.prototype.$game = {
       start() {
-        GameStateManager.StartGame();
+        gsMan.StartGame();
       },
       receiveInput(input) {
         console.log(input);
-        GameStateManager.receiveInput(input);
-      },
-      generateName() {
-        return GenerateName();
+        gsMan.receiveInput(input);
       },
       parseCommand(command) {
         // return CommandParser.ParseCommand(command);
         console.log("Parsing " + command);
       },
-      getCurrentState() {
-        return GameStateManager.currentState;
-      },
-      redraw() {
-        return GameStateManager.redraw();
+      displaySplash() {
+        return gData.displaySplash;
       },
       display: display,
     }

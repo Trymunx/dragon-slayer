@@ -1,5 +1,10 @@
 import ROT from "rot-js";
-ROT.Display.prototype.drawWorld = function(world, player) {
+import gData from "../state/data";
+
+ROT.Display.prototype.drawWorld = function() {
+  let world = gData.world;
+  let player = gData.player;
+
   this.clear();
   let curOpts = this.getOptions();
   let top = Math.ceil(player.pos.y - curOpts.height / 2);
