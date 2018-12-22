@@ -7,16 +7,8 @@ class GameStateManager {
     this.state = null;
   }
 
-  get currentState() {
-    return this.state;
-  }
-
-  set currentState(state) {
-    this.state = state;
-  }
-
   StartGame() {
-    this.currentState = gsStart;
+    this.state = gsStart;
     this.state.init();
   }
 
@@ -35,12 +27,12 @@ class GameStateManager {
   nextState(caller) {
     switch (caller) {
       case "start":
-        this.currentState = gsMain;
+        this.state = gsMain;
         break;
       case "main":
         break;
       case "end":
-        this.currentState = gsStart;
+        this.state = gsStart;
         break;
       default:
         console.error(`${caller} is not a registered game state.`);
