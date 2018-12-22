@@ -33,6 +33,7 @@ export default {
   },
   methods: {
     handleInput(event) {
+      event.preventDefault();
       if (event.key === "Enter") {
         document.querySelector("#input-text").focus();
       } else if (event.key === "Escape") {
