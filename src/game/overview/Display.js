@@ -15,8 +15,7 @@ ROT.Display.prototype.drawWorld = function() {
 
   for (let i = 0, y = top; y < bot; y++) {
     for (let j = 0, x = left; x < right; x++) {
-      let chunk = world.getChunkFromTile(x, y);
-      let tile = chunk.getTileFromWorldCoords(x, y);
+      let tile = world.getTile(x, y);
 
       let symbol, foreground, background;
 

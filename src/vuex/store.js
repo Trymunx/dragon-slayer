@@ -32,8 +32,7 @@ const store = new Vuex.Store({
       for (let y = -2; y <= 2; y++) {
         for (let x = -2; x <= +2; x++) {
           let tile =
-            state.world.getChunkFromTile(state.player.pos.x + x, state.player.pos.y + y)
-            .getTileFromWorldCoords(state.player.pos.x + x, state.player.pos.y + y);
+            state.world.getTile(state.player.pos.x + x, state.player.pos.y + y);
           if (tile.items.length) {
             surr.items.push(...tile.items);
           }
