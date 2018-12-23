@@ -1,5 +1,6 @@
 import ROT from "rot-js";
 import store from "../../vuex/store";
+import { levelColour } from "../utils/colours";
 
 ROT.Display.prototype.drawWorld = function() {
   let world = store.getters.world;
@@ -27,15 +28,7 @@ ROT.Display.prototype.drawWorld = function() {
         let highestLvl = Math.max(...tile.creatures.map(creature => creature.level));
         let creature = tile.creatures.find(creature => creature.level === highestLvl);
         symbol = creature.symbol;
-        let diff = highestLvl - player.level;
-        if (diff > 10) {
-          foreground = "hsl(0, 100%, 50%)";
-        } else if (diff < -10) {
-          foreground = "hsl(120, 100%, 50%)";
-        } else {
-          // converts numbers from 10 to -10 into a val from 120 to 0
-          foreground = `hsl(${120 - (diff + 10) * 6}, 100%, 50%)`;
-        }
+        foreground = levelColour(highestLvl);
       } else {
         foreground = tile.foreground;
         symbol = tile.display;

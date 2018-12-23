@@ -46,11 +46,22 @@ const store = new Vuex.Store({
               else if (x > 0) dir.push("east");
               if (!x && !y) dir.push("here");
               creature.dir = dir.join(" ");
-
+              creature.dist = Math.abs(x) + Math.abs(y);
               surr.creatures.push(creature)
             });
           }
         }
+      }
+
+      for (let [key, val] of Object.entries(surr)) {
+        val.sort((a, b) => {
+          let delta = a.dist - b.dist;
+          if (delta === 0 && a.level) {
+            return b.level - a.level;
+          } else {
+            return delta;
+          }
+        });
       }
 
       return surr;
