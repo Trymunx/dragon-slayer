@@ -6,7 +6,7 @@
       "maxTotalHP": 50000,
       "minTotalHP": 15000,
       "healthBar": "#",
-      "spawnChance": 0.15,
+      "spawnChance": 0.0015,
       "aggressive": true
     },
     "attacks": [
@@ -94,7 +94,7 @@
       "maxTotalHP": 25000,
       "minTotalHP": 10000,
       "healthBar": ">",
-      "spawnChance": 0.2,
+      "spawnChance": 0.002,
       "aggressive": true
     },
     "attacks": [
@@ -167,7 +167,7 @@
       "maxTotalHP": 17500,
       "minTotalHP": 6500,
       "healthBar": "»",
-      "spawnChance": 0.25,
+      "spawnChance": 0.0025,
       "aggressive": true
     },
     "attacks": [
@@ -229,7 +229,7 @@
       "maxTotalHP": 600,
       "minTotalHP": 120,
       "healthBar": "©",
-      "spawnChance": 0.58,
+      "spawnChance": 0.0058,
       "aggressive": true
     },
     "attacks": [
@@ -312,7 +312,7 @@
       "maxTotalHP": 140,
       "minTotalHP": 50,
       "healthBar": "¢",
-      "spawnChance": 0.7,
+      "spawnChance": 0.007,
       "aggressive": true
     },
     "attacks": [
@@ -395,7 +395,7 @@
       "maxTotalHP": 200,
       "minTotalHP": 60,
       "healthBar": "¦",
-      "spawnChance": 0.72,
+      "spawnChance": 0.0072,
       "aggressive": true
     },
     "attacks": [
@@ -488,7 +488,7 @@
       "maxTotalHP": 500,
       "minTotalHP": 120,
       "healthBar": "X",
-      "spawnChance": 0.68,
+      "spawnChance": 0.0068,
       "aggressive": true
     },
     "attacks": [
@@ -571,7 +571,7 @@
       "maxTotalHP": 320,
       "minTotalHP": 38,
       "healthBar": "~",
-      "spawnChance": 0.65,
+      "spawnChance": 0.0065,
       "aggressive": true
     },
     "attacks": [
@@ -633,7 +633,7 @@
       "maxTotalHP": 150,
       "minTotalHP": 60,
       "healthBar": "O",
-      "spawnChance": 0.85,
+      "spawnChance": 0.0085,
       "aggressive": true
     },
     "attacks": [
@@ -696,7 +696,7 @@
       "maxTotalHP": 120,
       "minTotalHP": 45,
       "healthBar": "S",
-      "spawnChance": 0.85,
+      "spawnChance": 0.0085,
       "aggressive": true
     },
     "attacks": [
@@ -759,7 +759,7 @@
       "maxTotalHP": 280,
       "minTotalHP": 60,
       "healthBar": "Ø",
-      "spawnChance": 0.75,
+      "spawnChance": 0.0075,
       "aggressive": true
     },
     "attacks": [
@@ -822,7 +822,7 @@
       "maxTotalHP": 180,
       "minTotalHP": 120,
       "healthBar": "@",
-      "spawnChance": 0.8,
+      "spawnChance": 0.008,
       "aggressive": true
     },
     "attacks": [
@@ -886,7 +886,7 @@
       "maxTotalHP": 50,
       "minTotalHP": 20,
       "healthBar": "v",
-      "spawnChance": 0.75,
+      "spawnChance": 0.0075,
       "aggressive": false
     },
     "attacks": [
@@ -948,7 +948,7 @@
       "maxTotalHP": 25,
       "minTotalHP": 1,
       "healthBar": "o",
-      "spawnChance": 0.8,
+      "spawnChance": 0.008,
       "aggressive": false
     },
     "attacks": [
@@ -1010,7 +1010,7 @@
       "maxTotalHP": 18,
       "minTotalHP": 1,
       "healthBar": "s",
-      "spawnChance": 0.75,
+      "spawnChance": 0.0075,
       "aggressive": false
     },
     "attacks": [
@@ -1072,7 +1072,7 @@
       "maxTotalHP": 35,
       "minTotalHP": 10,
       "healthBar": "+",
-      "spawnChance": 0.8,
+      "spawnChance": 0.008,
       "aggressive": false
     },
     "attacks": [
@@ -1134,7 +1134,7 @@
       "maxTotalHP": 80,
       "minTotalHP": 45,
       "healthBar": "Þ",
-      "spawnChance": 0.5,
+      "spawnChance": 0.005,
       "aggressive": false
     },
     "attacks": [
@@ -1199,7 +1199,7 @@
       "maxTotalHP": 65,
       "minTotalHP": 45,
       "healthBar": "&",
-      "spawnChance": 0.5,
+      "spawnChance": 0.005,
       "aggressive": false
     },
     "attacks": [
@@ -1261,7 +1261,7 @@
       "maxTotalHP": 10,
       "minTotalHP": 1,
       "healthBar": "r",
-      "spawnChance": 0.75,
+      "spawnChance": 0.0075,
       "aggressive": false
     },
     "attacks": [

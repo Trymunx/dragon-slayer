@@ -1,9 +1,9 @@
 import ROT from "rot-js";
-import gData from "../state/data";
+import store from "../../vuex/store";
 
 ROT.Display.prototype.drawWorld = function() {
-  let world = gData.world;
-  let player = gData.player;
+  let world = store.getters.world;
+  let player = store.getters.player;
 
   this.clear();
   let curOpts = this.getOptions();

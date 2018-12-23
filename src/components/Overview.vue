@@ -5,6 +5,7 @@
 
 <script>
 import _ from "lodash";
+import display from "../game/overview/Display";
 
 export default {
   mounted() {
@@ -14,13 +15,13 @@ export default {
   },
   methods: {
     resizeOverview() {
-      if (!this.$game.displaySplash()) {
+      if (!this.$store.getters.splash) {
         let overviewDiv = document.querySelector("#overview");
         let [width, height] =
-          this.$game.display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
+          display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
 
-        this.$game.display.setOptions({width, height});
-        this.$game.display.drawWorld();
+        display.setOptions({width, height});
+        display.drawWorld();
       }
     }
   }

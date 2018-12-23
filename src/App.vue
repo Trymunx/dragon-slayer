@@ -2,7 +2,7 @@
   <div id="app" @click="hideContextMenu" @click.right.prevent="showContextMenu">
     <Output/>
     <Overview/>
-    <player-stats/>
+    <surroundings/>
     <player-inventory/>
     <input-bar/>
     <context-menu/>
@@ -14,7 +14,7 @@ import Output from "./components/Output";
 import Overview from "./components/Overview";
 import InputBar from "./components/InputBar";
 import ContextMenu from "./components/ContextMenu";
-import PlayerStats from "./components/PlayerStats";
+import Surroundings from "./components/Surroundings";
 import PlayerInventory from "./components/PlayerInventory";
 
 export default {
@@ -22,7 +22,7 @@ export default {
   components: {
     Output,
     Overview,
-    PlayerStats,
+    Surroundings,
     PlayerInventory,
     InputBar,
     ContextMenu
@@ -76,10 +76,10 @@ export default {
   grid-template-columns: 1fr 350px;
   grid-template-rows: auto 2fr 1fr 30px;
   grid-template-areas:
-    "overview player-stats"
-    "overview player-stats"
-    "output player-inventory"
-    "input player-inventory";
+    "upper-main upper-right-col"
+    "upper-main upper-right-col"
+    "lower-main lower-right-col"
+    "bottom-bar lower-right-col";
   background-color: var(--ui-dark);
   font-size: 0.95em;
 }
@@ -103,37 +103,37 @@ export default {
 @media (max-width: 900px) {
   #app {
     grid-template-columns: 1fr;
-    grid-template-rows: 60px 1fr 30px;
+    grid-template-rows: 2fr 1fr 30px;
     grid-template-areas:
-      "player-stats"
-      "output"
-      "input";
+      "upper-main"
+      "lower-main"
+      "bottom-bar";
   }
 
-  #overview,
-  #player-inventory {
+  #player-inventory,
+  #surroundings-output {
     display: none;
   }
 }
 
-#output {
-  grid-area: output;
+#overview {
+  grid-area: upper-main;
 }
 
-#overview {
-  grid-area: overview;
+#output {
+  grid-area: lower-main;
 }
 
 #input-bar {
-  grid-area: input;
+  grid-area: bottom-bar;
 }
 
-#player-stats {
-  grid-area: player-stats;
+#surroundings-output {
+  grid-area: upper-right-col;
 }
 
 #player-inventory {
-  grid-area: player-inventory;
+  grid-area: lower-right-col;
 }
 
 #app,
