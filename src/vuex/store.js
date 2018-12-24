@@ -46,6 +46,7 @@ const store = new Vuex.Store({
               if (!x && !y) dir.push("here");
               creature.dir = dir.join(" ");
               creature.dist = Math.abs(x) + Math.abs(y);
+              creature.loc = [x, y];
               surr.creatures.push(creature)
             });
           }

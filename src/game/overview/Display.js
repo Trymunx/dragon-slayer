@@ -21,7 +21,8 @@ ROT.Display.prototype.drawWorld = function() {
 
       if (x === player.pos.x && y === player.pos.y) {
         foreground = "#fff";
-        symbol = "«※»";
+        // symbol = "«※»";
+        symbol = "※";
         // symbol = "🧙";
       } else if (tile.creatures.length) {
         let highestLvl = Math.max(...tile.creatures.map(creature => creature.level));

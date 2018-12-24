@@ -5,7 +5,10 @@
       <div class="table-wrapper">
         <table class="surrounds-categories">
           <tbody>
-            <tr v-for="(entity, index) in surroundings.creatures" :key="index">
+            <tr v-for="(entity, index) in surroundings.creatures"
+                :key="index"
+                @mouseenter="highlight(entity)"
+                @mouseleave="highlight()">
               <td :style="getStyle(entity.level)" class="symbol">{{entity.symbol}}</td>
               <td class="creature-name">{{entity.name}}</td>
               <td class="creature-level">Level</td>
@@ -35,6 +38,7 @@
 
 <script>
 import { levelColour } from "../game/utils/colours";
+import display from "../game/overview/Display";
 
 export default {
   computed: {
@@ -49,6 +53,16 @@ export default {
   methods: {
     getStyle(lvl) {
       return "color: " + levelColour(lvl);
+    },
+    highlight(entity) {
+      if (entity) {
+        let displayOptions = display.getOptions();
+        let a = Math.floor(displayOptions.width / 2) + entity.loc[0];
+        let b = Math.floor(displayOptions.height / 2) + entity.loc[1];
+        display.draw(a, b, entity.symbol, levelColour(entity.level), "#0a0a0a");
+      } else {
+        display.drawWorld();
+      }
     },
   },
 };
