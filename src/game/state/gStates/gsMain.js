@@ -9,13 +9,9 @@ import World from "../../Generators/world/World";
 var gsMain = new GameState("main");
 
 gsMain.init = () => {
-  // this.display = display;
-  // this.display.clear();
-  // this.display.setOptions(displayConf.main);
   display.clear();
   display.setOptions(displayConf.main);
 
-  // gData.world = new World();
   store.dispatch('setWorld', new World());
 
   // Resize only after resetting font size to default
@@ -48,22 +44,18 @@ gsMain.receiveInput = input => {
     switch (input) {
       case "ArrowUp":
         store.dispatch("movePlayer", "UP");
-        display.setOptions(displayConf.main)
         display.drawWorld();
         break;
       case "ArrowDown":
         store.dispatch("movePlayer", "DOWN");
-        display.setOptions(displayConf.main)
         display.drawWorld();
         break;
       case "ArrowLeft":
         store.dispatch("movePlayer", "LEFT");
-        display.setOptions(displayConf.main)
         display.drawWorld();
         break;
       case "ArrowRight":
         store.dispatch("movePlayer", "RIGHT");
-        display.setOptions(displayConf.main)
         display.drawWorld();
         break;
       default:
