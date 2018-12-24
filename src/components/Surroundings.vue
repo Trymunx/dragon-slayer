@@ -1,18 +1,34 @@
 <template>
   <div id="surroundings-output">
-    <div v-if="worldExists">
-      Creatures:
-      <table class="surrounds-categories">
-        <tbody>
-          <tr v-for="(entity, index) in surroundings.creatures" :key="index">
-            <td :style="getStyle(entity.level)" class="symbol">{{entity.symbol}}</td>
-            <td class="creature-name">{{entity.name}}</td>
-            <td class="creature-level">Level</td>
-            <td :style="getStyle(entity.level)">{{entity.level}}</td>
-            <td>({{entity.dir}})</td>
-          </tr>
-        </tbody>
-      </table>
+    <div v-if="worldExists" class="wrapper">
+      {{surroundings.creatures.length}} Creature{{surroundings.creatures.length === 1 ? '' : 's'}}:
+      <div class="table-wrapper">
+        <table class="surrounds-categories">
+          <tbody>
+            <tr v-for="(entity, index) in surroundings.creatures" :key="index">
+              <td :style="getStyle(entity.level)" class="symbol">{{entity.symbol}}</td>
+              <td class="creature-name">{{entity.name}}</td>
+              <td class="creature-level">Level</td>
+              <td :style="getStyle(entity.level)">{{entity.level}}</td>
+              <td>({{entity.dir}})</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      {{surroundings.items.length}} Item{{surroundings.items.length === 1 ? '' : 's'}}:
+      <div class="table-wrapper">
+        <table class="surrounds-categories">
+          <tbody>
+            <tr v-for="(entity, index) in surroundings.items" :key="index">
+              <!-- <td :style="getStyle(entity.level)" class="symbol">{{entity.symbol}}</td> -->
+              <td class="item-name">{{entity.name}}</td>
+              <!-- <td class="creature-level">Level</td> -->
+              <!-- <td :style="getStyle(entity.level)">{{entity.level}}</td> -->
+              <td>({{entity.dir}})</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -40,8 +56,7 @@ export default {
 
 <style>
 #surroundings-output {
-  padding: 20px 8px 20px 15px;
-  overflow-y: auto;
+  overflow-y: visible;
   color: var(--text-blur);
   background-color: var(--ui-darker);
   border-color: var(--ui-border);
@@ -49,24 +64,27 @@ export default {
   font-size: 18px;
 }
 
-#surroundings-output::-webkit-scrollbar {
-  width: 8px;
+.table-wrapper::-webkit-scrollbar {
+  width: 6px;
 }
 
-#surroundings-output::-webkit-scrollbar-track {
-  background-color: var(--ui-darker);
+.table-wrapper::-webkit-scrollbar-track {
+  background-color: #2b2b2b;
 }
 
-#surroundings-output::-webkit-scrollbar-thumb {
-  background-color: var(--ui-border);
+.table-wrapper::-webkit-scrollbar-thumb {
+  background-color: #404040;
 }
 
 .surrounds-categories {
   table-layout: fixed;
-  padding: 8px 0px;
+  padding: 0px;
   width: 100%;
   font-size: 14px;
-  opacity: 0.9;
+}
+
+.surrounds-categories tr:hover {
+  background-color: var(--ui-border);
 }
 
 .surrounds-categories td {
@@ -77,6 +95,18 @@ export default {
   text-align: right;
   text-transform: capitalize;
   width: 110px;
+}
+
+.wrapper {
+  height: 100%;
+  padding: 20px 8px 20px 15px;
+  overflow-y: hidden;
+}
+
+.table-wrapper {
+  margin: 6px 0px 16px;
+  height: 40%;
+  overflow-y: scroll;
 }
 
 .symbol {
