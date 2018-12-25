@@ -38,6 +38,9 @@ export default class World {
       return this.genChunk(...chunkCoords);
     }
   }
+  getTile(x, y) {
+    return this.getChunkFromTile(x, y).getTileFromWorldCoords(x, y);
+  }
   placePlayer(player, chunk = this.spawnChunk) {
     let playerPos = randomPosition();
     var playerPlaced = false;

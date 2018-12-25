@@ -14,10 +14,9 @@ class Creature {
 
 const genCreatures = (playerLevel = 1) => {
   let tileCreatures = [];
-  let level = ~~(Math.random() * playerLevel * 1.5);
   creatures.forEach(c => {
     if (Math.random() < c.attributes.spawnChance) {
-      tileCreatures.push(new Creature(level, c));
+      tileCreatures.push(new Creature(Math.ceil(Math.random() * playerLevel * 1.5), c));
     }
   });
   return tileCreatures;

@@ -2,31 +2,30 @@ import display from "../../overview/Display";
 import store from "../../../vuex/store";
 import gsMan from "../gsMan";
 import GameState from "../GameState";
-import gData from "../data";
+// import gData from "../data";
 import displayConf from "../../config/display";
 import World from "../../Generators/world/World";
 
 var gsMain = new GameState("main");
 
 gsMain.init = () => {
-  this.display = display;
-  this.display.clear();
-  this.display.setOptions(displayConf.main);
+  display.clear();
+  display.setOptions(displayConf.main);
 
-  gData.world = new World();
+  store.dispatch('setWorld', new World());
 
   // Resize only after resetting font size to default
   let overviewDiv = document.querySelector("#overview");
-  let [width, height] = this.display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
-  this.display.setOptions({
+  let [width, height] = display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
+  display.setOptions({
     width: width,
     height: height
   });
 
-  this.display.drawText(0, 0, "Main state initialised");
-  this.display.drawText(2, 2, "Player: " + gData.player.name);
+  display.drawText(0, 0, "Main state initialised");
+  display.drawText(2, 2, "Player: " + store.getters.playerName);
 
-  this.display.drawWorld();
+  display.drawWorld();
 
   store.dispatch("addMessage", {
     entity: "",
@@ -44,24 +43,20 @@ gsMain.receiveInput = input => {
     // Handle as an instant command
     switch (input) {
       case "ArrowUp":
-        gData.player.pos.y--;
-        this.display.setOptions(displayConf.main)
-        this.display.drawWorld();
+        store.dispatch("movePlayer", "UP");
+        display.drawWorld();
         break;
       case "ArrowDown":
-        gData.player.pos.y++;
-        this.display.setOptions(displayConf.main)
-        this.display.drawWorld();
+        store.dispatch("movePlayer", "DOWN");
+        display.drawWorld();
         break;
       case "ArrowLeft":
-        gData.player.pos.x--;
-        this.display.setOptions(displayConf.main)
-        this.display.drawWorld();
+        store.dispatch("movePlayer", "LEFT");
+        display.drawWorld();
         break;
       case "ArrowRight":
-        gData.player.pos.x++;
-        this.display.setOptions(displayConf.main)
-        this.display.drawWorld();
+        store.dispatch("movePlayer", "RIGHT");
+        display.drawWorld();
         break;
       default:
         break;

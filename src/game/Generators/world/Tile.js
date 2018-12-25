@@ -9,7 +9,7 @@ export default class Tile {
     this.chunk = chunk;
     // this.playerHere = false;
     this.discovered = true; // TODO: Make false to enable discovery fog
-    if (Math.random() > 0.95) this.creatures = genCreatures();
+    if (Math.random() < 0.5) this.creatures = genCreatures();
     else this.creatures = [];
     this.items = [];
     // this.structures = [];

@@ -1,6 +1,7 @@
 import gsStart from "./gStates/gsStart";
 import gsMain from "./gStates/gsMain";
-import gData from "./data";
+// import gData from "./data";
+// import store from "../../vuex/store";
 
 class GameStateManager {
   constructor() {

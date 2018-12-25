@@ -1,4 +1,5 @@
 import gsMan from "./state/gsMan";
+// import store from "../vuex/store";
 import gData from "./state/data";
 // import CommandParser from "./Commands/CommandParser";
 import GenerateName from "./Generators/NameGenerator";
@@ -17,6 +18,9 @@ export default {
       parseCommand(command) {
         // return CommandParser.ParseCommand(command);
         console.log("Parsing " + command);
+      },
+      worldExists() {
+        return (gData.world !== null);
       },
       displaySplash() {
         return gData.displaySplash;

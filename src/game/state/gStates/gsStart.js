@@ -2,7 +2,7 @@ import display from "../../overview/Display";
 import store from "../../../vuex/store";
 import gsMan from "../gsMan";
 import GameState from "../GameState";
-import gData from "../data";
+// import gData from "../data";
 import generateName from "../../Generators/NameGenerator";
 import newPlayer from "../../Generators/NewPlayer";
 import displayConf from "../../config/display";
@@ -27,8 +27,8 @@ gsStart.receiveInput = function(input) {
     switch (input.toUpperCase()) {
       case "YES":
       case "Y":
-        gData.player = newPlayer(this.playerName);
-        gData.displaySplash = false; // Stop displaying splash screen
+        store.dispatch("setPlayer", newPlayer(this.playerName));
+        store.dispatch("setSplash", false);
         gsMan.nextState(this.name);
         break;
       case "NO":

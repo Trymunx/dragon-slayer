@@ -1,6 +1,6 @@
 {
   "main": {
-    "bg": "transparent",
+    "bg": "#1e1e1e",
     "fontFamily": "monospace",
     "fontSize": 32
   },

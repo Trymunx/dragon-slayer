@@ -1,9 +1,10 @@
 import ROT from "rot-js";
-import gData from "../state/data";
+import store from "../../vuex/store";
+import { levelColour } from "../utils/colours";
 
 ROT.Display.prototype.drawWorld = function() {
-  let world = gData.world;
-  let player = gData.player;
+  let world = store.getters.world;
+  let player = store.getters.player;
 
   this.clear();
   let curOpts = this.getOptions();
@@ -14,28 +15,20 @@ ROT.Display.prototype.drawWorld = function() {
 
   for (let i = 0, y = top; y < bot; y++) {
     for (let j = 0, x = left; x < right; x++) {
-      let chunk = world.getChunkFromTile(x, y);
-      let tile = chunk.getTileFromWorldCoords(x, y);
+      let tile = world.getTile(x, y);
 
       let symbol, foreground, background;
 
       if (x === player.pos.x && y === player.pos.y) {
         foreground = "#fff";
-        symbol = "«※»";
+        // symbol = "«※»";
+        symbol = "※";
         // symbol = "🧙";
       } else if (tile.creatures.length) {
         let highestLvl = Math.max(...tile.creatures.map(creature => creature.level));
         let creature = tile.creatures.find(creature => creature.level === highestLvl);
         symbol = creature.symbol;
-        let diff = highestLvl - player.level;
-        if (diff > 10) {
-          foreground = "hsl(0, 100%, 50%)";
-        } else if (diff < -10) {
-          foreground = "hsl(120, 100%, 50%)";
-        } else {
-          // converts numbers from 10 to -10 into a val from 120 to 0
-          foreground = `hsl(${120 - (diff + 10) * 6}, 100%, 50%)`;
-        }
+        foreground = levelColour(highestLvl);
       } else {
         foreground = tile.foreground;
         symbol = tile.display;
