@@ -13,6 +13,7 @@ ROT.Display.prototype.drawWorld = function() {
   let left = Math.ceil(player.pos.x - curOpts.width / 2);
   let right = Math.ceil(player.pos.x + curOpts.width / 2);
 
+  store.dispatch("setDisplayOrigin", {x: left, y: top});
   for (let i = 0, y = top; y < bot; y++) {
     for (let j = 0, x = left; x < right; x++) {
       let tile = world.getTile(x, y);

@@ -24,14 +24,14 @@ export const mixin = {
       let items = [];
       let comp = this;
       while (comp) {
-        let e = comp.contextMenuItems(comp, items) || [];
+        let e = comp.contextMenuItems(comp, items, event) || [];
         items = [].concat(items, e);
         comp = comp.$parent;
       }
       data.items = items;
       this.$nextTick(() => data.pos = pos);
     },
-    contextMenuItems(vm, menuItems) {},
+    contextMenuItems(vm, menuItems, event) {},
     hideContextMenu() {
       data.items = [];
     }

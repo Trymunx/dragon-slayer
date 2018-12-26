@@ -11,6 +11,7 @@ const store = new Vuex.Store({
     commandMode: "text",
     splash: true,
     world: null,
+    displayOrigin: {},
   },
 
   getters: {
@@ -21,6 +22,7 @@ const store = new Vuex.Store({
     splash: (state) => state.splash,
     player: (state) => state.player,
     playerPos: (state) => state.player.pos,
+    displayOrigin: (state) => state.displayOrigin,
     world: (state) => state.world,
     worldExists: (state) => state.world !== null,
     surroundings: (state) => {
@@ -31,8 +33,7 @@ const store = new Vuex.Store({
 
       for (let y = -2; y <= 2; y++) {
         for (let x = -2; x <= +2; x++) {
-          let tile =
-            state.world.getTile(state.player.pos.x + x, state.player.pos.y + y);
+          let tile = state.world.getTile(state.player.pos.x + x, state.player.pos.y + y);
           if (tile.items.length) {
             surr.items.push(...tile.items);
           }
@@ -122,6 +123,9 @@ const store = new Vuex.Store({
           break;
       }
     },
+    setDisplayOrigin({ commit }, pos) {
+      commit("SET_DISPLAY_ORIGIN", pos);
+    },
   },
 
   mutations: {
@@ -151,6 +155,9 @@ const store = new Vuex.Store({
     },
     SET_SPLASH(state, val) {
       state.splash = val;
+    },
+    SET_DISPLAY_ORIGIN(state, pos) {
+      state.displayOrigin = pos;
     },
     MOVE_PLAYER_UP(state) {
       const pos = {
