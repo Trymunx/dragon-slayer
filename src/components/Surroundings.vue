@@ -59,7 +59,7 @@ export default {
         let displayOptions = display.getOptions();
         let a = Math.floor(displayOptions.width / 2) + entity.loc[0];
         let b = Math.floor(displayOptions.height / 2) + entity.loc[1];
-        display.draw(a, b, entity.symbol, levelColour(entity.level), "#0a0a0a");
+        display.draw(a, b, entity.symbol, levelColour(entity.level, 50), "#0a0a0a");
       } else {
         display.drawWorld();
       }
