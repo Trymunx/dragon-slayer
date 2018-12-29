@@ -9,6 +9,11 @@ class Creature {
     this.symbol = creature.attributes.healthBar;
     // this.items = getItems(this.name);
     this.attr = creature.attributes;
+    if (Math.random() < creature.drops.gold.dropChance) {
+      this.gold = ~~(Math.random() * creature.drops.gold.max);
+    } else {
+      this.gold = 0;
+    }
   }
 }
 

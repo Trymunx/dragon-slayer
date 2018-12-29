@@ -36,11 +36,10 @@ export default {
         return {
           text: `Examine ${creature.name}`,
           action: () => {
-            console.log(creature);
             this.$store.dispatch("addMessage", {
               entity: `Examine:`,
               message: `The ${creature.name} is level ${creature.level}.`
-                + ` It will drop ${creature.drops !== undefined ? creature.drops.items.join(", ") : "nothing"}.`,
+                + ` It will drop ${creature.gold !== 0 ? creature.gold + " gold" : "nothing"}.`,
             });
           },
         }
