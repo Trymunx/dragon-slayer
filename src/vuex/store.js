@@ -42,7 +42,7 @@ const store = new Vuex.Store({
         let x = parseInt(pos[0]) - state.player.pos.x;
         let y = parseInt(pos[1]) - state.player.pos.y;
 
-        if (Math.abs(x) <= radius && Math.abs(y) <= radius) {
+        if (Math.abs(x) <= radius && Math.abs(y) <= radius && state.creatures[key].length > 0) {
           state.creatures[key].forEach(creature => {
             let dir = [];
             if (y < 0) dir.push("north");
@@ -142,6 +142,9 @@ const store = new Vuex.Store({
     addCreature({ commit }, creature) {
       commit("ADD_CREATURE", creature);
     },
+    moveCreature({ commit }, data) {
+      commit("MOVE_CREATURE", data);
+    },
   },
 
   mutations: {
@@ -208,7 +211,22 @@ const store = new Vuex.Store({
         state.creatures[creature.pos].push(creature);
         state.creatures[creature.pos].sort((a, b) => b.level - a.level);
       } else {
-        state.creatures[creature.pos] = [creature];
+        Vue.set(state.creatures, creature.pos, [creature]);
+      }
+    },
+    MOVE_CREATURE(state, data) {
+      if (state.creatures[data.newPos]) {
+        state.creatures[data.newPos].push(
+          ...state.creatures[data.creature.pos].splice(
+            state.creatures[data.creature.pos].indexOf(data.creature), 1
+          )
+        );
+        state.creatures[data.newPos].sort((a, b) => b.level - a.level);
+      } else {
+        Vue.set(state.creatures, data.newPos,
+          state.creatures[data.creature.pos].splice(
+            state.creatures[data.creature.pos].indexOf(data.creature), 1
+          ));
       }
     },
   }
