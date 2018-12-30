@@ -31,8 +31,12 @@ export default {
       let displayX = ~~((pos.x - canvas.offsetLeft) * dOpts.width / canvas.offsetWidth);
       let displayY = ~~((pos.y - canvas.offsetTop) * dOpts.height / canvas.offsetHeight);
       let displayOrigin = this.$store.getters.displayOrigin;
-      let tile = this.$store.getters.world.getTile(displayX + displayOrigin.x, displayY + displayOrigin.y);
-      return tile.creatures.map(creature => {
+      let creaturesOnTile = this.$store.getters.creaturesAt(
+        displayX + displayOrigin.x,
+        displayY + displayOrigin.y
+      );
+      if (creaturesOnTile) {
+      return creaturesOnTile.map(creature => {
         return {
           text: `Examine ${creature.name}`,
           action: () => {
@@ -44,6 +48,7 @@ export default {
           },
         }
       });
+      }
     },
   }
 };

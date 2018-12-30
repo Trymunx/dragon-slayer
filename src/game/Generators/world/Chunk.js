@@ -1,8 +1,8 @@
+import store from "../../../vuex/store";
 import Tile from "./Tile";
-import config from "../../config/world";
 import parseDirection from "../../utils/ParseDirection";
-
-const chunkSize = config.chunkSize;
+import { chunkSize } from "../../config/world";
+import genCreatures from "../genCreatures";
 
 export default class Chunk {
   constructor(x, y, world) {
@@ -51,6 +51,7 @@ export default class Chunk {
   generate() {
     console.log("Generating: %O", this);
     // Terrain -> structure -> creatures -> player
-
+    let pLvl = store.getters.playerLevel;
+    genCreatures(Chunk.size, this.x, this.y, pLvl);
   }
 }
