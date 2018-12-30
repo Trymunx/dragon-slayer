@@ -35,7 +35,7 @@ export default {
         displayX + displayOrigin.x,
         displayY + displayOrigin.y
       );
-      if (creaturesOnTile) {
+      if (creaturesOnTile && creaturesOnTile.length > 0) {
       return creaturesOnTile.map(creature => {
         return {
           text: `Examine ${creature.name}`,

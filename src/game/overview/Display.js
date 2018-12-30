@@ -33,7 +33,7 @@ ROT.Display.prototype.drawWorld = function() {
   Object.keys(creatures).forEach(key => {
     let pos = key.split(",");
     let cArr = creatures[key];
-    if (pos[0] >= left && pos[0] < right && pos[1] >= top && pos[1] < bot) {
+    if (pos[0] >= left && pos[0] < right && pos[1] >= top && pos[1] < bot && cArr.length > 0) {
       this.draw(pos[0] - left, pos[1] - top, cArr[0].symbol, levelColour(cArr[0].level), bg);
     }
   });
