@@ -1,6 +1,5 @@
-import genTree from "../../utils/GenerateTree";
+import genTree from "../genTree";
 import genCreatures from "../genCreatures";
-import GData from "../../state/data";
 
 export default class Tile {
   constructor(x, y, chunk, terrain) {
@@ -9,8 +8,6 @@ export default class Tile {
     this.chunk = chunk;
     // this.playerHere = false;
     this.discovered = true; // TODO: Make false to enable discovery fog
-    if (Math.random() < 0.5) this.creatures = genCreatures();
-    else this.creatures = [];
     this.items = [];
     // this.structures = [];
     this.display;

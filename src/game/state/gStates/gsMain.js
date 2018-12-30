@@ -5,6 +5,7 @@ import GameState from "../GameState";
 // import gData from "../data";
 import displayConf from "../../config/display";
 import World from "../../Generators/world/World";
+import gameloop from "../../gameloop";
 
 var gsMain = new GameState("main");
 
@@ -36,6 +37,9 @@ gsMain.init = () => {
     message: "You can type commands to move around and interact with the world. Try entering /help for a list of commands. " + 
       "Additionally, you can press 'escape' to unfocus the command input and then use arrow keys to move around. Press 'enter' to refocus the command input."
   });
+
+
+  gameloop.start();
 }
 
 gsMain.receiveInput = input => {

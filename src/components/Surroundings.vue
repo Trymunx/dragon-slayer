@@ -13,7 +13,7 @@
               <td class="creature-name">{{entity.name}}</td>
               <td class="creature-level">Level</td>
               <td :style="getStyle(entity.level)">{{entity.level}}</td>
-              <td>({{entity.dir}})</td>
+              <td>(<span :style="entity.dir === 'here' ? getStyle(entity.level) : ''">{{entity.dir}}</span>)</td>
             </tr>
           </tbody>
         </table>
@@ -46,8 +46,7 @@ export default {
       return this.$store.getters.worldExists;
     },
     surroundings() {
-      // console.log(this.$store.getters.surroundings);
-      return this.$store.getters.surroundings;
+      return this.$store.getters.surroundings(2);
     },
   },
   methods: {
@@ -133,6 +132,7 @@ export default {
   text-transform: capitalize;
   width: 100px;
 }
+
 .creature-level {
   text-align: right;
   width: 40px;
