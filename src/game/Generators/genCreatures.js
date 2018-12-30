@@ -9,12 +9,46 @@ class Creature {
     this.level = level;
     this.pos = pos;
     this.symbol = creature.attributes.healthBar;
+    this.speed = () => ~~(Math.random() * 500) + 200;
     // this.items = getItems(this.name);
     this.attr = creature.attributes;
     if (Math.random() < creature.drops.gold.dropChance) {
       this.gold = ~~(Math.random() * creature.drops.gold.max);
     } else {
       this.gold = 0;
+    }
+  }
+
+  move() {
+    switch (~~(Math.random() * 4)) {
+      case 0:
+        store.dispatch("moveCreature", {
+          creature: this,
+          newPos: [this.pos[0], this.pos[1] - 1],
+        });
+        this.pos[1]--;
+        break;
+      case 1:
+        store.dispatch("moveCreature", {
+          creature: this,
+          newPos: [this.pos[0], this.pos[1] + 1],
+        });
+        this.pos[1]++;
+        break;
+      case 2:
+        store.dispatch("moveCreature", {
+          creature: this,
+          newPos: [this.pos[0] - 1, this.pos[1]],
+        });
+        this.pos[0]--;
+        break;
+      case 3:
+        store.dispatch("moveCreature", {
+          creature: this,
+          newPos: [this.pos[0] + 1, this.pos[1]],
+        });
+        this.pos[0]++;
+        break;
     }
   }
 }
