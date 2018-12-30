@@ -1,5 +1,5 @@
 <template>
-  <div id="overview">
+  <div id="overview" @click.right.stop.prevent="showContextMenu">
   </div>
 </template>
 
@@ -23,7 +23,28 @@ export default {
         display.setOptions({width, height});
         display.drawWorld();
       }
-    }
+    },
+    contextMenuItems(vm, items, event) {
+      let pos = {x: event.x, y: event.y};
+      let canvas = document.querySelector("#overview > canvas");
+      let dOpts = display.getOptions();
+      let displayX = ~~((pos.x - canvas.offsetLeft) * dOpts.width / canvas.offsetWidth);
+      let displayY = ~~((pos.y - canvas.offsetTop) * dOpts.height / canvas.offsetHeight);
+      let displayOrigin = this.$store.getters.displayOrigin;
+      let tile = this.$store.getters.world.getTile(displayX + displayOrigin.x, displayY + displayOrigin.y);
+      return tile.creatures.map(creature => {
+        return {
+          text: `Examine ${creature.name}`,
+          action: () => {
+            this.$store.dispatch("addMessage", {
+              entity: `Examine:`,
+              message: `The ${creature.name} is level ${creature.level}.`
+                + ` It will drop ${creature.gold !== 0 ? creature.gold + " gold" : "nothing"}.`,
+            });
+          },
+        }
+      });
+    },
   }
 };
 </script>

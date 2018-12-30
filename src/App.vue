@@ -43,12 +43,14 @@ export default {
       }
     },
     contextMenuItems(vm, menuItems) {
-      return [{
-              text: "WhoAmI?",
-              action: () => {
-                console.log(vm);
-              }
-            }];
+      return [
+        {
+          text: "WhoAmI?",
+          action: () => {
+            console.log(vm);
+          }
+        }
+      ];
     }
   }
 };
