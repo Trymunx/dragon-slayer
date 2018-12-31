@@ -1,5 +1,7 @@
 import Food from "./Food";
 import Crafting from "./Crafting";
+import Ingredients from "./Ingredients";
+import Trophies from "./Trophies";
 
 let gameItems = new Map();
 
@@ -65,6 +67,7 @@ Food.forEach(i => {
     }
     item.value.push(itemParams => getItemValue(itemParams, "heal", i.heal.slice()));
   }
+  if (!item.plural) item.plural = item.name;
   item.edible = true;
   item.addMethod("eat", () => item.uncooked = false);
   gameItems.set(item.name, item);
@@ -82,7 +85,45 @@ Crafting.forEach(i => {
     }
     item.value.push(itemParams => getRandomInRange(itemParams.val[0], itemParams.val[1]));
   }
+  if (!item.plural) {
+    item.plural = item.name + "s";
+  }
   item.addMethod("craft", () => console.log(`Crafting with ${this.name}`));
+  gameItems.set(item.name, item);
+});
+
+Ingredients.forEach(i => {
+  let item;
+  if (!gameItems.has(i.name)) {
+    item = new ItemConstructor(i);
+    item.value = [itemParams => getRandomInRange(itemParams.val[0], itemParams.val[1])];
+  } else {
+    item = gameItems.get(i.name);
+    for (let key in i) {
+      item[key] = i[key];
+    }
+    item.value.push(itemParams => getRandomInRange(itemParams.val[0], itemParams.val[1]));
+  }
+  if (!item.plural) item.plural = item.name;
+  item.addMethod("combine", () => console.log(`Using ingredient ${this.name}`));
+  gameItems.set(item.name, item);
+});
+
+Trophies.forEach(i => {
+  let item;
+  if (!gameItems.has(i.name)) {
+    item = new ItemConstructor(i);
+    item.value = [itemParams => getRandomInRange(itemParams.val[0], itemParams.val[1])];
+  } else {
+    item = gameItems.get(i.name);
+    for (let key in i) {
+      item[key] = i[key];
+    }
+    item.value.push(itemParams => getRandomInRange(itemParams.val[0], itemParams.val[1]));
+  }
+  if (!item.plural) {
+    item.plural = item.name + "s";
+  }
   gameItems.set(item.name, item);
 });
 

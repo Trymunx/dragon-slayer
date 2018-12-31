@@ -251,11 +251,11 @@
         },
         {
           "name": "troll flesh",
-          "quantity": [1, 5]
+          "quantity": [1, 3]
         },
         {
           "name": "troll fat",
-          "quantity": [1, 4]
+          "quantity": [1, 2]
         }
       ],
       "equipment": []
@@ -324,7 +324,7 @@
         },
         {
           "name": "orc flesh",
-          "quantity": [1, 5]
+          "quantity": [1, 3]
         }
       ],
       "equipment": [
@@ -416,7 +416,7 @@
         },
         {
           "name": "goblin flesh",
-          "quantity": [1, 3]
+          "quantity": [1, 2]
         }
       ],
       "equipment": [
@@ -522,7 +522,7 @@
         },
         {
           "name": "bones",
-          "quantity": [1, 3]
+          "quantity": [1, 2]
         }
       ],
       "equipment": [
@@ -610,7 +610,7 @@
       "harvest": [
         {
           "name": "bones",
-          "quantity": [1, 4]
+          "quantity": [1, 3]
         },
         {
           "name": "skull",
@@ -770,7 +770,7 @@
         },
         {
           "name": "rat meat",
-          "quantity": [1, 6]
+          "quantity": [1, 5]
         }
       ],
       "equipment": []
@@ -839,7 +839,7 @@
         },
         {
           "name": "spider silk",
-          "quantity": [1, 3]
+          "quantity": [1, 2]
         },
         {
           "name": "venom",
@@ -912,7 +912,7 @@
         },
         {
           "name": "wolf fur",
-          "quantity": [1, 3]
+          "quantity": [1, 2]
         },
         {
           "name": "wolf meat",
@@ -988,11 +988,11 @@
       },
       "harvest": [
         {
-          "name": "pig skull",
+          "name": "boar skull",
           "quantity": [1, 1]
         },
         {
-          "name": "tusks",
+          "name": "tusk",
           "quantity": [1, 2]
         },
         {
@@ -1345,16 +1345,16 @@
       },
       "harvest": [
         {
-          "name": "antlers",
+          "name": "antler",
           "quantity": [1, 1]
         },
         {
           "name": "deer hide",
-          "quantity": [1, 4]
+          "quantity": [1, 2]
         },
         {
           "name": "venison",
-          "quantity": [2, 5]
+          "quantity": [2, 4]
         }
       ],
       "equipment": []
@@ -1423,7 +1423,7 @@
         },
         {
           "name": "pork",
-          "quantity": [2, 5]
+          "quantity": [2, 3]
         }
       ],
       "equipment": []

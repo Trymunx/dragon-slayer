@@ -47,13 +47,12 @@ export default {
               return acc;
             }, {});
             let outputs = Object.keys(items).map(k => {
-              let plural = creature.items.find(el => el.name === k).plural;
-              if (items[k] > 1 && plural) {
-                return `${items[k]} ${plural}`;
+              if (items[k] > 1) {
+                return `${items[k]} ${creature.items.find(el => el.name === k).plural}`;
               } else {
-                return `${items[k]} ${k}`
+                return `${items[k]} ${k}`;
               }
-            })
+            });
             let output = outputs.length > 1
               ? outputs.slice(0, -1).join(", ") + ", and " + outputs.slice(-1)
               : outputs[0];

@@ -9,6 +9,7 @@
   },
   {
     "name": "spider silk",
+    "plural": "spider silk",
     "val": [6, 20]
   },
   {
@@ -29,6 +30,7 @@
   },
   {
     "name": "giant bones",
+    "plural": "giant bones",
     "val": [35, 75]
   },
   {
@@ -41,6 +43,7 @@
   },
   {
     "name": "dragon scales",
+    "plural": "dragon scales",
     "val": [105, 200]
   }
 ]

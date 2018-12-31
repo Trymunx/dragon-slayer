@@ -58,7 +58,12 @@ const getItems = (creatureItemsArray) => {
   let items = [];
   creatureItemsArray.forEach(item => {
     if (gameItems.has(item.name)) {
-      let quantity = ~~(Math.random() * item.quantity[1] + 1) + item.quantity[0];
+      let quantity;
+      if (item.quantity[1] !== 1) {
+        quantity = ~~(Math.random() * (item.quantity[1] - item.quantity[0] + 1)) + item.quantity[0];
+      } else {
+        quantity = 1;
+      }
       for (let i = 0; i < quantity; i++) {
         let newItem = gameItems.get(item.name).newItem();
         items.push(newItem);
