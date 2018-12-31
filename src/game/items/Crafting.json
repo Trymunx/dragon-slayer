@@ -1,0 +1,46 @@
+[
+  {
+    "name": "fox hide",
+    "val": [3, 16]
+  },
+  {
+    "name": "boar hide",
+    "val": [5, 30]
+  },
+  {
+    "name": "spider silk",
+    "val": [6, 20]
+  },
+  {
+    "name": "snakeskin",
+    "val": [8, 18]
+  },
+  {
+    "name": "deer hide",
+    "val": [8, 50]
+  },
+  {
+    "name": "wolf fur",
+    "val": [10, 30]
+  },
+  {
+    "name": "dragon skull",
+    "val": [30, 65]
+  },
+  {
+    "name": "giant bones",
+    "val": [35, 75]
+  },
+  {
+    "name": "giant skull",
+    "val": [45, 100]
+  },
+  {
+    "name": "dragon hide",
+    "val": [90, 250]
+  },
+  {
+    "name": "dragon scales",
+    "val": [105, 200]
+  }
+]

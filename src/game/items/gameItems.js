@@ -1,4 +1,5 @@
 import Food from "./Food";
+import Crafting from "./Crafting";
 
 let gameItems = new Map();
 
@@ -22,14 +23,13 @@ class ItemConstructor {
     const itemParams = {};
 
     for (const key in this) {
-      if (key === "value") {
-        itemParams[key] = this[key].reduce((sum, fn) => sum += fn(), 0);
-      } else if (Array.isArray(this[key])) {
+      if (Array.isArray(this[key]) && key !== "value" && key !== "val") {
         itemParams[key] = ~~getRandomInRange(this[key][0], this[key][1]);
-      } else {
+      } else if (key !== "value") {
         itemParams[key] = this[key];
       }
     }
+    itemParams.val = this.value.reduce((sum, fn) => sum += fn(itemParams), 0);
 
     return new Item(itemParams)
   }
@@ -47,29 +47,42 @@ function getRandomInRange(min, max) {
  * Returns a random int between item minVal and maxVal mapped on minProp and maxProp inclusive
  * item.val and item.prop are arrays of length 2, with form [min, max]
  */
-function getItemValue(item, prop) {
-  let val = getRandomInRange(item[prop][0], item[prop][1]);
-  let slope = (item.val[1] - item.val[0] + 1) / (item[prop][1] - item[prop][0] + 1);
-  return ~~((val - item[prop][0]) * slope + item.val[0]);
+function getItemValue(item, prop, range) {
+  let val = item[prop];
+  let slope = (item.val[1] - item.val[0] + 1) / (range[1] - range[0] + 1);
+  return ~~((val - range[0]) * slope + item.val[0]);
 }
 
 Food.forEach(i => {
   let item;
   if (!gameItems.has(i.name)) {
     item = new ItemConstructor(i);
-    let valueFn = function() {getItemValue(this, "heal")};
-    item.value = [valueFn.bind(i)];
+    item.value = [itemParams => getItemValue(itemParams, "heal", i.heal.slice())];
   } else {
     item = gameItems.get(i.name);
     for (let key in i) {
       item[key] = i[key];
     }
-    let valueFn = function() {getItemValue(this, "heal")};
-    // item.value = [valueFn.bind(i)];
-    item.value.push(valueFn.bind(i));
+    item.value.push(itemParams => getItemValue(itemParams, "heal", i.heal.slice()));
   }
   item.edible = true;
   item.addMethod("eat", () => item.uncooked = false);
+  gameItems.set(item.name, item);
+});
+
+Crafting.forEach(i => {
+  let item;
+  if (!gameItems.has(i.name)) {
+    item = new ItemConstructor(i);
+    item.value = [itemParams => getRandomInRange(itemParams.val[0], itemParams.val[1])];
+  } else {
+    item = gameItems.get(i.name);
+    for (let key in i) {
+      item[key] = i[key];
+    }
+    item.value.push(itemParams => getRandomInRange(itemParams.val[0], itemParams.val[1]));
+  }
+  item.addMethod("craft", () => console.log(`Crafting with ${this.name}`));
   gameItems.set(item.name, item);
 });
 

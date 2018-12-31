@@ -40,6 +40,7 @@ export default {
         return {
           text: `Examine ${creature.name}`,
           action: () => {
+            console.log(creature.items);
             let items = creature.items.reduce((acc, item) => {
               if (acc[item.name]) acc[item.name]++;
               else acc[item.name] = 1;
