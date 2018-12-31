@@ -40,10 +40,26 @@ export default {
         return {
           text: `Examine ${creature.name}`,
           action: () => {
+            let items = creature.items.reduce((acc, item) => {
+              if (acc[item.name]) acc[item.name]++;
+              else acc[item.name] = 1;
+              return acc;
+            }, {});
+            let outputs = Object.keys(items).map(k => {
+              let plural = creature.items.find(el => el.name === k).plural;
+              if (items[k] > 1 && plural) {
+                return `${items[k]} ${plural}`;
+              } else {
+                return `${items[k]} ${k}`
+              }
+            })
+            let output = outputs.length > 1
+              ? outputs.slice(0, -1).join(", ") + ", and " + outputs.slice(-1)
+              : outputs[0];
             this.$store.dispatch("addMessage", {
-              entity: `Examine:`,
+              entity: `Examine ${creature.name}:`,
               message: `The ${creature.name} is level ${creature.level}.`
-                + ` It will drop ${creature.gold !== 0 ? creature.gold + " gold" : "nothing"}.`,
+                + ` It will drop ${outputs.length !== 0 ? output : "nothing"}.`,
             });
           },
         }

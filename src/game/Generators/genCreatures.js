@@ -1,5 +1,6 @@
 import CreaturesJSON from "../db/Creatures.json";
 import store from "../../vuex/store";
+import gameItems from "../items/gameItems";
 
 const Creatures = new Map(Object.entries(CreaturesJSON));
 
@@ -10,7 +11,7 @@ class Creature {
     this.pos = pos;
     this.symbol = creature.attributes.healthBar;
     this.speed = () => ~~(Math.random() * 500) + 200;
-    // this.items = getItems(this.name);
+    this.items = getItems(creature.drops.harvest);
     this.attr = creature.attributes;
     if (Math.random() < creature.drops.gold.dropChance) {
       this.gold = ~~(Math.random() * creature.drops.gold.max);
@@ -51,6 +52,20 @@ class Creature {
         break;
     }
   }
+}
+
+const getItems = (creatureItemsArray) => {
+  let items = [];
+  creatureItemsArray.forEach(item => {
+    if (gameItems.has(item.name)) {
+      let quantity = ~~(Math.random() * item.quantity[1] + 1) + item.quantity[0];
+      for (let i = 0; i < quantity; i++) {
+        let newItem = gameItems.get(item.name).newItem();
+        items.push(newItem);
+      }
+    }
+  });
+  return items;
 }
 
 const getRandomPos = (chunkSize, left, top) => ([

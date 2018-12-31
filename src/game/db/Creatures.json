@@ -29,7 +29,7 @@
         "chance": 0.16,
         "minDamage": 17,
         "maxDamage": 50,
-               "messages": [
+        "messages": [
           "You raise you shield but the dragon breaths fire. You lose ",
           "Your vision erupts in blazing fire as the dragon's breath surrounds you. You lose "
         ]
@@ -44,11 +44,35 @@
         "dropChance": 0.95,
         "max": 18
       },
-      "items": [
-        "dragon hide",
-        "dragon scales",
-        "dragon claws",
-        "dragon blood"
+      "harvest": [
+        {
+          "name": "dragon skull",
+          "quantity": [1, 1]
+        },
+        {
+          "name": "dragon hide",
+          "quantity": [1, 4]
+        },
+        {
+          "name": "dragon scales",
+          "quantity": [2, 8]
+        },
+        {
+          "name": "dragon claws",
+          "quantity": [4, 10]
+        },
+        {
+          "name": "dragon teeth",
+          "quantity": [4, 8]
+        },
+        {
+          "name": "dragon meat",
+          "quantity": [1, 4]
+        },
+        {
+          "name": "dragon blood",
+          "quantity": [1, 2]
+        }
       ],
       "equipment": [
         "longsword",
@@ -107,7 +131,7 @@
         "chance": 0.6,
         "minDamage": 8,
         "maxDamage": 22,
-               "messages": [
+        "messages": [
           "The giant clubs you, hitting you for ",
           "The giant's club smashes into your torso. You lose "
         ]
@@ -117,7 +141,7 @@
         "chance": 0.15,
         "minDamage": 15,
         "maxDamage": 40,
-               "messages": [
+        "messages": [
           "The giant picks you up and hurls you against the ground. You lose ",
           "The giant grabs you by your leg and smashes you against the ground. You lose "
         ]
@@ -132,8 +156,23 @@
         "dropChance": 0.9,
         "max": 15
       },
-      "items": [
-        "giant bones"
+      "harvest": [
+        {
+          "name": "giant bones",
+          "quantity": [2, 5]
+        },
+        {
+          "name": "giant skull",
+          "quantity": [1, 1]
+        },
+        {
+          "name": "giant heart",
+          "quantity": [1, 1]
+        },
+        {
+          "name": "giant flesh",
+          "quantity": [2, 4]
+        }
       ],
       "equipment": [
         "club",
@@ -180,7 +219,7 @@
         "chance": 0.56,
         "minDamage": 8,
         "maxDamage": 18,
-               "messages": [
+        "messages": [
           "The troll mauls you for ",
           "The trolls claws rip through your flesh. You lose "
         ]
@@ -190,7 +229,7 @@
         "chance": 0.14,
         "minDamage": 12,
         "maxDamage": 32,
-               "messages": [
+        "messages": [
           "The troll rushes at you, knocking you off your feet and savaging you for ",
           "The troll savages you with its teeth and claws, ripping your flesh. You lose "
         ]
@@ -205,8 +244,19 @@
         "dropChance": 0.85,
         "max": 12
       },
-      "items": [
-        "troll fat"
+      "harvest": [
+        {
+          "name": "troll skull",
+          "quantity": [1, 1]
+        },
+        {
+          "name": "troll flesh",
+          "quantity": [1, 5]
+        },
+        {
+          "name": "troll fat",
+          "quantity": [1, 4]
+        }
       ],
       "equipment": []
     },
@@ -242,7 +292,7 @@
         "chance": 0.56,
         "minDamage": 4,
         "maxDamage": 15,
-               "messages": [
+        "messages": [
           "The orc swings its sword and slashes you for ",
           "The orc's sword cuts into you, you lose "
         ]
@@ -252,7 +302,7 @@
         "chance": 0.14,
         "minDamage": 8,
         "maxDamage": 16,
-               "messages": [
+        "messages": [
           "The orc suddenly lunges at you, bashing you with its shield then stabbing you with a piercing blow while your guard is down. You lose ",
           "The orc slams its shield into you, following up with a slash. You lose "
         ]
@@ -267,7 +317,16 @@
         "dropChance": 0.75,
         "max": 5
       },
-      "items": [],
+      "harvest": [
+        {
+          "name": "orc skull",
+          "quantity": [1, 1]
+        },
+        {
+          "name": "orc flesh",
+          "quantity": [1, 5]
+        }
+      ],
       "equipment": [
         "longsword",
         "halberd",
@@ -325,7 +384,7 @@
         "chance": 0.48,
         "minDamage": 2,
         "maxDamage": 12,
-               "messages": [
+        "messages": [
           "The goblin slashes you for ",
           "The goblin's sword cuts you, you lose "
         ]
@@ -335,7 +394,7 @@
         "chance": 0.12,
         "minDamage": 4,
         "maxDamage": 18,
-               "messages": [
+        "messages": [
           "The goblin lunges at you, stabbing you with its sword. You lose ",
           "The goblin's sword pierces you for "
         ]
@@ -350,7 +409,16 @@
         "dropChance": 0.55,
         "max": 3
       },
-      "items": [],
+      "harvest": [
+        {
+          "name": "goblin skull",
+          "quantity": [1, 1]
+        },
+        {
+          "name": "goblin flesh",
+          "quantity": [1, 3]
+        }
+      ],
       "equipment": [
         "longsword",
         "halberd",
@@ -408,7 +476,7 @@
         "chance": 0.36,
         "minDamage": 1,
         "maxDamage": 3,
-               "messages": [
+        "messages": [
           "The thief lashes out, punching you for ",
           "The thief punches you. You lose "
         ]
@@ -418,7 +486,7 @@
         "chance": 0.18,
         "minDamage": 2,
         "maxDamage": 5,
-               "messages": [
+        "messages": [
           "The thief kicks you, hitting you for ",
           "The thief kicks you, making you stagger backwards. You lose "
         ]
@@ -428,7 +496,7 @@
         "chance": 0.06,
         "minDamage": 5,
         "maxDamage": 12,
-               "messages": [
+        "messages": [
           "The thief draws his dagger and lunges, stabbing you for ",
           "The thief manages to get behind you and stabs you with his dagger. You lose "
         ]
@@ -443,7 +511,20 @@
         "dropChance": 0.75,
         "max": 3
       },
-      "items": [],
+      "harvest": [
+        {
+          "name": "skull",
+          "quantity": [1, 1]
+        },
+        {
+          "name": "human flesh",
+          "quantity": [1, 2]
+        },
+        {
+          "name": "bones",
+          "quantity": [1, 3]
+        }
+      ],
       "equipment": [
         "longsword",
         "halberd",
@@ -501,7 +582,7 @@
         "chance": 0.48,
         "minDamage": 1,
         "maxDamage": 5,
-               "messages": [
+        "messages": [
           "The skeleton slashes you for ",
           "The skeleton's sword cuts you, you lose "
         ]
@@ -511,7 +592,7 @@
         "chance": 0.12,
         "minDamage": 3,
         "maxDamage": 7,
-               "messages": [
+        "messages": [
           "The skeleton stabs you with its sword. You lose ",
           "The skeleton's sword pierces you for "
         ]
@@ -526,7 +607,16 @@
         "dropChance": 0.65,
         "max": 3
       },
-      "items": [],
+      "harvest": [
+        {
+          "name": "bones",
+          "quantity": [1, 4]
+        },
+        {
+          "name": "skull",
+          "quantity": [1, 1]
+        }
+      ],
       "equipment": [
         "longsword",
         "halberd",
@@ -584,7 +674,7 @@
         "chance": 0.36,
         "minDamage": 1,
         "maxDamage": 6,
-               "messages": [
+        "messages": [
           "The ghost rears its spectral form, fearing you for ",
           "The ghost takes on many forms in rapid succession, rushing at you and fearing you for "
         ]
@@ -594,7 +684,7 @@
         "chance": 0.09,
         "minDamage": 5,
         "maxDamage": 12,
-               "messages": [
+        "messages": [
           "The ghost channels spectral energy into a magical attack that hits you for ",
           "The ghost begins summoning dark forces with its whispery moaning voice. You are hit by a magical barrage and lose "
         ]
@@ -609,9 +699,7 @@
         "dropChance": 0.45,
         "max": 3
       },
-      "items": [
-        "magical runestones"
-      ],
+      "harvest": [],
       "equipment": []
     },
     "messages": {
@@ -646,7 +734,7 @@
         "chance": 0.4,
         "minDamage": 1,
         "maxDamage": 5,
-               "messages": [
+        "messages": [
           "The giant rat scratches you for ",
           "The giant rat's claws scratch you. You lose "
         ]
@@ -656,7 +744,7 @@
         "chance": 0.1,
         "minDamage": 1,
         "maxDamage": 9,
-               "messages": [
+        "messages": [
           "The giant rat bites you for ",
           "The giant rat's teeth sink into your arm. You lose "
         ]
@@ -671,9 +759,19 @@
         "dropChance": 0.2,
         "max": 1
       },
-      "items": [
-        "rat tail",
-        "rat meat"
+      "harvest": [
+        {
+          "name": "rat tail",
+          "quantity": [1, 1]
+        },
+        {
+          "name": "giant rat skull",
+          "quantity": [1, 1]
+        },
+        {
+          "name": "rat meat",
+          "quantity": [1, 6]
+        }
       ],
       "equipment": []
     },
@@ -709,7 +807,7 @@
         "chance": 0.44,
         "minDamage": 1,
         "maxDamage": 6,
-               "messages": [
+        "messages": [
           "The giant spider rears up, pulling you towards it with its front legs. It bites you for ",
           "With a sudden scuttling movement the giant spider sinks its fangs into you. You lose "
         ]
@@ -719,7 +817,7 @@
         "chance": 0.11,
         "minDamage": 2,
         "maxDamage": 12,
-               "messages": [
+        "messages": [
           "The giant spider launches itself at you. You see its stinger plunge into you. You lose ",
           "The giant spider suddenly scuttles onto you, swinging its abdomen towards you. You see its stinger stab into you. You lose "
         ]
@@ -734,9 +832,19 @@
         "dropChance": 0.2,
         "max": 1
       },
-      "items": [
-        "spider silk",
-        "venom"
+      "harvest": [
+        {
+          "name": "giant spider head",
+          "quantity": [1, 1]
+        },
+        {
+          "name": "spider silk",
+          "quantity": [1, 3]
+        },
+        {
+          "name": "venom",
+          "quantity": [1, 2]
+        }
       ],
       "equipment": []
     },
@@ -772,7 +880,7 @@
         "chance": 0.42,
         "minDamage": 2,
         "maxDamage": 8,
-               "messages": [
+        "messages": [
           "The wolf rears up and slashes you, its claws slicing through your skin. You lose ",
           "The wolf swipes at you with its claws, hitting you for "
         ]
@@ -782,7 +890,7 @@
         "chance": 0.1,
         "minDamage": 1,
         "maxDamage": 9,
-               "messages": [
+        "messages": [
           "The wolf leaps at you, sinking its teeth into your arm. You lose ",
           "The wolf grips you in its teeth, shaking its head from side to side. You lose "
         ]
@@ -797,9 +905,27 @@
         "dropChance": 0.35,
         "max": 2
       },
-      "items": [
-        "wolf fur",
-        "claws"
+      "harvest": [
+        {
+          "name": "wolf skull",
+          "quantity": [1, 1]
+        },
+        {
+          "name": "wolf fur",
+          "quantity": [1, 3]
+        },
+        {
+          "name": "wolf meat",
+          "quantity": [1, 2]
+        },
+        {
+          "name": "wolf teeth",
+          "quantity": [3, 6]
+        },
+        {
+          "name": "wolf claws",
+          "quantity": [2, 8]
+        }
       ],
       "equipment": []
     },
@@ -835,7 +961,7 @@
         "chance": 0.44,
         "minDamage": 2,
         "maxDamage": 7,
-               "messages": [
+        "messages": [
           "The boar rams into you, its tusks digging in. You lose ",
           "The boar lowers its head and lurches forward into you, hitting you for "
         ]
@@ -845,7 +971,7 @@
         "chance": 0.11,
         "minDamage": 5,
         "maxDamage": 13,
-               "messages": [
+        "messages": [
           "The boar moves away before rushing back at high speed, slamming headfirst into you, the force knocking you to the ground. It turns and rams you again while you are down. You lose ",
           "With a swift run up the boar slams into you headfirst, knocking you off your feet. It turns and rams you again while you are on the ground. You lose "
         ]
@@ -860,10 +986,23 @@
         "dropChance": 0.2,
         "max": 1
       },
-      "items": [
-        "tusks",
-        "hide",
-        "meat"
+      "harvest": [
+        {
+          "name": "pig skull",
+          "quantity": [1, 1]
+        },
+        {
+          "name": "tusks",
+          "quantity": [1, 2]
+        },
+        {
+          "name": "boar hide",
+          "quantity": [1, 2]
+        },
+        {
+          "name": "boar meat",
+          "quantity": [1, 2]
+        }
       ],
       "equipment": []
     },
@@ -899,7 +1038,7 @@
         "chance": 0.4,
         "minDamage": 1,
         "maxDamage": 4,
-               "messages": [
+        "messages": [
           "The snake wraps itself around you, constricting you. You lose ",
           "The snake grips you in its coils, squeezing you. You lose "
         ]
@@ -909,7 +1048,7 @@
         "chance": 0.1,
         "minDamage": 6,
         "maxDamage": 18,
-               "messages": [
+        "messages": [
           "The snake's head lunges forward at lightning speed as it bites, hitting you for ",
           "With a lightning-fast movement the snake bites you for "
         ]
@@ -924,8 +1063,19 @@
         "dropChance": 0.15,
         "max": 1
       },
-      "items": [
-        "venom"
+      "harvest": [
+        {
+          "name": "snakeskin",
+          "quantity": [1, 1]
+        },
+        {
+          "name": "snake meat",
+          "quantity": [1, 2]
+        },
+        {
+          "name": "venom",
+          "quantity": [1, 2]
+        }
       ],
       "equipment": []
     },
@@ -961,7 +1111,7 @@
         "chance": 0.16,
         "minDamage": 1,
         "maxDamage": 2,
-               "messages": [
+        "messages": [
           "The rat scratches you for ",
           "The rat's claws scratch you for "
         ]
@@ -971,7 +1121,7 @@
         "chance": 0.04,
         "minDamage": 1,
         "maxDamage": 3,
-               "messages": [
+        "messages": [
           "The rat bites you for ",
           "The rat sinks its teeth into you. You lose "
         ]
@@ -986,8 +1136,15 @@
         "dropChance": 0.05,
         "max": 1
       },
-      "items": [
-        "rat tail"
+      "harvest": [
+        {
+          "name": "rat tail",
+          "quantity": [1, 1]
+        },
+        {
+          "name": "rat meat",
+          "quantity": [1, 2]
+        }
       ],
       "equipment": []
     },
@@ -1023,7 +1180,7 @@
         "chance": 0.2,
         "minDamage": 1,
         "maxDamage": 3,
-               "messages": [
+        "messages": [
           "The spider bites you for ",
           "You feel the spider bite you for "
         ]
@@ -1033,7 +1190,7 @@
         "chance": 0.05,
         "minDamage": 2,
         "maxDamage": 5,
-               "messages": [
+        "messages": [
           "Your foot gets caught in a cobweb, tripping you. You fall and hit your head. You lose ",
           "Your arm catches on a cobweb and you drop your weapon on your foot. You lose "
         ]
@@ -1048,8 +1205,11 @@
         "dropChance": 0.05,
         "max": 1
       },
-      "items": [
-        "spider silk"
+      "harvest": [
+        {
+          "name": "spider silk",
+          "quantity": [1, 2]
+        }
       ],
       "equipment": []
     },
@@ -1085,7 +1245,7 @@
         "chance": 0.14,
         "minDamage": 1,
         "maxDamage": 2,
-               "messages": [
+        "messages": [
           "The fox scratches you for ",
           "The fox's claws scratch you for "
         ]
@@ -1095,7 +1255,7 @@
         "chance": 0.06,
         "minDamage": 1,
         "maxDamage": 4,
-               "messages": [
+        "messages": [
           "The fox bites you for ",
           "The fox sinks its teeth into you. You lose "
         ]
@@ -1110,8 +1270,19 @@
         "dropChance": 0.05,
         "max": 1
       },
-      "items": [
-        "hide"
+      "harvest": [
+        {
+          "name": "fox skull",
+          "quantity": [1, 1]
+        },
+        {
+          "name": "fox hide",
+          "quantity": [1, 2]
+        },
+        {
+          "name": "fox meat",
+          "quantity": [1, 2]
+        }
       ],
       "equipment": []
     },
@@ -1147,7 +1318,7 @@
         "chance": 0.28,
         "minDamage": 1,
         "maxDamage": 4,
-               "messages": [
+        "messages": [
           "The deer lowers its head and rams into you, hitting you for ",
           "The deer takes a step back then rams its head into you. You lose "
         ]
@@ -1157,7 +1328,7 @@
         "chance": 0.07,
         "minDamage": 2,
         "maxDamage": 6,
-               "messages": [
+        "messages": [
           "Turning, the deer kicks you with its hind leg, hitting you for ",
           "The deer turns and kicks you hard with its hind leg. You lose "
         ]
@@ -1172,11 +1343,19 @@
         "dropChance": 0.05,
         "max": 1
       },
-      "items": [
-        "hide",
-        "meat",
-        "venison",
-        "antlers"
+      "harvest": [
+        {
+          "name": "antlers",
+          "quantity": [1, 1]
+        },
+        {
+          "name": "deer hide",
+          "quantity": [1, 4]
+        },
+        {
+          "name": "venison",
+          "quantity": [2, 5]
+        }
       ],
       "equipment": []
     },
@@ -1212,7 +1391,7 @@
         "chance": 0.24,
         "minDamage": 1,
         "maxDamage": 2,
-               "messages": [
+        "messages": [
           "The pig rams into you. You lose ",
           "The pig lowers its head and lurches forward into you, hitting you for "
         ]
@@ -1222,7 +1401,7 @@
         "chance": 0.06,
         "minDamage": 1,
         "maxDamage": 3,
-               "messages": [
+        "messages": [
           "The pig moves away before rushing back at speed, knocking you to the ground. You lose ",
           "With a swift run up the pig slams into you headfirst, knocking you off your feet. You lose "
         ]
@@ -1237,8 +1416,15 @@
         "dropChance": 0.05,
         "max": 1
       },
-      "items": [
-        "meat"
+      "harvest": [
+        {
+          "name": "pig skull",
+          "quantity": [1, 1]
+        },
+        {
+          "name": "pork",
+          "quantity": [2, 5]
+        }
       ],
       "equipment": []
     },
@@ -1274,7 +1460,7 @@
         "chance": 0.15,
         "minDamage": 1,
         "maxDamage": 2,
-               "messages": [
+        "messages": [
           "The rabbit scratches you for "
         ]
       },
@@ -1283,7 +1469,7 @@
         "chance": 0.00001,
         "minDamage": 150,
         "maxDamage": 500,
-               "messages": [
+        "messages": [
           "Uh oh! This might have been a were-rabbit... It just hit you for "
         ]
       }
@@ -1297,8 +1483,11 @@
         "dropChance": 0,
         "max": 0
       },
-      "items": [
-        "meat"
+      "harvest": [
+        {
+          "name": "rabbit meat",
+          "quantity": [1, 2]
+        }
       ],
       "equipment": []
     },
