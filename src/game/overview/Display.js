@@ -15,34 +15,44 @@ ROT.Display.prototype.drawWorld = function() {
   let right = Math.ceil(player.pos.x + curOpts.width / 2);
   store.dispatch("setDisplayOrigin", {x: left, y: top});
 
-  let bg;
-
   for (let i = 0, y = top; y < bot; y++) {
     for (let j = 0, x = left; x < right; x++) {
       let tile = world.getTile(x, y);
-      if (tile.items.length > 0) {
-        bg = `hsla(0, 0%, 100%, ${tile.items.length / 12 + 0.2})`;
+      let hl = store.getters.highlit[[x, y]];
+      let symbol = tile.display;
+      let fg = tile.foreground;
+      let bg = "#1e1e1e";
+
+      if (hl) {
+        bg = "#fff";
+      } else if (tile.items.length > 0) {
+        bg = `hsla(0, 0%, 100%, ${Math.min(tile.items.length / 12, 0.8)})`;
       }
-      this.draw(j, i, tile.display, tile.foreground, bg);
+
+      if (x === player.pos.x && y === player.pos.y) {
+        symbol = "※";
+        // symbol = "«※»";
+        // symbol = "🧙";
+        if (hl || tile.items.length > 8) {
+          fg = "#000";
+        } else {
+          fg = "#fff";
+        }
+      } else if (creatures[[x, y]] && creatures[[x, y]].length) {
+        if (hl) {
+          symbol = hl.symbol;
+          fg = hl.colour;
+        } else {
+          symbol = creatures[[x, y]][0].symbol;
+          fg = levelColour(creatures[[x, y]][0].level);
+        }
+      }
+
+      this.draw(j, i, symbol, fg, bg);
       j++;
     }
     i++;
   }
-
-  // Draw creatures over tiles
-  Object.keys(creatures).forEach(key => {
-    let pos = key.split(",");
-    let cArr = creatures[key];
-    if (pos[0] >= left && pos[0] < right && pos[1] >= top && pos[1] < bot && cArr.length > 0) {
-      this.draw(pos[0] - left, pos[1] - top, cArr[0].symbol, levelColour(cArr[0].level), bg);
-    }
-  });
-
-  // Draw player last
-  this.draw(player.pos.x - left, player.pos.y - top, "※", "#fff", bg);
-    // symbol = "«※»";
-    // symbol = "※";
-    // symbol = "🧙";
 }
 
 var display = new ROT.Display({

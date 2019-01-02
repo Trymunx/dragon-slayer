@@ -18,7 +18,7 @@
           </tbody>
         </table>
       </div>
-      {{surroundings.items.length}} Item{{surroundings.items.length === 1 ? '' : 's'}}:
+      {{surroundings.items.size}} Item{{surroundings.items.size === 1 ? '' : 's'}}:
       <div class="table-wrapper">
         <table class="surrounds-categories">
           <tbody>
@@ -55,12 +55,15 @@ export default {
     },
     highlight(entity) {
       if (entity) {
-        let displayOptions = display.getOptions();
-        let a = Math.floor(displayOptions.width / 2) + entity.loc[0];
-        let b = Math.floor(displayOptions.height / 2) + entity.loc[1];
-        display.draw(a, b, entity.symbol, levelColour(entity.level, 50), "#0a0a0a");
+        let highlit = {
+          [entity.pos]: {
+            symbol: entity.symbol,
+            colour: levelColour(entity.level, 30),
+          },
+        };
+        this.$store.dispatch("highlight", highlit)
       } else {
-        display.drawWorld();
+        this.$store.dispatch("highlight");
       }
     },
   },

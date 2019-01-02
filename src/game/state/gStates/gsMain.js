@@ -65,6 +65,7 @@ gsMain.receiveInput = input => {
       default:
         break;
     }
+    store.dispatch("highlight");
   } else {
     // Handle as text command
     store.dispatch("addMessage", {
