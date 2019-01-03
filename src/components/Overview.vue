@@ -35,8 +35,12 @@ export default {
         displayX + displayOrigin.x,
         displayY + displayOrigin.y
       );
+      let itemsOnTile = this.$store.getters.world.getTile(
+        displayX + displayOrigin.x,
+        displayY + displayOrigin.y
+      ).items;
       if (creaturesOnTile && creaturesOnTile.length > 0) {
-      return creaturesOnTile.map(creature => {
+        creaturesOnTile = creaturesOnTile.map(creature => {
         return {
           text: `Examine ${creature.name}`,
           action: () => {
@@ -65,6 +69,30 @@ export default {
         }
       });
       }
+      if (itemsOnTile && itemsOnTile.length > 0) {
+        itemsOnTile = itemsOnTile.reduce((arr, item) => {
+          let val = arr.find(el => el.name === item.name);
+          if (val) {
+            val.count++;
+            val.val += item.val;
+            val.text = `${val.count} ${val.count === 1 ? val.name : val.plural} (${val.val})`;
+            val.action = () => console.log(val);
+          } else {
+            let newItemEntry = {
+              name: item.name,
+              plural: item.plural,
+              val: item.val,
+              count: 1,
+              text: `1 ${item.name} (${item.val})`,
+              // Have to use old school function so that this points to this object
+              action: function() {console.log(this)},
+            };
+            arr.push(newItemEntry);
+          }
+          return arr;
+        }, []);
+      }
+      return (creaturesOnTile || []).concat(itemsOnTile || []);
     },
   }
 };
