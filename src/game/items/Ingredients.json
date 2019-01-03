@@ -1,6 +1,7 @@
 [
   {
-    "name": "bones",
+    "name": "bone",
+    "plural": "bones",
     "val": [12, 35]
   },
   {

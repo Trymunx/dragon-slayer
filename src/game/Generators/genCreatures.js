@@ -21,6 +21,8 @@ class Creature {
   }
 
   move() {
+    let tile = store.getters.world.getTile(this.pos[0], this.pos[1]);
+    if (Math.random() < 0.5) tile.items.push(...this.items);
     switch (~~(Math.random() * 4)) {
       case 0:
         store.dispatch("moveCreature", {

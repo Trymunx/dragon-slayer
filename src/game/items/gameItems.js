@@ -13,7 +13,7 @@ class Item {
   }
 }
 
-class ItemConstructor {
+class ItemFactory {
   constructor(itemObject) {
     for (let key in itemObject) {
       this[key] = itemObject[key];
@@ -58,7 +58,7 @@ function getItemValue(item, prop, range) {
 Food.forEach(i => {
   let item;
   if (!gameItems.has(i.name)) {
-    item = new ItemConstructor(i);
+    item = new ItemFactory(i);
     item.value = [itemParams => getItemValue(itemParams, "heal", i.heal.slice())];
   } else {
     item = gameItems.get(i.name);
@@ -69,14 +69,14 @@ Food.forEach(i => {
   }
   if (!item.plural) item.plural = item.name;
   item.edible = true;
-  item.addMethod("eat", () => item.uncooked = false);
+  item.addMethod("cook", () => item.uncooked = false);
   gameItems.set(item.name, item);
 });
 
 Crafting.forEach(i => {
   let item;
   if (!gameItems.has(i.name)) {
-    item = new ItemConstructor(i);
+    item = new ItemFactory(i);
     item.value = [itemParams => getRandomInRange(itemParams.val[0], itemParams.val[1])];
   } else {
     item = gameItems.get(i.name);
@@ -95,7 +95,7 @@ Crafting.forEach(i => {
 Ingredients.forEach(i => {
   let item;
   if (!gameItems.has(i.name)) {
-    item = new ItemConstructor(i);
+    item = new ItemFactory(i);
     item.value = [itemParams => getRandomInRange(itemParams.val[0], itemParams.val[1])];
   } else {
     item = gameItems.get(i.name);
@@ -112,7 +112,7 @@ Ingredients.forEach(i => {
 Trophies.forEach(i => {
   let item;
   if (!gameItems.has(i.name)) {
-    item = new ItemConstructor(i);
+    item = new ItemFactory(i);
     item.value = [itemParams => getRandomInRange(itemParams.val[0], itemParams.val[1])];
   } else {
     item = gameItems.get(i.name);

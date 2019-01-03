@@ -68,24 +68,65 @@ const store = new Vuex.Store({
         return a.dist - b.dist === 0 ? b.level - a.level : a.dist - b.dist;
       });
 
-      let items = new Map();
+      let items = {
+        total: 0,
+        stacked: {},
+      };
       for (let y = -radius; y <= radius; y++) {
         for (let x = -radius; x <= radius; x++) {
           let tile = state.world.getTile(state.player.pos.x + x, state.player.pos.y + y);
           if (tile.items.length) {
-            let tileItems = tile.items.reduce((obj, el) => {
-              if (obj[el.name]) {
-                obj[el.name].push(el);
+            items.total += tile.items.length;
+            tile.items.forEach(item => {
+              if (items.stacked[item.name]) {
+                items.stacked[item.name].count++;
+                items.stacked[item.name].locations[
+                  [state.player.pos.x + x, state.player.pos.y + y]
+                ] = {};
+                if (items.stacked[item.name].expanded[[x,y,item.name]]) {
+                  items.stacked[item.name].expanded[[x,y,item.name]].count++;
+                  items.stacked[item.name].expanded[[x,y,item.name]].totalValue += item.val;
+                } else {
+                  items.stacked[item.name].expanded[[x,y,item.name]] = {
+                    name: item.name,
+                    plural: item.plural,
+                    count: 1,
+                    totalValue: item.val,
+                    dir: getDir(x, y),
+                    loc: {[[state.player.pos.x + x, state.player.pos.y + y]]: {}},
+                  };
+                }
               } else {
-                obj[el.name] = [el];
+                items.stacked[item.name] = {
+                  name: item.name,
+                  plural: item.plural,
+                  count: 1,
+                  locations: {
+                    [[state.player.pos.x + x, state.player.pos.y + y]]: {},
+                  },
+                  expanded: {
+                    [[x,y,item.name]]: {
+                      name: item.name,
+                      plural: item.plural,
+                      count: 1,
+                      totalValue: item.val,
+                      dir: getDir(x, y),
+                      loc: {[[state.player.pos.x + x, state.player.pos.y + y]]: {}},
+                    },
+                  },
+                };
               }
-              return obj;
-            }, {});
-            tileItems.dir = getDir(x, y);
-            items.set(
-              `${state.player.pos.x + x},${state.player.pos.y + y}`,
-              tileItems
-            );
+            });
+            // let tileItems = tile.items.reduce((obj, el) => {
+            //   if (obj[el.name]) {
+            //     obj[el.name].push(el);
+            //   } else {
+            //     obj[el.name] = [el];
+            //   }
+            //   return obj;
+            // }, {});
+            // tileItems.dir = getDir(x, y);
+            // items[[state.player.pos.x + x], [state.player.pos.y + y]] = tileItems;
             // surr.items.push(...tile.items);
           }
         }

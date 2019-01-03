@@ -158,7 +158,7 @@
       },
       "harvest": [
         {
-          "name": "giant bones",
+          "name": "giant bone",
           "quantity": [2, 5]
         },
         {
@@ -521,7 +521,7 @@
           "quantity": [1, 2]
         },
         {
-          "name": "bones",
+          "name": "bone",
           "quantity": [1, 2]
         }
       ],
@@ -609,7 +609,7 @@
       },
       "harvest": [
         {
-          "name": "bones",
+          "name": "bone",
           "quantity": [1, 3]
         },
         {

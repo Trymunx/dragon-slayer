@@ -24,7 +24,7 @@ ROT.Display.prototype.drawWorld = function() {
       let bg = "#1e1e1e";
 
       if (hl) {
-        bg = "#fff";
+        bg = "#df9";
       } else if (tile.items.length > 0) {
         bg = `hsla(0, 0%, 100%, ${Math.min(tile.items.length / 12, 0.8)})`;
       }
@@ -39,7 +39,7 @@ ROT.Display.prototype.drawWorld = function() {
           fg = "#fff";
         }
       } else if (creatures[[x, y]] && creatures[[x, y]].length) {
-        if (hl) {
+        if (hl && hl.symbol && hl.colour) {
           symbol = hl.symbol;
           fg = hl.colour;
         } else {
