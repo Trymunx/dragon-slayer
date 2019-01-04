@@ -14,7 +14,8 @@
     "lodash": "^4.17.10",
     "rot-js": "^0.6.5",
     "vue": "^2.5.2",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "vue-contextmenu": "Alpvax/vue-contextmenu"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.22",

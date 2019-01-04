@@ -1,11 +1,10 @@
 <template>
-  <div id="app" @click="hideContextMenu" @click.right.prevent="showContextMenu">
+  <div id="app" v-contextmenu>
     <Output/>
     <Overview/>
     <surroundings/>
     <player-inventory/>
     <input-bar/>
-    <context-menu/>
   </div>
 </template>
 
@@ -13,7 +12,6 @@
 import Output from "./components/Output";
 import Overview from "./components/Overview";
 import InputBar from "./components/InputBar";
-import ContextMenu from "./components/ContextMenu";
 import Surroundings from "./components/Surroundings";
 import PlayerInventory from "./components/PlayerInventory";
 
@@ -25,7 +23,6 @@ export default {
     Surroundings,
     PlayerInventory,
     InputBar,
-    ContextMenu
   },
   created() {
     this.$game.start();
@@ -42,7 +39,7 @@ export default {
         this.$game.receiveInput(event.key);
       }
     },
-    contextMenuItems(vm, menuItems) {
+    contextMenuItems(vm) {
       return [
         {
           text: "WhoAmI?",
@@ -67,6 +64,15 @@ export default {
   --text: #daddd8;
   --text-blur: #bababa;
   --select: #323336;
+}
+
+.context-menu {
+  color: var(--text-blur);
+  background: var(--ui-border);
+}
+
+.context-item:hover {
+  background: var(--ui-dark);
 }
 
 #app {
