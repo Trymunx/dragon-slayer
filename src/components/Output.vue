@@ -1,5 +1,5 @@
 <template>
-  <div id="output">
+  <div id="output" v-contextmenu>
     <message v-for="(msg, i) in messages" :entity="msg.entity" :message="msg.message" :key="i"/>
     <div id="messageBg"><div class="entity"/><div class="message"/></div>
   </div>
