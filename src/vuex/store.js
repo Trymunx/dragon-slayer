@@ -117,17 +117,6 @@ const store = new Vuex.Store({
                 };
               }
             });
-            // let tileItems = tile.items.reduce((obj, el) => {
-            //   if (obj[el.name]) {
-            //     obj[el.name].push(el);
-            //   } else {
-            //     obj[el.name] = [el];
-            //   }
-            //   return obj;
-            // }, {});
-            // tileItems.dir = getDir(x, y);
-            // items[[state.player.pos.x + x], [state.player.pos.y + y]] = tileItems;
-            // surr.items.push(...tile.items);
           }
         }
       }
