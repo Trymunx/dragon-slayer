@@ -4,7 +4,7 @@ import Vue from "vue";
 import App from "./App";
 import store from "./vuex/store";
 import game from "./game/vue-game-plugin";
-import contextmenu from "vue-contextmenu";
+import contextmenu from "vue-contextmenu-plugin";
 
 Vue.config.productionTip = false;
 Vue.use(game);
