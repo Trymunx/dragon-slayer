@@ -1,6 +1,6 @@
 <template>
   <div id="surroundings-output">
-    <div v-if="worldExists" class="wrapper">
+    <template v-if="worldExists">
       {{surroundings.creatures.length}} Creature{{surroundings.creatures.length === 1 ? '' : 's'}}:
       <div class="table-wrapper">
         <table class="surrounds-categories">
@@ -32,7 +32,7 @@
           </tbody>
         </table>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -69,7 +69,7 @@ export default {
 
 <style>
 #surroundings-output {
-  overflow-y: visible;
+  padding: 20px 8px 20px 15px;
   color: var(--text-blur);
   background-color: var(--ui-darker);
   border-color: var(--ui-border);
@@ -108,12 +108,6 @@ export default {
   text-align: right;
   text-transform: capitalize;
   width: 110px;
-}
-
-.wrapper {
-  height: 100%;
-  padding: 20px 8px 20px 15px;
-  overflow-y: hidden;
 }
 
 .table-wrapper {
