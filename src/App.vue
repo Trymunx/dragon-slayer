@@ -39,12 +39,13 @@ export default {
         this.$game.receiveInput(event.key);
       }
     },
-    contextMenuItems(vm) {
+    contextMenuItems(vm, {targetEl, targetVm}) {
       return [
         {
           text: "WhoAmI?",
           action: () => {
-            console.log(vm);
+            console.log("target element:", targetEl);
+            console.log("target VueComponent:", targetVm);
           }
         }
       ];
