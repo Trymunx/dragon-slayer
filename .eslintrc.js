@@ -1,4 +1,4 @@
-{
+module.exports = {
   "env": {
     "browser": true,
     "es6": true,
@@ -35,6 +35,9 @@
         "tabWidth": 2,
         "ignoreTrailingComments": true,
       }
+    ],
+    "no-trailing-spaces": [
+      "error",
     ],
   },
 }
