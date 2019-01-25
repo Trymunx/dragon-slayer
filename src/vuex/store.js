@@ -17,23 +17,23 @@ const store = new Vuex.Store({
   },
 
   getters: {
-    playerName: (state) => state.player.name,
-    messages: (state) => state.messages,
-    instantMode: (state) => state.commandMode === "instant" ? true : false,
-    inputText: (state) => state.inputText,
-    splash: (state) => state.splash,
-    player: (state) => state.player,
-    playerPos: (state) => state.player.pos,
-    playerLevel: (state) => state.player.level,
-    displayOrigin: (state) => state.displayOrigin,
-    world: (state) => state.world,
-    worldExists: (state) => state.world !== null,
-    highlit: (state) => state.highlit,
-    creatures: (state) => state.creatures,
-    creaturesAt: (state) => (x, y) => {
+    playerName: state => state.player.name,
+    messages: state => state.messages,
+    instantMode: state => (state.commandMode === "instant" ? true : false),
+    inputText: state => state.inputText,
+    splash: state => state.splash,
+    player: state => state.player,
+    playerPos: state => state.player.pos,
+    playerLevel: state => state.player.level,
+    displayOrigin: state => state.displayOrigin,
+    world: state => state.world,
+    worldExists: state => state.world !== null,
+    highlit: state => state.highlit,
+    creatures: state => state.creatures,
+    creaturesAt: state => (x, y) => {
       return state.creatures[[x, y]];
     },
-    surroundings: (state) => (radius = 2) => {
+    surroundings: state => (radius = 2) => {
       let surr = {
         items: [],
         creatures: [],
@@ -59,11 +59,11 @@ const store = new Vuex.Store({
             creature.dir = getDir(x, y);
             creature.dist = Math.abs(x) + Math.abs(y);
             creature.loc = [x, y];
-            surr.creatures.push(creature)
+            surr.creatures.push(creature);
           });
         }
       });
-      
+
       surr.creatures.sort((a, b) => {
         return a.dist - b.dist === 0 ? b.level - a.level : a.dist - b.dist;
       });
@@ -83,17 +83,17 @@ const store = new Vuex.Store({
                 items.stacked[item.name].locations[
                   [state.player.pos.x + x, state.player.pos.y + y]
                 ] = {};
-                if (items.stacked[item.name].expanded[[x,y,item.name]]) {
-                  items.stacked[item.name].expanded[[x,y,item.name]].count++;
-                  items.stacked[item.name].expanded[[x,y,item.name]].totalValue += item.val;
+                if (items.stacked[item.name].expanded[[x, y, item.name]]) {
+                  items.stacked[item.name].expanded[[x, y, item.name]].count++;
+                  items.stacked[item.name].expanded[[x, y, item.name]].totalValue += item.val;
                 } else {
-                  items.stacked[item.name].expanded[[x,y,item.name]] = {
+                  items.stacked[item.name].expanded[[x, y, item.name]] = {
                     name: item.name,
                     plural: item.plural,
                     count: 1,
                     totalValue: item.val,
                     dir: getDir(x, y),
-                    loc: {[[state.player.pos.x + x, state.player.pos.y + y]]: {}},
+                    loc: { [[state.player.pos.x + x, state.player.pos.y + y]]: {} },
                   };
                 }
               } else {
@@ -105,13 +105,13 @@ const store = new Vuex.Store({
                     [[state.player.pos.x + x, state.player.pos.y + y]]: {},
                   },
                   expanded: {
-                    [[x,y,item.name]]: {
+                    [[x, y, item.name]]: {
                       name: item.name,
                       plural: item.plural,
                       count: 1,
                       totalValue: item.val,
                       dir: getDir(x, y),
-                      loc: {[[state.player.pos.x + x, state.player.pos.y + y]]: {}},
+                      loc: { [[state.player.pos.x + x, state.player.pos.y + y]]: {} },
                     },
                   },
                 };
@@ -136,7 +136,7 @@ const store = new Vuex.Store({
     enterCommand({ commit, state }, text) {
       commit("ADD_MESSAGE", {
         entity: state.playerName,
-        message: text
+        message: text,
       });
       commit("SET_INPUT_TEXT", "");
     },
@@ -191,7 +191,7 @@ const store = new Vuex.Store({
     },
     highlight({ commit }, tiles) {
       if (tiles) {
-        commit("HIGHLIGHT_TILES", tiles)
+        commit("HIGHLIGHT_TILES", tiles);
       } else {
         commit("CLEAR_HIGHLIGHTED");
       }
@@ -205,7 +205,7 @@ const store = new Vuex.Store({
     ADD_MESSAGE(state, data) {
       state.messages.push({
         entity: data.entity,
-        message: data.message
+        message: data.message,
       });
     },
     SET_COMMAND_MODE(state, mode) {
@@ -234,28 +234,28 @@ const store = new Vuex.Store({
         x: state.player.pos.x,
         y: state.player.pos.y - 1,
       };
-      state.player = Object.assign({}, state.player, {pos});
+      state.player = Object.assign({}, state.player, { pos });
     },
     MOVE_PLAYER_DOWN(state) {
       const pos = {
         x: state.player.pos.x,
         y: state.player.pos.y + 1,
       };
-      state.player = Object.assign({}, state.player, {pos});
+      state.player = Object.assign({}, state.player, { pos });
     },
     MOVE_PLAYER_LEFT(state) {
       const pos = {
         x: state.player.pos.x - 1,
         y: state.player.pos.y,
       };
-      state.player = Object.assign({}, state.player, {pos});
+      state.player = Object.assign({}, state.player, { pos });
     },
     MOVE_PLAYER_RIGHT(state) {
       const pos = {
         x: state.player.pos.x + 1,
         y: state.player.pos.y,
       };
-      state.player = Object.assign({}, state.player, {pos});
+      state.player = Object.assign({}, state.player, { pos });
     },
     ADD_CREATURE(state, creature) {
       if (state.creatures[creature.pos]) {
@@ -269,15 +269,20 @@ const store = new Vuex.Store({
       if (state.creatures[data.newPos]) {
         state.creatures[data.newPos].push(
           ...state.creatures[data.creature.pos].splice(
-            state.creatures[data.creature.pos].indexOf(data.creature), 1
+            state.creatures[data.creature.pos].indexOf(data.creature),
+            1
           )
         );
         state.creatures[data.newPos].sort((a, b) => b.level - a.level);
       } else {
-        Vue.set(state.creatures, data.newPos,
+        Vue.set(
+          state.creatures,
+          data.newPos,
           state.creatures[data.creature.pos].splice(
-            state.creatures[data.creature.pos].indexOf(data.creature), 1
-          ));
+            state.creatures[data.creature.pos].indexOf(data.creature),
+            1
+          )
+        );
       }
     },
     HIGHLIGHT_TILES(state, tiles) {
@@ -286,7 +291,7 @@ const store = new Vuex.Store({
     CLEAR_HIGHLIGHTED(state) {
       state.highlit = [];
     },
-  }
+  },
 });
 
 export default store;
