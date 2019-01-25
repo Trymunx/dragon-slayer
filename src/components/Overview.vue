@@ -1,5 +1,5 @@
 <template>
-  <div id="overview" @click.right.stop.prevent="showContextMenu">
+  <div id="overview" v-contextmenu>
   </div>
 </template>
 
@@ -24,7 +24,7 @@ export default {
         display.drawWorld();
       }
     },
-    contextMenuItems(vm, items, event) {
+    contextMenuItems(vm, {event}) {
       let pos = {x: event.x, y: event.y};
       let canvas = document.querySelector("#overview > canvas");
       let dOpts = display.getOptions();
