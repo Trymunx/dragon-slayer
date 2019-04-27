@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   env: { node: true },
-  extends: ["plugin:vue/essential", "@vue/prettier", "prettier", "@vue/typescript"],
+  extends: ["plugin:vue/essential", "@vue/prettier", "prettier"],
   rules: {
     "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
@@ -17,11 +17,9 @@ module.exports = {
     "sort-imports": [
       "warn",
       {
+        ignoreCase: true,
         memberSyntaxSortOrder: ["none", "all", "single", "multiple"],
       },
     ],
-  },
-  parserOptions: {
-    parser: "@typescript-eslint/parser",
   },
 };
