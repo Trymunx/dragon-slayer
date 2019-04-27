@@ -1,5 +1,5 @@
-import Food from "./json/Food";
 import Crafting from "./json/Crafting";
+import Food from "./json/Food";
 import Ingredients from "./json/Ingredients";
 import Trophies from "./json/Trophies";
 

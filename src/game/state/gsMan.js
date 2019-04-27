@@ -1,5 +1,5 @@
-import gsStart from "./gStates/gsStart";
 import gsMain from "./gStates/gsMain";
+import gsStart from "./gStates/gsStart";
 // import gData from "./data";
 // import store from "../../vuex/store";
 

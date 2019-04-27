@@ -1,6 +1,6 @@
+import { levelColour } from "../utils/colours";
 import ROT from "rot-js";
 import store from "../../vuex/store";
-import { levelColour } from "../utils/colours";
 
 ROT.Display.prototype.drawWorld = function() {
   const world = store.getters.world;

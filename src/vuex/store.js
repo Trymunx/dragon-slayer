@@ -107,7 +107,9 @@ const store = new Vuex.Store({
                     count: 1,
                     totalValue: item.val,
                     dir: getDir(x, y),
-                    loc: { [[state.player.pos.x + x, state.player.pos.y + y]]: {} },
+                    loc: {
+                      [[state.player.pos.x + x, state.player.pos.y + y]]: {},
+                    },
                   };
                 }
               } else {
@@ -125,7 +127,9 @@ const store = new Vuex.Store({
                       count: 1,
                       totalValue: item.val,
                       dir: getDir(x, y),
-                      loc: { [[state.player.pos.x + x, state.player.pos.y + y]]: {} },
+                      loc: {
+                        [[state.player.pos.x + x, state.player.pos.y + y]]: {},
+                      },
                     },
                   },
                 };

@@ -1,11 +1,11 @@
 import display from "../../overview/Display";
-import store from "../../../vuex/store";
-import gsMan from "../gsMan";
-import GameState from "../GameState";
-// import gData from "../data";
 import displayConf from "../../config/display";
-import World from "../../world/World";
 import gameloop from "../../gameloop";
+import GameState from "../GameState";
+import gsMan from "../gsMan";
+// import gData from "../data";
+import store from "../../../vuex/store";
+import World from "../../world/World";
 
 var gsMain = new GameState("main");
 
@@ -31,13 +31,15 @@ gsMain.init = () => {
   store.dispatch("addMessage", {
     entity: "",
     message:
-      "You find yourself in the middle of a forest. Looking around, you see trees extending off into the distance.",
+      "You find yourself in the middle of a forest. Looking around, you see trees extending off " +
+      "into the distance.",
   });
   store.dispatch("addMessage", {
     entity: "Controls:",
     message:
-      "You can type commands to move around and interact with the world. Try entering /help for a list of commands. " +
-      "Additionally, you can press 'escape' to unfocus the command input and then use arrow keys to move around. Press 'enter' to refocus the command input.",
+      "You can type commands to move around and interact with the world. Try entering /help for a" +
+      " list of commands. Additionally, you can press 'escape' to unfocus the command input and " +
+      "then use arrow keys to move around. Press 'enter' to refocus the command input.",
   });
 
   gameloop.run();

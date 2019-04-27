@@ -1,4 +1,4 @@
-export default function () {
+export default function() {
   const canvas = document.getElementById("overview-canvas");
   const c = canvas.getContext("2d");
 
@@ -14,7 +14,7 @@ export default function () {
     ["↟", "↟", "↟", "↟", "| |", "↟", "«※»", "↟", "↟", "↟", "↟", "↟"],
     ["↟", "↟", "o", "↟", "| |", "↟", "↟", "s", "↟", "↟", "↟", "↟"],
     ["↟", "↟", "↟", "↟", "| |", "O", "↟", "S", "↟", "↟", "S", "↟"],
-    ["↟", "v", "↟", "↟", "| |", "↟", "O", "↟", "↟", "ø", "↟", "↟"]
+    ["↟", "v", "↟", "↟", "| |", "↟", "O", "↟", "↟", "ø", "↟", "↟"],
   ];
 
   c.font = "10px monospace";
@@ -22,7 +22,7 @@ export default function () {
   c.fillRect(0, 0, canvas.width, canvas.height);
 
   var rows = levelMap.length;
-  var cols = Math.max(...levelMap.map((row) => row.length));
+  var cols = Math.max(...levelMap.map(row => row.length));
 
   var rowHeight = canvas.height / rows - 1;
   var colWidth = canvas.width / cols - 1;

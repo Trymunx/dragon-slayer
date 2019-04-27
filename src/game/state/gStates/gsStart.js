@@ -1,11 +1,11 @@
 import display from "../../overview/Display";
-import store from "../../../vuex/store";
-import gsMan from "../gsMan";
-import GameState from "../GameState";
-// import gData from "../data";
-import generateName from "../../utils/nameGenerator";
-import newPlayer from "../../player/NewPlayer";
 import displayConf from "../../config/display";
+import GameState from "../GameState";
+import generateName from "../../utils/nameGenerator";
+import gsMan from "../gsMan";
+// import gData from "../data";
+import newPlayer from "../../player/NewPlayer";
+import store from "../../../vuex/store";
 
 var gsStart = new GameState("start");
 
@@ -17,7 +17,8 @@ gsStart.init = function() {
   store.dispatch("addMessage", {
     entity: "Welcome",
     message:
-      "Greetings adventurer. Please enter your name to begin, or type /generate to have one generated for you.",
+      "Greetings adventurer. Please enter your name to begin, or type /generate to have one " +
+      "generated for you.",
   });
 };
 

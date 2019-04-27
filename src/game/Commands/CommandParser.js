@@ -4,11 +4,10 @@ export default {
     console.log("Parsing: " + command);
     return {
       entity: "Game",
-      message: "Response to " + command
-    }
-  }
-}
-
+      message: "Response to " + command,
+    };
+  },
+};
 
 // Should import game states here?
 // import StartGame from "../GameStates/StartGame";
@@ -20,9 +19,10 @@ class CommandParser {
 
   parse(command) {
     // Moojs parsing things
-    let parsed = ["setName"]
+    let parsed = ["setName"];
     // This part is hard
-    let response = this.state.parsed[command](parsed.args); // Doesn't work as command will be a string not a function
+    // Doesn't work as command will be a string not a function
+    // let response = this.state.parsed[command](parsed.args);
     let response = this.state.command(parsed); // Instead of importing functions will have to have a switch in the gamestates
     return response;
   }
@@ -33,8 +33,6 @@ class CommandParser {
 }
 
 // export default new CommandParser;
-
-
 
 /* IDEAS
 Command parser will parse the text to find commands and arguments.
