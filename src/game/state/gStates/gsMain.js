@@ -4,7 +4,7 @@ import gsMan from "../gsMan";
 import GameState from "../GameState";
 // import gData from "../data";
 import displayConf from "../../config/display";
-import World from "../../Generators/world/World";
+import World from "../../world/World";
 import gameloop from "../../gameloop";
 
 var gsMain = new GameState("main");

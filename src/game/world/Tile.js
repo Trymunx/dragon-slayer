@@ -1,5 +1,5 @@
-import genTree from "../genTree";
-import genCreatures from "../../creatures/genCreatures";
+import genTree from "./genTree";
+import genCreatures from "../creatures/genCreatures";
 
 export default class Tile {
   constructor(x, y, chunk, terrain) {

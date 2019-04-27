@@ -1,5 +1,5 @@
 import Chunk from "./Chunk";
-import RNG from "../../utils/RNG";
+import RNG from "../utils/RNG";
 
 export default class World {
   constructor() {
@@ -12,11 +12,11 @@ export default class World {
       this.genChunk(c[0], c[1]);
     });
 
-  // constructor(type, size) {
-  //   this.chunks = new Map();
-  //   this.type = type; // Example types: dungeon, forest, dragon-lair
-  //   this.size = size > 0 ? size : 8; // Arbitrary limit for player spawn chunk
-  //   let spawnChunk = this.genChunk(~~(RNG(this.size)), ~~(RNG(this.size)));
+    // constructor(type, size) {
+    //   this.chunks = new Map();
+    //   this.type = type; // Example types: dungeon, forest, dragon-lair
+    //   this.size = size > 0 ? size : 8; // Arbitrary limit for player spawn chunk
+    //   let spawnChunk = this.genChunk(~~(RNG(this.size)), ~~(RNG(this.size)));
   }
   getChunk(chunkX, chunkY) {
     return this.chunks.get(Chunk.chunkKey(chunkX, chunkY));
@@ -55,7 +55,7 @@ export default class World {
         // revealSurroundings(playerPos, map);
         playerPlaced = true;
         // player.position = playerPos;
-        player.pos.chunk = {x: chunk.x, y: chunk.y};
+        player.pos.chunk = { x: chunk.x, y: chunk.y };
         player.pos.tile = playerPos;
       }
     }
@@ -64,7 +64,7 @@ export default class World {
 
 function randomPosition() {
   return {
-    x: ~~(RNG(Chunk.size)),
-    y: ~~(RNG(Chunk.size))
-  }
+    x: ~~RNG(Chunk.size),
+    y: ~~RNG(Chunk.size),
+  };
 }

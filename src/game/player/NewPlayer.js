@@ -1,5 +1,5 @@
-import PlayerTemplate from "../db/Player.json";
-import GenerateName from "./NameGenerator";
+import PlayerTemplate from "./PlayerTemplate.json";
+import GenerateName from "../utils/nameGenerator";
 
 class Inventory {
   constructor() {
@@ -16,10 +16,11 @@ class Inventory {
   addItem(item) {
     let key = item.key;
     let quantity = item.quantity;
-    if (this.items[item.key]) { //TODO: check if that's how you find whether an item key is already present
+    if (this.items[item.key]) {
+      //TODO: check if that's how you find whether an item key is already present
       this.items[key].quantity += quantity;
     } else {
-      this.items[key] = Object.assign({ "key": key, "quantity": quantity });
+      this.items[key] = Object.assign({ key: key, quantity: quantity });
     }
   }
 
@@ -34,7 +35,7 @@ class Player {
   constructor(name, level = 1) {
     this.name = name || GenerateName();
     this.level = level;
-    this.pos = {x: 0, y: 0};
+    this.pos = { x: 0, y: 0 };
     this.attributes = Object.assign({}, PlayerTemplate.attributes);
     this.attributes.level = level || this.attributes.level;
     this.attributes.currentHP = this.attributes.totalHP = this.calcMaxHP();

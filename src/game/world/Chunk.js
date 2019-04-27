@@ -1,8 +1,8 @@
-import store from "../../../vuex/store";
+import store from "../../vuex/store";
 import Tile from "./Tile";
-import parseDirection from "../../utils/ParseDirection";
-import { chunkSize } from "../../config/world";
-import genCreatures from "../../creatures/genCreatures";
+import parseDirection from "../utils/ParseDirection";
+import { chunkSize } from "../config/world";
+import genCreatures from "../creatures/genCreatures";
 
 export default class Chunk {
   constructor(x, y, world) {
