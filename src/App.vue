@@ -54,7 +54,7 @@ export default {
     contextMenuItems(vm, menuItems) {
       return [
         {
-          text: "WhoAmI?",
+          text: "Cancel",
           action: () => {
             console.log(vm);
           },
