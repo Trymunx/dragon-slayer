@@ -13,14 +13,14 @@ gsMain.init = () => {
   display.clear();
   display.setOptions(displayConf.main);
 
-  store.dispatch('setWorld', new World());
+  store.dispatch("setWorld", new World());
 
   // Resize only after resetting font size to default
   let overviewDiv = document.querySelector("#overview");
   let [width, height] = display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
   display.setOptions({
     width: width,
-    height: height
+    height: height,
   });
 
   display.drawText(0, 0, "Main state initialised");
@@ -30,17 +30,18 @@ gsMain.init = () => {
 
   store.dispatch("addMessage", {
     entity: "",
-    message: "You find yourself in the middle of a forest. Looking around, you see trees extending off into the distance."
+    message:
+      "You find yourself in the middle of a forest. Looking around, you see trees extending off into the distance.",
   });
   store.dispatch("addMessage", {
     entity: "Controls:",
-    message: "You can type commands to move around and interact with the world. Try entering /help for a list of commands. " + 
-      "Additionally, you can press 'escape' to unfocus the command input and then use arrow keys to move around. Press 'enter' to refocus the command input."
+    message:
+      "You can type commands to move around and interact with the world. Try entering /help for a list of commands. " +
+      "Additionally, you can press 'escape' to unfocus the command input and then use arrow keys to move around. Press 'enter' to refocus the command input.",
   });
 
-
-  gameloop.start();
-}
+  gameloop.run();
+};
 
 gsMain.receiveInput = input => {
   if (store.getters.instantMode) {
@@ -70,9 +71,9 @@ gsMain.receiveInput = input => {
     // Handle as text command
     store.dispatch("addMessage", {
       entity: "Main state",
-      message: "Response to " + input
+      message: "Response to " + input,
     });
   }
-}
+};
 
 export default gsMain;

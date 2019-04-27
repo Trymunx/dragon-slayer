@@ -30,6 +30,20 @@ const store = new Vuex.Store({
     worldExists: state => state.world !== null,
     highlit: state => state.highlit,
     creatures: state => state.creatures,
+    creaturesWithinRadius: state => (pos, radius = 10) => {
+      if (!pos) {
+        return state.creatures;
+      }
+      const creatures = [];
+      for (let y = pos.y - radius; y < pos.y + radius; y++) {
+        for (let x = pos.x - radius; x < pos.x + radius; x++) {
+          if (state.creatures[[x, y]]) {
+            creatures.push(...state.creatures[[x, y]]);
+          }
+        }
+      }
+      return creatures;
+    },
     creaturesAt: state => (x, y) => {
       return state.creatures[[x, y]];
     },
