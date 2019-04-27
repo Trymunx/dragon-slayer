@@ -12,17 +12,17 @@ export default {
   computed: {
     messages() {
       return this.$store.getters.messages;
-    }
+    },
   },
   watch: {
     messages() {
       this.$nextTick(() => {
         document.querySelector("#output").lastChild.scrollIntoView();
       });
-    }
+    },
   },
   components: {
-    Message
+    Message,
   },
   methods: {
     contextMenuItems(vm) {
@@ -31,15 +31,15 @@ export default {
           text: "Log vuex",
           action: () => {
             console.log(vm.$store);
-          }
+          },
         },
         {
           text: "Do Nothing",
-          action: () => {}
-        }
+          action: () => {},
+        },
       ];
-    }
-  }
+    },
+  },
 };
 </script>
 

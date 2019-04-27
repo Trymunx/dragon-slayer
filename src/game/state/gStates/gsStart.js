@@ -22,7 +22,9 @@ gsStart.init = function() {
   });
 };
 
-gsStart.receiveInput = function(input) {
+gsStart.keyDown = null;
+
+gsStart.receiveInputText = function(input) {
   if (!this.playerName) {
     this.confirmPlayerName(input);
   } else {

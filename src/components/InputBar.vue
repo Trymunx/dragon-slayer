@@ -15,8 +15,8 @@ export default {
       },
       set(newValue) {
         this.$store.dispatch("setInputText", newValue);
-      }
-    }
+      },
+    },
   },
   mounted() {
     document.querySelector("#input-text").focus();
@@ -27,7 +27,7 @@ export default {
       if (!/^\s*$/.test(this.inputText)) {
         let input = this.inputText.trim();
         this.$store.dispatch("enterCommand", input);
-        this.$game.receiveInput(input);
+        this.$game.receiveInputText(input);
       }
     },
     inputBar(state) {
@@ -46,8 +46,8 @@ export default {
 
       document.querySelector("#input-bar").style["background-color"] = colour;
       document.querySelector("#input-text").style["background-color"] = colour;
-    }
-  }
+    },
+  },
 };
 </script>
 

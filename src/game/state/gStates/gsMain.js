@@ -45,23 +45,27 @@ gsMain.init = () => {
   gameloop.run();
 };
 
-gsMain.receiveInput = input => {
+gsMain.keyDown = input => {
   if (store.getters.instantMode) {
     // Handle as an instant command
     switch (input) {
       case "ArrowUp":
+      case "w":
         store.dispatch("movePlayer", "UP");
         display.drawWorld();
         break;
       case "ArrowDown":
+      case "s":
         store.dispatch("movePlayer", "DOWN");
         display.drawWorld();
         break;
       case "ArrowLeft":
+      case "a":
         store.dispatch("movePlayer", "LEFT");
         display.drawWorld();
         break;
       case "ArrowRight":
+      case "d":
         store.dispatch("movePlayer", "RIGHT");
         display.drawWorld();
         break;
@@ -69,7 +73,10 @@ gsMain.receiveInput = input => {
         break;
     }
     store.dispatch("highlight");
-  } else {
+  }
+};
+gsMain.receiveInputText = input => {
+  if (!store.getters.instantMode) {
     // Handle as text command
     store.dispatch("addMessage", {
       entity: "Main state",

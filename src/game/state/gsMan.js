@@ -13,9 +13,20 @@ class GameStateManager {
     this.state.init();
   }
 
-  receiveInput(input) {
-    if (this.state) {
-      this.state.receiveInput(input);
+  receiveInputKeyUp(input) {
+    if (this.state && this.state.keyUp) {
+      this.state.keyUp(input);
+    }
+  }
+  receiveInputKeyDown(input) {
+    if (this.state && this.state.keyDown) {
+      this.state.keyDown(input);
+    }
+  }
+  receiveInputText(text) {
+    console.log(text);
+    if (this.state && this.state.receiveInputText) {
+      this.state.receiveInputText(text);
     }
   }
 

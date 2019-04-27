@@ -11,9 +11,14 @@ export default {
       start() {
         gsMan.StartGame();
       },
-      receiveInput(input) {
-        console.log(input);
-        gsMan.receiveInput(input);
+      receiveInputKeyUp(input) {
+        gsMan.receiveInputKeyUp(input);
+      },
+      receiveInputKeyDown(input) {
+        gsMan.receiveInputKeyDown(input);
+      },
+      receiveInputText(text) {
+        gsMan.receiveInputText(text);
       },
       parseCommand(command) {
         // return CommandParser.ParseCommand(command);
