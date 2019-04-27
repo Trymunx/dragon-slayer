@@ -1,14 +1,14 @@
-import Food from "./Food";
-import Crafting from "./Crafting";
-import Ingredients from "./Ingredients";
-import Trophies from "./Trophies";
+import Food from "./json/Food";
+import Crafting from "./json/Crafting";
+import Ingredients from "./json/Ingredients";
+import Trophies from "./json/Trophies";
 
 let gameItems = new Map();
 
 class Item {
   constructor(itemObject) {
     for (const key in itemObject) {
-      this[key] = itemObject[key]
+      this[key] = itemObject[key];
     }
   }
 }
@@ -31,9 +31,9 @@ class ItemFactory {
         itemParams[key] = this[key];
       }
     }
-    itemParams.val = this.value.reduce((sum, fn) => sum += fn(itemParams), 0);
+    itemParams.val = this.value.reduce((sum, fn) => (sum += fn(itemParams)), 0);
 
-    return new Item(itemParams)
+    return new Item(itemParams);
   }
 
   addMethod(methodName, fn) {
@@ -69,7 +69,7 @@ Food.forEach(i => {
   }
   if (!item.plural) item.plural = item.name;
   item.edible = true;
-  item.addMethod("cook", () => item.uncooked = false);
+  item.addMethod("cook", () => (item.uncooked = false));
   gameItems.set(item.name, item);
 });
 

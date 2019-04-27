@@ -3,17 +3,17 @@ import store from "../../vuex/store";
 import { levelColour } from "../utils/colours";
 
 ROT.Display.prototype.drawWorld = function() {
-  let world = store.getters.world;
-  let creatures = store.getters.creatures;
-  let player = store.getters.player;
+  const world = store.getters.world;
+  const creatures = store.getters.creatures;
+  const player = store.getters.player;
 
   this.clear();
-  let curOpts = this.getOptions();
+  const curOpts = this.getOptions();
   let top = Math.ceil(player.pos.y - curOpts.height / 2);
   let bot = Math.ceil(player.pos.y + curOpts.height / 2);
   let left = Math.ceil(player.pos.x - curOpts.width / 2);
   let right = Math.ceil(player.pos.x + curOpts.width / 2);
-  store.dispatch("setDisplayOrigin", {x: left, y: top});
+  store.dispatch("setDisplayOrigin", { x: left, y: top });
 
   for (let i = 0, y = top; y < bot; y++) {
     for (let j = 0, x = left; x < right; x++) {
@@ -53,13 +53,13 @@ ROT.Display.prototype.drawWorld = function() {
     }
     i++;
   }
-}
+};
 
 var display = new ROT.Display({
   fg: "#daddd8",
   bg: "#1e1e1e",
   // bg: "#9e9e9e", // For debugging
-  forceSquareRatio: true
+  forceSquareRatio: true,
 });
 
 export default display;
