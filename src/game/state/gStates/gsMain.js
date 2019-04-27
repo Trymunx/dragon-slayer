@@ -37,9 +37,10 @@ gsMain.init = () => {
   store.dispatch("addMessage", {
     entity: "Controls:",
     message:
-      "You can type commands to move around and interact with the world. Try entering /help for a" +
-      " list of commands. Additionally, you can press 'escape' to unfocus the command input and " +
-      "then use arrow keys to move around. Press 'enter' to refocus the command input.",
+      "Use the arrow keys to move around. Aditionally, you can press 'enter' to enter command " +
+      "mode, where you can type commands to interact with the world. Try entering /help " +
+      "in this mode for a list of commands. You can press 'escape' to unfocus the command input " +
+      "to use arrow keys to move around.",
   });
 
   gameloop.run();
@@ -77,11 +78,20 @@ gsMain.keyDown = input => {
 };
 gsMain.receiveInputText = input => {
   if (!store.getters.instantMode) {
-    // Handle as text command
-    store.dispatch("addMessage", {
-      entity: "Main state",
-      message: "Response to " + input,
-    });
+    if (/^\/help$/.test(input)) {
+      store.dispatch("addMessage", {
+        entity: "Help",
+        message:
+          "Press 'enter' to enter typed command mode, and 'escape' to get back to command mode.\n" +
+          "You can right-click on the map to see what is on that tile.",
+      });
+    } else {
+      // Handle as text command
+      store.dispatch("addMessage", {
+        entity: "Main state",
+        message: "Response to " + input,
+      });
+    }
   }
 };
 
