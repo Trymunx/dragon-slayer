@@ -4,7 +4,7 @@ import store from "../../vuex/store";
 
 ROT.Display.prototype.drawWorld = function() {
   const world = store.getters.world;
-  const creatures = store.getters.creatures;
+  // const creatures = store.getters.creatures;
   const player = store.getters.player;
 
   this.clear();
@@ -22,6 +22,20 @@ ROT.Display.prototype.drawWorld = function() {
       let symbol = tile.display;
       let fg = tile.foreground;
       let bg = "#1e1e1e";
+      const creatures = store.getters.creaturesAt(x, y);
+      if (creatures) {
+        creatures.sort((a, b) => {
+          if (a.isDead() && b.isDead()) {
+            return 0;
+          } else if (a.isDead()) {
+            return 1;
+          } else if (b.isDead()) {
+            return -1;
+          } else {
+            return b.hp - a.hp;
+          }
+        });
+      }
 
       if (hl) {
         bg = "#df9";
@@ -38,13 +52,13 @@ ROT.Display.prototype.drawWorld = function() {
         } else {
           fg = "#fff";
         }
-      } else if (creatures[[x, y]] && creatures[[x, y]].length) {
+      } else if (creatures && creatures.length) {
         if (hl && hl.symbol && hl.colour) {
           symbol = hl.symbol;
           fg = hl.colour;
         } else {
-          symbol = creatures[[x, y]][0].symbol;
-          fg = levelColour(creatures[[x, y]][0].level);
+          symbol = creatures[0].symbol;
+          fg = creatures[0].isDead() ? "#222" : levelColour(creatures[0].level);
         }
       }
 
