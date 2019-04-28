@@ -37,11 +37,8 @@ class Creature {
     }, {});
 
     this.attr = creature.attributes;
-    if (Math.random() < creature.drops.gold.dropChance) {
-      this.gold = ~~RNG(creature.drops.gold.max);
-    } else {
-      this.gold = 0;
-    }
+
+    this.items = this.items.concat(getGold(creature.drops.gold));
   }
 
   attack(target) {
@@ -60,14 +57,14 @@ class Creature {
       if (target.hp === 0) {
         store.dispatch("sendMessageAtPosition", {
           entity: "",
-          message: `The ${target.name} died and dropped ${target.gold} gold.`,
+          message: `The ${target.name} died and dropped ${target.getItemsPrettyOutput()}.`,
           position: this.pos,
         });
         target.currentActivityState = ActivityStates.DEAD;
         target.dropItems();
       } else {
         store.dispatch("sendMessageAtPosition", {
-          entity: target.name,
+          entity: target.name.padStart(15),
           message: target.getHPReport(),
           position: target.pos,
         });
@@ -89,10 +86,6 @@ class Creature {
   dropItems() {
     const tile = store.getters.world.getTile(...this.pos);
     tile.items.push(...this.items);
-    if (this.gold) {
-      console.log(this.gold);
-      tile.items.push(this.gold);
-    }
   }
 
   getHPReport() {
@@ -101,6 +94,27 @@ class Creature {
     const currentHPLength = Math.round((totalBarLength / 100) * hpPercent);
 
     return `[${this.symbol.repeat(currentHPLength).padEnd(totalBarLength)}] (${this.hp}HP)`;
+  }
+
+  getItemsPrettyOutput() {
+    const items = this.items.reduce((acc, item) => {
+      if (acc[item.name]) acc[item.name]++;
+      else acc[item.name] = 1;
+      return acc;
+    }, {});
+    const outputs = Object.keys(items).map(k => {
+      if (items[k] > 1) {
+        return `${items[k]} ${this.items.find(el => el.name === k).plural}`;
+      } else {
+        return `${items[k]} ${k}`;
+      }
+    });
+    const output =
+      outputs.length > 1
+        ? outputs.slice(0, -1).join(", ") + ", and " + outputs.slice(-1)
+        : outputs[0];
+
+    return output;
   }
 
   move() {
@@ -147,7 +161,7 @@ class Creature {
         this.currentActivityState === ActivityStates.MOVING &&
         c.currentActivityState === ActivityStates.MOVING
       ) {
-        console.log(`${this.pos}: ${this.name} attacking ${c.name}`);
+        console.info(`${this.pos}: ${this.name} attacking ${c.name}`);
         this.currentActivityState = ActivityStates.FIGHTING;
         c.currentActivityState = ActivityStates.FIGHTING;
         this.target = c;
@@ -184,6 +198,17 @@ class Creature {
     }
   }
 }
+
+const getGold = ({ max, dropChance }) => {
+  const gold = [];
+  if (RNG() > dropChance) {
+    const quantity = ~~RNG(max);
+    for (let i = 0; i < quantity; i++) {
+      gold.push(gameItems.get("gold").newItem());
+    }
+  }
+  return gold;
+};
 
 const getItems = creatureItemsArray => {
   let items = [];
