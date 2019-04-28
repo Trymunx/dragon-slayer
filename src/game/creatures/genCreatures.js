@@ -14,6 +14,7 @@ class Creature {
     this.pos = pos;
     this.symbol = creature.attributes.healthBar;
     this.hp = ~~RNG(creature.attributes.minTotalHP, creature.attributes.maxTotalHP);
+    this.totalHP = this.hp;
 
     this.moveSpeed = () => ~~RNG(20, 600);
     this.attackSpeed = () => 35;
@@ -51,7 +52,7 @@ class Creature {
 
       store.dispatch("sendMessageAtPosition", {
         entity: "",
-        message: `${this.name} used ${attack} on ${target.name} for ${damage}`,
+        message: `The ${this.name} used ${attack} on the ${target.name} for ${damage}.`,
         position: this.pos,
       });
 
@@ -59,16 +60,22 @@ class Creature {
       if (target.hp === 0) {
         store.dispatch("sendMessageAtPosition", {
           entity: "",
-          message: `${target.name} died and dropped ${target.gold} gold`,
+          message: `The ${target.name} died and dropped ${target.gold} gold.`,
           position: this.pos,
         });
         target.currentActivityState = ActivityStates.DEAD;
         target.dropItems();
+      } else {
+        store.dispatch("sendMessageAtPosition", {
+          entity: target.name,
+          message: target.getHPReport(),
+          position: target.pos,
+        });
       }
     } else {
       store.dispatch("sendMessageAtPosition", {
         entity: "",
-        message: `${this.name} missed ${target.name}`,
+        message: `The ${this.name} missed the ${target.name}.`,
         position: this.pos,
       });
     }
@@ -86,6 +93,14 @@ class Creature {
       console.log(this.gold);
       tile.items.push(this.gold);
     }
+  }
+
+  getHPReport() {
+    const totalBarLength = 40;
+    const hpPercent = Math.round((this.hp / this.totalHP) * 100);
+    const currentHPLength = Math.round((totalBarLength / 100) * hpPercent);
+
+    return `[${this.symbol.repeat(currentHPLength).padEnd(totalBarLength)}] (${this.hp}HP)`;
   }
 
   move() {
