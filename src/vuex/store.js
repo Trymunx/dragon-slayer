@@ -259,7 +259,6 @@ const store = new Vuex.Store({
         y: state.player.pos.y + delta[1],
       };
       state.player = Object.assign({}, state.player, { pos });
-      console.log(pos.x, pos.y);
     },
     ADD_CREATURE(state, creature) {
       if (state.creatures[creature.pos]) {
