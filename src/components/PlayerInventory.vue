@@ -13,7 +13,8 @@ export default {
   },
   computed: {
     playerPos() {
-      return this.$store.getters.playerPos;
+      const pos = this.$store.getters.playerPos;
+      return pos ? pos : { x: 0, y: 0 };
     },
   },
 };
