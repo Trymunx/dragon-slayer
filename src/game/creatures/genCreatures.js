@@ -2,6 +2,7 @@ import ActivityStates from "./ActivityStates";
 import CreaturesJSON from "./Creatures.json";
 import gameItems from "../items/gameItems";
 import RNG from "../utils/RNG";
+import ROT from "rot-js";
 import store from "../../vuex/store";
 
 const Creatures = new Map(Object.entries(CreaturesJSON));
@@ -24,6 +25,16 @@ class Creature {
 
     this.items = getItems(creature.drops.harvest);
 
+    this.missChance = creature.missChance;
+    this.weightedAttacks = creature.attacks.reduce((weights, attack) => {
+      weights[attack.name] = attack.chance;
+      return weights;
+    }, {});
+    this.attacks = creature.attacks.reduce((attacks, attack) => {
+      attacks[attack.name] = attack;
+      return attacks;
+    }, {});
+
     this.attr = creature.attributes;
     if (Math.random() < creature.drops.gold.dropChance) {
       this.gold = ~~RNG(creature.drops.gold.max);
@@ -33,16 +44,33 @@ class Creature {
   }
 
   attack(target) {
-    store.dispatch("addMessage", {
-      entity: this.pos,
-      message: `${this.name} hit ${target.name} for 10hp`,
-    });
-    // console.log(`${this.name} hit ${target.name}`);
+    const attackChance = RNG();
+    if (attackChance > this.missChance) {
+      const attack = ROT.RNG.getWeightedValue(this.weightedAttacks);
+      const damage = ~~RNG(this.attacks[attack].minDamage, this.attacks[attack].maxDamage);
 
-    if (Math.random() < 0.2 && this.attr.aggressive) {
-      console.log(`${this.name} killed ${target.name} at ${this.pos}`);
-      target.currentActivityState = ActivityStates.DEAD;
-      target.dropItems();
+      store.dispatch("sendMessageAtPosition", {
+        entity: "",
+        message: `${this.name} used ${attack} on ${target.name} for ${damage}`,
+        position: this.pos,
+      });
+
+      target.hp = Math.max(0, target.hp - damage);
+      if (target.hp === 0) {
+        store.dispatch("sendMessageAtPosition", {
+          entity: "",
+          message: `${target.name} died and dropped ${target.gold} gold`,
+          position: this.pos,
+        });
+        target.currentActivityState = ActivityStates.DEAD;
+        target.dropItems();
+      }
+    } else {
+      store.dispatch("sendMessageAtPosition", {
+        entity: "",
+        message: `${this.name} missed ${target.name}`,
+        position: this.pos,
+      });
     }
 
     if (target.isDead()) {
@@ -110,7 +138,7 @@ class Creature {
         this.target = c;
         c.target = this;
         this.cooldown = this.attackSpeed();
-        c.cooldown = c.attackSpeed() + 5; // aggressor attacks first
+        c.cooldown = c.attackSpeed() + 10; // aggressor attacks first
       }
     }
   }
