@@ -151,6 +151,12 @@ const store = new Vuex.Store({
     addMessage({ commit }, data) {
       commit("ADD_MESSAGE", data);
     },
+    sendMessageAtPosition({ commit, state }, data) {
+      // Only send messages when player is there
+      if (state.player.pos.x === data.position[0] && state.player.pos.y === data.position[1]) {
+        commit("ADD_MESSAGE", { entity: data.entity, message: data.message });
+      }
+    },
     enterCommand({ commit, state }, text) {
       commit("ADD_MESSAGE", {
         entity: state.playerName,
@@ -185,16 +191,16 @@ const store = new Vuex.Store({
     movePlayer({ commit, state }, dir) {
       switch (dir.toUpperCase()) {
         case "UP":
-          commit("MOVE_PLAYER_UP");
+          commit("MOVE_PLAYER", [0, -1]);
           break;
         case "DOWN":
-          commit("MOVE_PLAYER_DOWN");
+          commit("MOVE_PLAYER", [0, 1]);
           break;
         case "LEFT":
-          commit("MOVE_PLAYER_LEFT");
+          commit("MOVE_PLAYER", [-1, 0]);
           break;
         case "RIGHT":
-          commit("MOVE_PLAYER_RIGHT");
+          commit("MOVE_PLAYER", [1, 0]);
           break;
       }
     },
@@ -247,33 +253,13 @@ const store = new Vuex.Store({
     SET_DISPLAY_ORIGIN(state, pos) {
       state.displayOrigin = pos;
     },
-    MOVE_PLAYER_UP(state) {
+    MOVE_PLAYER(state, delta) {
       const pos = {
-        x: state.player.pos.x,
-        y: state.player.pos.y - 1,
+        x: state.player.pos.x + delta[0],
+        y: state.player.pos.y + delta[1],
       };
       state.player = Object.assign({}, state.player, { pos });
-    },
-    MOVE_PLAYER_DOWN(state) {
-      const pos = {
-        x: state.player.pos.x,
-        y: state.player.pos.y + 1,
-      };
-      state.player = Object.assign({}, state.player, { pos });
-    },
-    MOVE_PLAYER_LEFT(state) {
-      const pos = {
-        x: state.player.pos.x - 1,
-        y: state.player.pos.y,
-      };
-      state.player = Object.assign({}, state.player, { pos });
-    },
-    MOVE_PLAYER_RIGHT(state) {
-      const pos = {
-        x: state.player.pos.x + 1,
-        y: state.player.pos.y,
-      };
-      state.player = Object.assign({}, state.player, { pos });
+      console.log(pos.x, pos.y);
     },
     ADD_CREATURE(state, creature) {
       if (state.creatures[creature.pos]) {
