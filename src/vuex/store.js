@@ -34,11 +34,11 @@ const store = new Vuex.Store({
       if (!pos) {
         return state.creatures;
       }
-      const creatures = [];
+      const creatures = new Map();
       for (let y = pos.y - radius; y < pos.y + radius; y++) {
         for (let x = pos.x - radius; x < pos.x + radius; x++) {
           if (state.creatures[[x, y]]) {
-            creatures.push(...state.creatures[[x, y]]);
+            creatures.set([x, y], state.creatures[[x, y]]);
           }
         }
       }

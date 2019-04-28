@@ -35,7 +35,9 @@
                     v-show="expandedItem === item.name"
                     class="expanded-items">
                   <span class="item-count">{{expanded.count}}</span>
-                  <span class="expanded-name">{{expanded.count === 1 ? expanded.name : expanded.plural}}</span>
+                  <span class="expanded-name">
+                    {{expanded.count === 1 ? expanded.name : expanded.plural}}
+                  </span>
                   <span class="item-value">{{expanded.totalValue}}</span>
                   <span class="direction">({{expanded.dir}})</span>
                 </div>
@@ -47,14 +49,14 @@
 </template>
 
 <script>
-import { levelColour } from "../game/utils/colours";
 import display from "../game/overview/Display";
+import { levelColour } from "../game/utils/colours";
 
 export default {
   data() {
     return {
       expandedItem: "",
-    }
+    };
   },
   computed: {
     worldExists() {
@@ -80,10 +82,10 @@ export default {
         let highlit = {
           [entity.pos]: {
             symbol: entity.symbol,
-            colour: levelColour(entity.level, 30),
+            colour: entity.isDead() ? "#888" : levelColour(entity.level, 30),
           },
         };
-        this.$store.dispatch("highlight", highlit)
+        this.$store.dispatch("highlight", highlit);
       } else if (locations) {
         this.$store.dispatch("highlight", locations);
       } else {

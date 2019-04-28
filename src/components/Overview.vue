@@ -20,12 +20,12 @@ export default {
         let [width, height] =
           display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
 
-        display.setOptions({width, height});
+        display.setOptions({ width, height });
         display.drawWorld();
       }
     },
     contextMenuItems(vm, items, event) {
-      let pos = {x: event.x, y: event.y};
+      let pos = { x: event.x, y: event.y };
       let canvas = document.querySelector("#overview > canvas");
       let dOpts = display.getOptions();
       let displayX = ~~((pos.x - canvas.offsetLeft) * dOpts.width / canvas.offsetWidth);
@@ -66,7 +66,7 @@ export default {
                 + ` It will drop ${outputs.length !== 0 ? output : "nothing"}.`,
             });
           },
-        }
+        };
       });
 
       itemsOnTile = itemsOnTile.reduce((arr, item) => {
@@ -84,7 +84,7 @@ export default {
             count: 1,
             text: `1 ${item.name} (${item.val})`,
             // Have to use old school function so that this points to this object
-            action: function() {console.log(this)},
+            action: function() {console.log(this);},
           };
           arr.push(newItemEntry);
         }
@@ -93,7 +93,7 @@ export default {
 
       return [...creaturesOnTile, ...itemsOnTile];
     },
-  }
+  },
 };
 </script>
 

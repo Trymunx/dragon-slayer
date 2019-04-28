@@ -1,6 +1,7 @@
 import ActivityStates from "./ActivityStates";
 import CreaturesJSON from "./Creatures.json";
 import gameItems from "../items/gameItems";
+import RNG from "../utils/RNG";
 import store from "../../vuex/store";
 
 const Creatures = new Map(Object.entries(CreaturesJSON));
@@ -11,16 +12,21 @@ class Creature {
     this.level = level;
     this.pos = pos;
     this.symbol = creature.attributes.healthBar;
+    this.hp = ~~RNG(creature.attributes.minTotalHP, creature.attributes.maxTotalHP);
 
-    this.speed = () => ~~(Math.random() * 8000) + 100;
-    this.cooldown = this.speed(); // Default timeout before moving
+    this.moveSpeed = () => ~~RNG(20, 600);
+    this.attackSpeed = () => 15;
+    this.cooldown = this.moveSpeed(); // Default timeout before moving
+    this.target = null;
+
     this.currentActivityState = ActivityStates.MOVING;
+    this.isDead = () => this.currentActivityState === ActivityStates.DEAD;
 
     this.items = getItems(creature.drops.harvest);
 
     this.attr = creature.attributes;
     if (Math.random() < creature.drops.gold.dropChance) {
-      this.gold = ~~(Math.random() * creature.drops.gold.max);
+      this.gold = ~~RNG(creature.drops.gold.max);
     } else {
       this.gold = 0;
     }
@@ -34,12 +40,30 @@ class Creature {
 
     switch (this.currentActivityState) {
       case ActivityStates.MOVING:
-        this.cooldown = this.speed();
+        if (this.attr.aggressive) {
+          const creaturesHere = store.getters.creaturesAt(...this.pos);
+          if (creaturesHere.length > 1) {
+            for (const c of creaturesHere) {
+              // Only attack creatures weaker, and not those already fighting or dead
+              if (c.hp < this.hp && c.currentActivityState === ActivityStates.MOVING) {
+                console.log(`${this.name} attacking ${c.name} ${this.pos}`);
+                this.currentActivityState = ActivityStates.FIGHTING;
+                c.currentActivityState = ActivityStates.FIGHTING;
+                this.target = c;
+                c.target = this;
+                this.cooldown = this.attackSpeed();
+                c.cooldown = c.attackSpeed() + 5; // aggressor attacks first
+                break;
+              }
+            }
+          }
+        }
+        this.cooldown = this.moveSpeed();
         this.move();
         break;
       case ActivityStates.FIGHTING:
-        this.cooldown = this.speed();
-        // this.attack(this.target);
+        this.cooldown = this.attackSpeed();
+        this.attack(this.target);
         break;
       case ActivityStates.DEAD:
         this.cooldown = 0;
@@ -52,9 +76,32 @@ class Creature {
     }
   }
 
+  dropItems() {
+    const tile = store.getters.world.getTile(...this.pos);
+    tile.items.push(...this.items);
+    if (this.gold) {
+      console.log(this.gold);
+      tile.items.push(this.gold);
+    }
+  }
+
+  attack(target) {
+    console.log(`${this.name} hit ${target.name}`);
+
+    if (Math.random() < 0.2 && this.attr.aggressive) {
+      console.log(`${this.name} killed ${target.name} at ${this.pos}`);
+      target.currentActivityState = ActivityStates.DEAD;
+      target.dropItems();
+    }
+
+    if (target.isDead()) {
+      this.currentActivityState = ActivityStates.MOVING;
+      this.cooldown = this.moveSpeed();
+    }
+  }
+
   move() {
     let tile = store.getters.world.getTile(this.pos[0], this.pos[1]);
-    if (Math.random() < 0.5) tile.items.push(...this.items);
     switch (~~(Math.random() * 4)) {
       case 0:
         store.dispatch("moveCreature", {

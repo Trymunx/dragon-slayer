@@ -3,10 +3,10 @@ import store from "../vuex/store";
 
 const gameloop = {
   run: () => {
-    const creatures = getCreaturesToUpdate();
-    Object.keys(creatures).forEach(key => {
-      creatures[key].update();
-    });
+    const locationsToCreaturesMap = getCreaturesToUpdate();
+    for (const [location, creatures] of locationsToCreaturesMap) {
+      creatures.forEach(creature => creature.update());
+    }
     display.drawWorld();
     window.requestAnimationFrame(gameloop.run);
   },
