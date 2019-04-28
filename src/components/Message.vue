@@ -64,12 +64,12 @@ export default {
 }
 
 .entity {
-  flex: 0 0 120px;
+  flex: 0 0 140px;
   padding: 3px 10px;
   color: var(--text-blur);
   background-color: var(--ui-dark);
   text-transform: capitalize;
-  text-align: right;
+  white-space: pre-wrap;
 }
 
 @media (max-width: 500px) {
