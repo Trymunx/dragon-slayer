@@ -45,7 +45,10 @@ class Creature {
     const attackChance = RNG();
     if (attackChance > this.missChance) {
       const attack = ROT.RNG.getWeightedValue(this.weightedAttacks);
-      const damage = ~~RNG(this.attacks[attack].minDamage, this.attacks[attack].maxDamage);
+      const damage = ~~(
+        (RNG(this.attacks[attack].minDamage, this.attacks[attack].maxDamage) * this.level) /
+        1.5
+      );
 
       store.dispatch("sendMessageAtPosition", {
         entity: "",
@@ -62,6 +65,7 @@ class Creature {
         });
         target.currentActivityState = ActivityStates.DEAD;
         target.dropItems();
+        this.level++;
       } else {
         store.dispatch("sendMessageAtPosition", {
           entity: target.name.padStart(15),
