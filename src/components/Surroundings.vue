@@ -1,48 +1,55 @@
 <template>
   <div id="surroundings-output">
     <div v-if="worldExists" class="wrapper">
-      {{surroundings.creatures.length}} Creature{{surroundings.creatures.length === 1 ? '' : 's'}}:
-      <div class="table-wrapper">
-        <table class="surrounds-categories">
-          <tbody>
-            <tr v-for="(entity, index) in surroundings.creatures"
-                :key="`creature-${index}`"
-                @mouseenter="highlight(entity)"
-                @mouseleave="highlight()">
-              <td :style="getStyle(entity.level)" class="symbol">{{entity.symbol}}</td>
-              <td class="creature-name">{{entity.name}}</td>
-              <td class="creature-level">Level</td>
-              <td :style="getStyle(entity.level)">{{entity.level}}</td>
-              <td class="direction">(<span :style="entity.dir === 'here' ? getStyle(entity.level) : ''">{{entity.dir}}</span>)</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="creatures-wrapper">
+        {{surroundings.creatures.length}} Creature{{surroundings.creatures.length === 1 ? '' : 's'}}:
+        <div class="table-wrapper">
+          <table class="surrounds-categories">
+            <tbody>
+              <tr v-for="(entity, index) in surroundings.creatures"
+                  :key="`creature-${index}`"
+                  @mouseenter="highlight(entity)"
+                  @mouseleave="highlight()">
+                <td :style="getStyle(entity.level)" class="symbol">{{entity.symbol}}</td>
+                <td class="creature-name">{{entity.name}}</td>
+                <td class="creature-level">Level</td>
+                <td :style="getStyle(entity.level)">{{entity.level}}</td>
+                <td class="direction">
+                  (<span :style="entity.dir === 'here' ? getStyle(entity.level) : ''">{{entity.dir}}</span>)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      {{surroundings.items.total}} Item{{surroundings.items.total === 1 ? '' : 's'}}:
-      <div class="table-wrapper">
-        <div class="surrounds-categories">
-            <div v-for="(item, i) in surroundings.items.stacked"
-                :key="`item-${i}`"
-                @mouseenter="highlight(null, item.locations)"
-                @mouseleave="highlight()"
-                @click.left="toggleExpanded(item)">
-              <span class="item-count">{{item.count}}</span>
-              <span class="item-name">{{item.count === 1 ? item.name : item.plural}}</span>
-                <div v-for="(expanded, i) in item.expanded"
-                    :key="`expanded-${i}`"
-                    @mouseenter="highlight(null, expanded.loc)"
-                    @mouseleave="highlight()"
-                    v-show="expandedItem === item.name"
-                    class="expanded-items">
-                  <span class="item-count">{{expanded.count}}</span>
-                  <span class="expanded-name">
-                    {{expanded.count === 1 ? expanded.name : expanded.plural}}
-                  </span>
-                  <span class="item-value">{{expanded.totalValue}}</span>
-                  <span class="direction">({{expanded.dir}})</span>
-                </div>
+      <div class="surrounding-items-wrapper">
+        {{surroundings.items.total}} Item{{surroundings.items.total === 1 ? '' : 's'}}:
+        <div class="table-wrapper">
+          <div class="surrounds-categories">
+              <div v-for="(item, i) in surroundings.items.stacked"
+                  :key="`item-${i}`"
+                  @mouseenter="highlight(null, item.locations)"
+                  @mouseleave="highlight()"
+                  @click.left="toggleExpanded(item)"
+                  class="item-list-wrapper">
+                <span class="item-count">{{item.count}}</span>
+                <span class="item-name">{{item.count === 1 ? item.name : item.plural}}</span>
+                  <div v-for="(expanded, i) in item.expanded"
+                      :key="`expanded-${i}`"
+                      @mouseenter="highlight(null, expanded.loc)"
+                      @mouseleave="highlight()"
+                      v-show="expandedItem === item.name"
+                      class="expanded-items">
+                    <span class="item-count">{{expanded.count}}</span>
+                    <span class="expanded-name">
+                      {{expanded.count === 1 ? expanded.name : expanded.plural}}
+                    </span>
+                    <span class="item-value">{{expanded.totalValue}}</span>
+                    <span class="direction">({{expanded.dir}})</span>
+                  </div>
+              </div>
             </div>
-          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -63,7 +70,7 @@ export default {
       return this.$store.getters.worldExists;
     },
     surroundings() {
-      return this.$store.getters.surroundings(2);
+      return this.$store.getters.surroundings(8);
     },
   },
   methods: {
@@ -103,7 +110,7 @@ export default {
   background-color: var(--ui-darker);
   border-color: var(--ui-border);
   font-family: "Ubuntu Mono", monospace;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .table-wrapper::-webkit-scrollbar {
@@ -123,6 +130,7 @@ export default {
   padding: 0px;
   width: 100%;
   font-size: 14px;
+  cursor: default;
 }
 
 .surrounds-categories tr:hover {
@@ -137,28 +145,38 @@ export default {
   text-align: right;
   text-transform: capitalize;
   width: 110px;
-  margin-left: auto;
+  margin-left: 10px;
 }
 
 .wrapper {
   height: 100%;
-  padding: 20px 8px 20px 15px;
   overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.creatures-wrapper,
+.surrounding-items-wrapper {
+  /* margin: 16px 8px 20px 15px; */
+  margin: 0px 8px 0px 15px;
+  flex: 1 1 0;
+  max-height: 48%;
 }
 
 .table-wrapper {
   margin: 6px 0px 16px;
-  height: 40%;
+  max-height: 85%;
   overflow-y: scroll;
 }
 
 .symbol {
-  font-size: 22px;
+  font-size: 20px;
   width: 14px;
 }
 
 .creature-name {
-  font-size: 1.2em;
+  font-size: 1.1em;
   text-transform: capitalize;
   width: 100px;
 }
@@ -168,8 +186,13 @@ export default {
   width: 40px;
 }
 
+.item-list-wrapper {
+  padding: 2px 0px;
+  cursor: pointer;
+}
+
 .item-name {
-  font-size: 1.2em;
+  font-size: 1.1em;
   width: 280px;
 }
 
@@ -185,11 +208,15 @@ export default {
 
 .expanded-items {
   background-color: #1e1e1e;
-  padding-left: 10px;
+  padding: 2px 0px 2px 10px;
   width: 95%;
   display: flex;
   flex-wrap: nowrap;
   align-items: baseline;
+}
+
+.item-list-wrapper > div:first-of-type {
+  margin-top: 3px;
 }
 
 .expanded-name {
