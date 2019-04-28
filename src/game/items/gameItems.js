@@ -55,24 +55,6 @@ function getItemValue(item, prop, range) {
   return ~~((val - range[0]) * slope + item.val[0]);
 }
 
-Food.forEach(i => {
-  let item;
-  if (!gameItems.has(i.name)) {
-    item = new ItemFactory(i);
-    item.value = [itemParams => getItemValue(itemParams, "heal", i.heal.slice())];
-  } else {
-    item = gameItems.get(i.name);
-    for (let key in i) {
-      item[key] = i[key];
-    }
-    item.value.push(itemParams => getItemValue(itemParams, "heal", i.heal.slice()));
-  }
-  if (!item.plural) item.plural = item.name;
-  item.edible = true;
-  item.addMethod("cook", () => (item.uncooked = false));
-  gameItems.set(item.name, item);
-});
-
 Crafting.forEach(i => {
   let item;
   if (!gameItems.has(i.name)) {
@@ -91,6 +73,34 @@ Crafting.forEach(i => {
   item.addMethod("craft", () => console.log(`Crafting with ${this.name}`));
   gameItems.set(item.name, item);
 });
+
+Food.forEach(i => {
+  let item;
+  if (!gameItems.has(i.name)) {
+    item = new ItemFactory(i);
+    item.value = [itemParams => getItemValue(itemParams, "heal", i.heal.slice())];
+  } else {
+    item = gameItems.get(i.name);
+    for (let key in i) {
+      item[key] = i[key];
+    }
+    item.value.push(itemParams => getItemValue(itemParams, "heal", i.heal.slice()));
+  }
+  if (!item.plural) item.plural = item.name;
+  item.edible = true;
+  item.addMethod("cook", () => (item.uncooked = false));
+  gameItems.set(item.name, item);
+});
+
+// Gold
+if (!gameItems.has("gold")) {
+  const gold = new ItemFactory({
+    name: "gold",
+    plural: "gold",
+    value: [() => 1],
+  });
+  gameItems.set("gold", gold);
+}
 
 Ingredients.forEach(i => {
   let item;
