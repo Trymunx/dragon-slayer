@@ -32,6 +32,68 @@ class Creature {
     }
   }
 
+  attack(target) {
+    store.dispatch("addMessage", {
+      entity: this.pos,
+      message: `${this.name} hit ${target.name} for 10hp`,
+    });
+    // console.log(`${this.name} hit ${target.name}`);
+
+    if (Math.random() < 0.2 && this.attr.aggressive) {
+      console.log(`${this.name} killed ${target.name} at ${this.pos}`);
+      target.currentActivityState = ActivityStates.DEAD;
+      target.dropItems();
+    }
+
+    if (target.isDead()) {
+      this.currentActivityState = ActivityStates.MOVING;
+      this.cooldown = this.moveSpeed();
+    }
+  }
+
+  dropItems() {
+    const tile = store.getters.world.getTile(...this.pos);
+    tile.items.push(...this.items);
+    if (this.gold) {
+      console.log(this.gold);
+      tile.items.push(this.gold);
+    }
+  }
+
+  move() {
+    let tile = store.getters.world.getTile(this.pos[0], this.pos[1]);
+    switch (~~(Math.random() * 4)) {
+      case 0:
+        store.dispatch("moveCreature", {
+          creature: this,
+          newPos: [this.pos[0], this.pos[1] - 1],
+        });
+        this.pos[1]--;
+        break;
+      case 1:
+        store.dispatch("moveCreature", {
+          creature: this,
+          newPos: [this.pos[0], this.pos[1] + 1],
+        });
+        this.pos[1]++;
+        break;
+      case 2:
+        store.dispatch("moveCreature", {
+          creature: this,
+          newPos: [this.pos[0] - 1, this.pos[1]],
+        });
+        this.pos[0]--;
+        break;
+      case 3:
+        store.dispatch("moveCreature", {
+          creature: this,
+          newPos: [this.pos[0] + 1, this.pos[1]],
+        });
+        this.pos[0]++;
+        break;
+    }
+  }
+
   targetCreatures(creatures) {
     for (const c of creatures) {
       if (c === this) {
@@ -75,68 +137,6 @@ class Creature {
         console.warn(
           `Unknown activity state for ${this.name} at ${this.pos}: ${this.currentActivityState}`
         );
-        break;
-    }
-  }
-
-  dropItems() {
-    const tile = store.getters.world.getTile(...this.pos);
-    tile.items.push(...this.items);
-    if (this.gold) {
-      console.log(this.gold);
-      tile.items.push(this.gold);
-    }
-  }
-
-  attack(target) {
-    store.dispatch("addMessage", {
-      entity: this.pos,
-      message: `${this.name} hit ${target.name} for 10hp`,
-    });
-    // console.log(`${this.name} hit ${target.name}`);
-
-    if (Math.random() < 0.2 && this.attr.aggressive) {
-      console.log(`${this.name} killed ${target.name} at ${this.pos}`);
-      target.currentActivityState = ActivityStates.DEAD;
-      target.dropItems();
-    }
-
-    if (target.isDead()) {
-      this.currentActivityState = ActivityStates.MOVING;
-      this.cooldown = this.moveSpeed();
-    }
-  }
-
-  move() {
-    let tile = store.getters.world.getTile(this.pos[0], this.pos[1]);
-    switch (~~(Math.random() * 4)) {
-      case 0:
-        store.dispatch("moveCreature", {
-          creature: this,
-          newPos: [this.pos[0], this.pos[1] - 1],
-        });
-        this.pos[1]--;
-        break;
-      case 1:
-        store.dispatch("moveCreature", {
-          creature: this,
-          newPos: [this.pos[0], this.pos[1] + 1],
-        });
-        this.pos[1]++;
-        break;
-      case 2:
-        store.dispatch("moveCreature", {
-          creature: this,
-          newPos: [this.pos[0] - 1, this.pos[1]],
-        });
-        this.pos[0]--;
-        break;
-      case 3:
-        store.dispatch("moveCreature", {
-          creature: this,
-          newPos: [this.pos[0] + 1, this.pos[1]],
-        });
-        this.pos[0]++;
         break;
     }
   }
