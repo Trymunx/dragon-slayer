@@ -5,7 +5,15 @@ const gameloop = {
   run: () => {
     const locationsToCreaturesMap = getCreaturesToUpdate();
     for (const [location, creatures] of locationsToCreaturesMap) {
-      creatures.forEach(creature => creature.update());
+      const aggressive = creatures.filter(c => c.attr.aggressive);
+      if (aggressive.length > 1 && creatures.length > 1) {
+        aggressive.forEach(aggressiveCreature => {
+          aggressiveCreature.targetCreatures(creatures);
+        });
+      }
+      creatures.forEach(creature => {
+        creature.update();
+      });
     }
     display.drawWorld();
     window.requestAnimationFrame(gameloop.run);

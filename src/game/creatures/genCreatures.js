@@ -15,7 +15,7 @@ class Creature {
     this.hp = ~~RNG(creature.attributes.minTotalHP, creature.attributes.maxTotalHP);
 
     this.moveSpeed = () => ~~RNG(20, 600);
-    this.attackSpeed = () => 15;
+    this.attackSpeed = () => 35;
     this.cooldown = this.moveSpeed(); // Default timeout before moving
     this.target = null;
 
@@ -32,6 +32,27 @@ class Creature {
     }
   }
 
+  targetCreatures(creatures) {
+    for (const c of creatures) {
+      if (c === this) {
+        continue;
+      }
+      if (
+        c.hp < this.hp &&
+        this.currentActivityState === ActivityStates.MOVING &&
+        c.currentActivityState === ActivityStates.MOVING
+      ) {
+        console.log(`${this.pos}: ${this.name} attacking ${c.name}`);
+        this.currentActivityState = ActivityStates.FIGHTING;
+        c.currentActivityState = ActivityStates.FIGHTING;
+        this.target = c;
+        c.target = this;
+        this.cooldown = this.attackSpeed();
+        c.cooldown = c.attackSpeed() + 5; // aggressor attacks first
+      }
+    }
+  }
+
   update() {
     if (this.cooldown > 0) {
       this.cooldown--;
@@ -40,24 +61,6 @@ class Creature {
 
     switch (this.currentActivityState) {
       case ActivityStates.MOVING:
-        if (this.attr.aggressive) {
-          const creaturesHere = store.getters.creaturesAt(...this.pos);
-          if (creaturesHere.length > 1) {
-            for (const c of creaturesHere) {
-              // Only attack creatures weaker, and not those already fighting or dead
-              if (c.hp < this.hp && c.currentActivityState === ActivityStates.MOVING) {
-                console.log(`${this.name} attacking ${c.name} ${this.pos}`);
-                this.currentActivityState = ActivityStates.FIGHTING;
-                c.currentActivityState = ActivityStates.FIGHTING;
-                this.target = c;
-                c.target = this;
-                this.cooldown = this.attackSpeed();
-                c.cooldown = c.attackSpeed() + 5; // aggressor attacks first
-                break;
-              }
-            }
-          }
-        }
         this.cooldown = this.moveSpeed();
         this.move();
         break;
@@ -86,7 +89,11 @@ class Creature {
   }
 
   attack(target) {
-    console.log(`${this.name} hit ${target.name}`);
+    store.dispatch("addMessage", {
+      entity: this.pos,
+      message: `${this.name} hit ${target.name} for 10hp`,
+    });
+    // console.log(`${this.name} hit ${target.name}`);
 
     if (Math.random() < 0.2 && this.attr.aggressive) {
       console.log(`${this.name} killed ${target.name} at ${this.pos}`);
