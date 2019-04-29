@@ -42,7 +42,7 @@ export default {
 
       creaturesOnTile = creaturesOnTile.map(creature => {
         return {
-          text: `Examine ${creature.name}`,
+          text: `Examine ${creature.isDead() ? "dead" : ""} ${creature.name}`,
           action: () => {
             if (creature.isDead()) {
               this.$store.dispatch("addMessage", {
@@ -53,8 +53,12 @@ export default {
               const itemDrops = creature.getItemsPrettyOutput();
               this.$store.dispatch("addMessage", {
                 entity: `Examine ${creature.name}:`,
-                message: `The ${creature.name} is level ${creature.level}.`
+                message: `The ${creature.name} is level ${creature.level} and has ${creature.hp}HP.`
                 + ` It will drop ${itemDrops ? itemDrops : "nothing"}.`,
+              });
+              this.$store.dispatch("addMessage", {
+                entity: "",
+                message: creature.getHPReport(),
               });
             }
           },
