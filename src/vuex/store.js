@@ -49,86 +49,52 @@ const store = new Vuex.Store({
     },
     surroundings: state => (radius = 2) => {
       let surr = {
-        items: [],
+        items: {},
         creatures: [],
       };
 
-      function getDir(x, y) {
-        let dir = [];
-        if (y < 0) dir.push("north");
-        else if (y > 0) dir.push("south");
-        if (x < 0) dir.push("west");
-        else if (x > 0) dir.push("east");
-        if (!x && !y) dir.push("here");
-        return dir.join(" ");
-      }
-
-      Object.keys(state.creatures).forEach(key => {
-        let pos = key.split(",");
-        let x = parseInt(pos[0]) - state.player.pos.x;
-        let y = parseInt(pos[1]) - state.player.pos.y;
-
-        if (Math.abs(x) <= radius && Math.abs(y) <= radius && state.creatures[key].length > 0) {
-          state.creatures[key].forEach(creature => {
-            creature.dir = getDir(x, y);
-            creature.dist = Math.abs(x) + Math.abs(y);
-            creature.loc = [x, y];
-            surr.creatures.push(creature);
-          });
-        }
-      });
-
-      surr.creatures.sort((a, b) => {
-        return a.dist - b.dist === 0 ? b.level - a.level : a.dist - b.dist;
-      });
-
-      let items = {
-        total: 0,
-        stacked: {},
-      };
       for (let y = -radius; y <= radius; y++) {
         for (let x = -radius; x <= radius; x++) {
-          let tile = state.world.getTile(state.player.pos.x + x, state.player.pos.y + y);
+          const pos = [state.player.pos.x + x, state.player.pos.y + y];
+
+          if (state.creatures[pos] && state.creatures[pos].length > 0) {
+            const dir = getDirFromVector(x, y);
+            const dist = Math.abs(x) + Math.abs(y);
+            const creaturesHere = state.creatures[pos]
+              .filter(creature => !creature.isDead())
+              .map(creature => ({
+                creature,
+                dir,
+                dist,
+              }));
+            surr.creatures = surr.creatures.concat(creaturesHere);
+          }
+
+          const tile = state.world.getTile(...pos);
           if (tile.items.length) {
-            items.total += tile.items.length;
             tile.items.forEach(item => {
-              if (items.stacked[item.name]) {
-                items.stacked[item.name].count++;
-                items.stacked[item.name].locations[
-                  [state.player.pos.x + x, state.player.pos.y + y]
-                ] = {};
-                if (items.stacked[item.name].expanded[[x, y, item.name]]) {
-                  items.stacked[item.name].expanded[[x, y, item.name]].count++;
-                  items.stacked[item.name].expanded[[x, y, item.name]].totalValue += item.val;
-                } else {
-                  items.stacked[item.name].expanded[[x, y, item.name]] = {
-                    name: item.name,
-                    plural: item.plural,
-                    count: 1,
-                    totalValue: item.val,
-                    dir: getDir(x, y),
-                    loc: {
-                      [[state.player.pos.x + x, state.player.pos.y + y]]: {},
-                    },
-                  };
-                }
+              if (surr.items[item.name]) {
+                surr.items[item.name].count++;
+                surr.items[item.name].locations[pos] = {};
+                surr.items[item.name].expanded[[x, y]].count++;
+                surr.items[item.name].expanded[[x, y]].totalValue += item.val;
               } else {
-                items.stacked[item.name] = {
+                surr.items[item.name] = {
                   name: item.name,
                   plural: item.plural,
                   count: 1,
                   locations: {
-                    [[state.player.pos.x + x, state.player.pos.y + y]]: {},
+                    [pos]: {},
                   },
                   expanded: {
-                    [[x, y, item.name]]: {
+                    [[x, y]]: {
                       name: item.name,
                       plural: item.plural,
                       count: 1,
                       totalValue: item.val,
-                      dir: getDir(x, y),
+                      dir: getDirFromVector(x, y),
                       loc: {
-                        [[state.player.pos.x + x, state.player.pos.y + y]]: {},
+                        [pos]: {},
                       },
                     },
                   },
@@ -138,7 +104,16 @@ const store = new Vuex.Store({
           }
         }
       }
-      surr.items = items;
+
+      surr.creatures.sort((a, b) => {
+        if (a.dist - b.dist !== 0) {
+          return a.dist - b.dist; // Sort by distance
+        } else if (a.creature.level - b.creature.level !== 0) {
+          return b.creature.level - a.creature.level; // Then descending order of level
+        } else {
+          return b.creature.hp - a.creature.hp; // Then amount of hp
+        }
+      });
 
       return surr;
     },
@@ -296,5 +271,15 @@ const store = new Vuex.Store({
     },
   },
 });
+
+function getDirFromVector(x, y) {
+  let dir = [];
+  if (y < 0) dir.push("north");
+  else if (y > 0) dir.push("south");
+  if (x < 0) dir.push("west");
+  else if (x > 0) dir.push("east");
+  if (!x && !y) dir.push("here");
+  return dir.join(" ");
+}
 
 export default store;

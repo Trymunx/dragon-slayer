@@ -2,20 +2,28 @@
   <div id="surroundings-output">
     <div v-if="worldExists" class="wrapper">
       <div class="creatures-wrapper">
-        {{surroundings.creatures.length}} Creature{{surroundings.creatures.length === 1 ? '' : 's'}}:
+        Creatures:
         <div class="table-wrapper">
           <table class="surrounds-categories">
             <tbody>
-              <tr v-for="(entity, index) in surroundings.creatures"
+              <tr v-for="(creatureData, index) in surroundings.creatures"
                   :key="`creature-${index}`"
-                  @mouseenter="highlight(entity)"
+                  @mouseenter="highlight(creatureData.creature)"
                   @mouseleave="highlight()">
-                <td :style="getStyle(entity.level)" class="symbol">{{entity.symbol}}</td>
-                <td class="creature-name">{{entity.name}}</td>
-                <td class="creature-level">Level</td>
-                <td :style="getStyle(entity.level)">{{entity.level}}</td>
+                <td :style="getStyle(creatureData.creature.level)" class="symbol">
+                  {{creatureData.creature.symbol}}
+                </td>
+                <td class="creature-name">
+                  {{creatureData.creature.isDead() ? "dead " : ""}}{{creatureData.creature.name}}
+                </td>
+                <td class="creature-level">
+                  Level
+                </td>
+                <td :style="getStyle(creatureData.creature.level)">
+                  {{creatureData.creature.level}}
+                </td>
                 <td class="direction">
-                  (<span :style="entity.dir === 'here' ? getStyle(entity.level) : ''">{{entity.dir}}</span>)
+                  (<span :style="creatureData.dir === 'here' ? getStyle(creatureData.creature.level) : ''">{{creatureData.dir}}</span>)
                 </td>
               </tr>
             </tbody>
@@ -23,10 +31,10 @@
         </div>
       </div>
       <div class="surrounding-items-wrapper">
-        {{surroundings.items.total}} Item{{surroundings.items.total === 1 ? '' : 's'}}:
+        Items:
         <div class="table-wrapper">
           <div class="surrounds-categories">
-              <div v-for="(item, i) in surroundings.items.stacked"
+              <div v-for="(item, i) in surroundings.items"
                   :key="`item-${i}`"
                   @mouseenter="highlight(null, item.locations)"
                   @mouseleave="highlight()"
@@ -144,7 +152,7 @@ export default {
 .direction {
   text-align: right;
   text-transform: capitalize;
-  width: 110px;
+  width: 85px;
   margin-left: 10px;
 }
 
