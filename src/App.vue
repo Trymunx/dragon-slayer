@@ -79,7 +79,7 @@ export default {
 }
 
 #app {
-  font-family: "Courier New", Courier, monospace;
+  font-family: "Oxygen Mono", monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
