@@ -37,7 +37,7 @@ gsMain.init = () => {
   store.dispatch("addMessage", {
     entity: "Controls:",
     message:
-      "Use the arrow keys to move around. Aditionally, you can press 'enter' to enter command " +
+      "Use the arrow keys to move around. Additionally, you can press 'enter' to enter command " +
       "mode, where you can type commands to interact with the world. Try entering /help " +
       "in this mode for a list of commands. You can press 'escape' to unfocus the command input " +
       "to use arrow keys to move around.",
