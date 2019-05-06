@@ -34,29 +34,29 @@
         Items:
         <div class="table-wrapper">
           <div class="surrounds-categories">
-              <div v-for="(item, i) in surroundings.items"
-                  :key="`item-${i}`"
-                  @mouseenter="highlight(null, item.locations)"
-                  @mouseleave="highlight()"
-                  @click.left="toggleExpanded(item)"
-                  class="item-list-wrapper">
-                <span class="item-count">{{item.count}}</span>
-                <span class="item-name">{{item.count === 1 ? item.name : item.plural}}</span>
-                  <div v-for="(expanded, i) in item.expanded"
-                      :key="`expanded-${i}`"
-                      @mouseenter="highlight(null, expanded.loc)"
-                      @mouseleave="highlight()"
-                      v-show="expandedItem === item.name"
-                      class="expanded-items">
-                    <span class="item-count">{{expanded.count}}</span>
-                    <span class="expanded-name">
-                      {{expanded.count === 1 ? expanded.name : expanded.plural}}
-                    </span>
-                    <span class="item-value">{{expanded.totalValue}}</span>
-                    <span class="direction">({{expanded.dir}})</span>
-                  </div>
+            <div v-for="(item, i) in surroundings.items"
+                 :key="`item-${i}`"
+                 @mouseenter="highlight(null, item.locations)"
+                 @mouseleave="highlight()"
+                 @click.left="toggleExpanded(item)"
+                 class="item-list-wrapper">
+              <span class="item-count">{{item.count}}</span>
+              <span class="item-name">{{item.count === 1 ? item.name : item.plural}}</span>
+              <div v-for="(expanded, i) in item.expanded"
+                   :key="`expanded-${i}`"
+                   @mouseenter="highlight(null, expanded.loc)"
+                   @mouseleave="highlight()"
+                   v-show="expandedItem === item.name"
+                   class="expanded-items">
+                <span class="item-count">{{expanded.count}}</span>
+                <span class="expanded-name">
+                  {{expanded.count === 1 ? expanded.name : expanded.plural}}
+                </span>
+                <span class="item-value">{{expanded.totalValue}}</span>
+                <span class="direction">({{expanded.dir}})</span>
               </div>
             </div>
+          </div>
         </div>
       </div>
     </div>
@@ -113,7 +113,7 @@ export default {
 
 <style>
 #surroundings-output {
-  overflow-y: visible;
+  padding: 20px 8px 20px 15px;
   color: var(--text-blur);
   background-color: var(--ui-darker);
   border-color: var(--ui-border);
