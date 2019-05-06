@@ -1,7 +1,7 @@
 <template>
   <div class="messages" @click.right.stop.prevent="showContextMenu">
     <div class="entity">{{entity}}</div>
-    <div class="message">{{message}}</div>
+    <div class="message" v-html="message"></div>
   </div>
 </template>
 
@@ -17,7 +17,7 @@ export default {
             vm.$store.dispatch("setInputText",
               vm.message
             );
-          }
+          },
         },
         {
           text: `Reply to ${vm.entity}`,
@@ -29,17 +29,17 @@ export default {
               entityName = `@${vm.entity}`;
             }
             vm.$store.dispatch("setInputText", `${entityName} `);
-          }
+          },
         },
         {
           text: `Inspect ${vm.entity}`,
           action: () => {
             console.log("TODO: pass more than just the name into the message to inspect.");
-          }
-        }
+          },
+        },
       ];
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -64,11 +64,12 @@ export default {
 }
 
 .entity {
-  flex: 0 0 160px;
+  flex: 0 0 140px;
   padding: 3px 10px;
   color: var(--text-blur);
   background-color: var(--ui-dark);
   text-transform: capitalize;
+  white-space: pre-wrap;
 }
 
 @media (max-width: 500px) {
@@ -83,5 +84,6 @@ export default {
   margin: none;
   color: var(--text);
   background-color: var(--ui);
+  white-space: pre-wrap;
 }
 </style>

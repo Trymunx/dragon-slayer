@@ -1,0 +1,44 @@
+Items:
+
+Have a slot to equip in if equipable
+  - item has a number of places in those slots it takes up, e.g. 2 for bows
+  - player needs slots defined
+  - Creatures also need slots defined so they know what items they can use
+  - creatures that cannot equip items must be balanced to have appropriate strength and
+      useful/valuable drops (e.g. deer dropping antlers, venison, deergut to sell/use)
+Have a strength requirement? Some creatures cannot use items because of this?
+Have modifiers:   good if these are computed, so would update if you e.g. sharped the item
+  - attack damage mod
+  - defence mod
+  - hp mod?
+Have a name:
+  - programatic naming?
+    + base name (e.g. sword, dagger, shield, coin)
+      > different bases have inherent speed that's affected by e.g. balance/weight?
+    + material (gold, iron, copper, stone)
+Attributes:
+  - sharpness
+  - balance (closer to handle gives more speed, less power; opposite gives more power but slower)
+  - condition (not bluntness, but could be nicked/rusted. Does this affect sharpness?)
+  - weight (affects speed, depends on material?)
+value:
+  - computed aggregator of all properties and attributes to give player quick indicator & sell val
+
+
+
+When generating equipped items for a creature, set a creature's value based on its level, then
+  start generating random items with value between 1 and creature's value - (already generated items),
+  including gold. Will have to work out how to make sure creatures don't end up with > max possible
+  items for each slot, e.g. 2 helmets or 3 swords.
+
+To do this, I'll need to loop:
+1. select a slot. Bag/items is a slot which has no limit. If creature hasShield, don't give shield
+2. get a type for that slot (bear in mind only one shield)
+3. get a constrained value
+4. generate an item for the slot and value ()
+
+If creature doesn't have slots available, give more experience for higher value, and make drops
+  more valuable. E.g. antlers -> big antlers and are worth more gold
+
+
+Weapons get stronger the longer you use them for, as you learn their unique traits

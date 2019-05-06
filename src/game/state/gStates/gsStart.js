@@ -1,11 +1,11 @@
 import display from "../../overview/Display";
-import store from "../../../vuex/store";
-import gsMan from "../gsMan";
-import GameState from "../GameState";
-// import gData from "../data";
-import generateName from "../../Generators/NameGenerator";
-import newPlayer from "../../Generators/NewPlayer";
 import displayConf from "../../config/display";
+import GameState from "../GameState";
+import generateName from "../../utils/nameGenerator";
+import gsMan from "../gsMan";
+// import gData from "../data";
+import newPlayer from "../../player/NewPlayer";
+import store from "../../../vuex/store";
 
 var gsStart = new GameState("start");
 
@@ -16,13 +16,17 @@ gsStart.init = function() {
 
   store.dispatch("addMessage", {
     entity: "Welcome",
-    message: "Greetings adventurer. Please enter your name to begin, or type /generate to have one generated for you."
+    message:
+      "Greetings adventurer. Please enter your name to begin, or type /generate to have one " +
+      "generated for you.",
   });
-}
+};
 
-gsStart.receiveInput = function(input) {
+gsStart.keyDown = null;
+
+gsStart.receiveInputText = function(input) {
   if (!this.playerName) {
-    this.confirmPlayerName(input)
+    this.confirmPlayerName(input);
   } else {
     switch (input.toUpperCase()) {
       case "YES":
@@ -37,8 +41,8 @@ gsStart.receiveInput = function(input) {
         store.dispatch("setPlayerName", null);
         store.dispatch("addMessage", {
           entity: "Game",
-          message: "Please enter a name, or type /generate to have one generated for you."
-        })
+          message: "Please enter a name, or type /generate to have one generated for you.",
+        });
         break;
       case "/GEN":
       case "/GENERATE":
@@ -48,7 +52,7 @@ gsStart.receiveInput = function(input) {
         this.confirmPlayerName(this.playerName);
     }
   }
-}
+};
 
 gsStart.confirmPlayerName = function(input) {
   switch (input) {
@@ -60,9 +64,9 @@ gsStart.confirmPlayerName = function(input) {
       store.dispatch("setPlayerName", input);
       store.dispatch("addMessage", {
         entity: "Confirm name:",
-        message: `Your name is ${input}. Use this name? [yes/no]`
+        message: `Your name is ${input}. Use this name? [yes/no]`,
       });
   }
-}
+};
 
 export default gsStart;

@@ -11,6 +11,8 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.2.2",
     "lodash": "^4.17.11",
     "rot-js": "^0.6.5",
     "vue": "^2.5.2",

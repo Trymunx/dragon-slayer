@@ -1,43 +1,28 @@
 module.exports = {
-  "env": {
-    "browser": true,
-    "es6": true,
+  root: true,
+  env: { node: true, es6: true },
+  extends: ["eslint:recommended", "plugin:vue/essential"],
+  parserOptions: {
+    sourceType: "module",
   },
-  "extends": "eslint:recommended",
-  "parserOptions": {
-    "sourceType": "module",
-  },
-  "rules": {
-    "indent": [
-      "error",
-      2
-    ],
-    "linebreak-style": [
-      "error",
-      "unix",
-    ],
-    "quotes": [
-      "error",
-      "double",
-    ],
-    "semi": [
-      "error",
-      "always",
-    ],
-    "comma-dangle": [
-      "error",
-      "always-multiline",
-    ],
-    "max-len": [
-      "error",
+  rules: {
+    "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
+    "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
+    indent: ["error", 2, { SwitchCase: 1 }],
+    "linebreak-style": ["error", "unix"],
+    quotes: ["error", "double"],
+    semi: ["error", "always"],
+    "comma-dangle": ["error", "always-multiline"],
+    "max-len": ["error", { code: 100, tabWidth: 2, ignoreTrailingComments: true }],
+    "no-trailing-spaces": ["error"],
+    "object-curly-spacing": ["warn", "always", { objectsInObjects: false, arraysInObjects: false }],
+    "arrow-parens": ["warn", "as-needed"],
+    "sort-imports": [
+      "warn",
       {
-        "code": 100,
-        "tabWidth": 2,
-        "ignoreTrailingComments": true,
-      }
-    ],
-    "no-trailing-spaces": [
-      "error",
+        ignoreCase: true,
+        memberSyntaxSortOrder: ["none", "all", "single", "multiple"],
+      },
     ],
   },
-}
+};

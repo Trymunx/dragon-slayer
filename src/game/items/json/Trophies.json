@@ -1,0 +1,70 @@
+[
+  {
+    "name": "antler",
+    "val": [10, 80]
+  },
+  {
+    "name": "dragon claws",
+    "plural": "dragon claws",
+    "val": [40, 135]
+  },
+  {
+    "name": "dragon teeth",
+    "plural": "dragon teeth",
+    "val": [40, 135]
+  },
+  {
+    "name": "fox skull",
+    "val": [3, 6]
+  },
+  {
+    "name": "giant rat skull",
+    "val": [15, 40]
+  },
+  {
+    "name": "giant spider head",
+    "val": [25, 65]
+  },
+  {
+    "name": "goblin skull",
+    "val": [15, 35]
+  },
+  {
+    "name": "orc skull",
+    "val": [20, 60]
+  },
+  {
+    "name": "skull",
+    "val": [20, 45]
+  },
+  {
+    "name": "troll skull",
+    "val": [25, 85]
+  },
+  {
+    "name": "tusk",
+    "val": [8, 25]
+  },
+  {
+    "name": "wolf claws",
+    "plural": "wolf claws",
+    "val": [5, 15]
+  },
+  {
+    "name": "pig skull",
+    "val": [1, 5]
+  },
+  {
+    "name": "boar skull",
+    "val": [1, 10]
+  },
+  {
+    "name": "wolf skull",
+    "val": [5, 20]
+  },
+  {
+    "name": "wolf teeth",
+    "plural": "wolf teeth",
+    "val": [6, 15]
+  }
+]

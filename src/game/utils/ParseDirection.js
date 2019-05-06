@@ -1,10 +1,10 @@
 export default function parseDirection(direction) {
-
   if (typeof direction !== "string") {
     return console.error("Arg must be a string");
   }
 
-  let x = 0, y = 0;
+  let x = 0,
+    y = 0;
 
   switch (direction.toUpperCase()) {
     case "NORTH":
@@ -30,10 +30,10 @@ export default function parseDirection(direction) {
     case "RIGHT":
       x = 1;
       break;
-    
+
     default:
       console.error(`${direction} is not a valid direction.`);
   }
 
-  return {x, y};
+  return { x, y };
 }

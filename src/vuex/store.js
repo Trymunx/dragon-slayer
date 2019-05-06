@@ -13,70 +13,120 @@ const store = new Vuex.Store({
     world: null,
     creatures: {},
     displayOrigin: {},
+    highlit: [],
   },
 
   getters: {
-    playerName: (state) => state.player.name,
-    messages: (state) => state.messages,
-    instantMode: (state) => state.commandMode === "instant" ? true : false,
-    inputText: (state) => state.inputText,
-    splash: (state) => state.splash,
-    player: (state) => state.player,
-    playerPos: (state) => state.player.pos,
-    playerLevel: (state) => state.player.level,
-    displayOrigin: (state) => state.displayOrigin,
-    world: (state) => state.world,
-    worldExists: (state) => state.world !== null,
-    creatures: (state) => state.creatures,
-    creaturesAt: (state) => (x, y) => {
+    playerName: state => state.player.name,
+    messages: state => state.messages,
+    instantMode: state => (state.commandMode === "instant" ? true : false),
+    inputText: state => state.inputText,
+    splash: state => state.splash,
+    player: state => state.player,
+    playerPos: state => state.player.pos,
+    playerLevel: state => state.player.level,
+    displayOrigin: state => state.displayOrigin,
+    world: state => state.world,
+    worldExists: state => state.world !== null,
+    highlit: state => state.highlit,
+    creatures: state => state.creatures,
+    creaturesWithinRadius: state => (pos, radius = 10) => {
+      if (!pos) {
+        return state.creatures;
+      }
+      const creatures = new Map();
+      for (let y = pos.y - radius; y < pos.y + radius; y++) {
+        for (let x = pos.x - radius; x < pos.x + radius; x++) {
+          if (state.creatures[[x, y]]) {
+            creatures.set([x, y], state.creatures[[x, y]]);
+          }
+        }
+      }
+      return creatures;
+    },
+    creaturesAt: state => (x, y) => {
       return state.creatures[[x, y]];
     },
-    surroundings: (state) => (radius = 2) => {
+    surroundings: state => (radius = 2) => {
       let surr = {
-        items: [],
+        items: {},
         creatures: [],
       };
 
-      Object.keys(state.creatures).forEach(key => {
-        let pos = key.split(",");
-        let x = parseInt(pos[0]) - state.player.pos.x;
-        let y = parseInt(pos[1]) - state.player.pos.y;
-
-        if (Math.abs(x) <= radius && Math.abs(y) <= radius && state.creatures[key].length > 0) {
-          state.creatures[key].forEach(creature => {
-            let dir = [];
-            if (y < 0) dir.push("north");
-            else if (y > 0) dir.push("south");
-            if (x < 0) dir.push("west");
-            else if (x > 0) dir.push("east");
-            if (!x && !y) dir.push("here");
-            creature.dir = dir.join(" ");
-            creature.dist = Math.abs(x) + Math.abs(y);
-            creature.loc = [x, y];
-            surr.creatures.push(creature)
-          });
-        }
-      });
-
       for (let y = -radius; y <= radius; y++) {
         for (let x = -radius; x <= radius; x++) {
-          let tile = state.world.getTile(state.player.pos.x + x, state.player.pos.y + y);
+          const pos = [state.player.pos.x + x, state.player.pos.y + y];
+
+          if (state.creatures[pos] && state.creatures[pos].length > 0) {
+            const dir = getDirFromVector(x, y);
+            const dist = Math.abs(x) + Math.abs(y);
+            const creaturesHere = state.creatures[pos]
+              .filter(creature => !creature.isDead())
+              .map(creature => ({
+                creature,
+                dir,
+                dist,
+              }));
+            surr.creatures = surr.creatures.concat(creaturesHere);
+          }
+
+          const tile = state.world.getTile(...pos);
           if (tile.items.length) {
-            surr.items.push(...tile.items);
+            tile.items.forEach(item => {
+              if (surr.items[item.name]) {
+                surr.items[item.name].count++;
+                surr.items[item.name].locations[pos] = {};
+                if (surr.items[item.name].expanded[[x, y]]) {
+                  surr.items[item.name].expanded[[x, y]].count++;
+                  surr.items[item.name].expanded[[x, y]].totalValue += item.val;
+                } else {
+                  surr.items[item.name].expanded[[x, y]] = {
+                    name: item.name,
+                    plural: item.plural,
+                    count: 1,
+                    totalValue: item.val,
+                    dir: getDirFromVector(x, y),
+                    loc: {
+                      [pos]: {},
+                    },
+                  };
+                }
+              } else {
+                surr.items[item.name] = {
+                  name: item.name,
+                  plural: item.plural,
+                  count: 1,
+                  locations: {
+                    [pos]: {},
+                  },
+                  expanded: {
+                    [[x, y]]: {
+                      name: item.name,
+                      plural: item.plural,
+                      count: 1,
+                      totalValue: item.val,
+                      dir: getDirFromVector(x, y),
+                      loc: {
+                        [pos]: {},
+                      },
+                    },
+                  },
+                };
+              }
+            });
           }
         }
       }
 
-      for (let [key, val] of Object.entries(surr)) {
-        val.sort((a, b) => {
-          let delta = a.dist - b.dist;
-          if (delta === 0 && a.level) {
-            return b.level - a.level;
-          } else {
-            return delta;
-          }
-        });
-      }
+      surr.creatures.sort((a, b) => {
+        if (a.dist !== b.dist) {
+          return a.dist - b.dist; // Sort by distance
+        } else if (a.creature.level !== b.creature.level) {
+          return b.creature.level - a.creature.level; // Then descending order of level
+        } else {
+          return b.creature.hp - a.creature.hp; // Then amount of hp
+        }
+      });
 
       return surr;
     },
@@ -89,10 +139,16 @@ const store = new Vuex.Store({
     addMessage({ commit }, data) {
       commit("ADD_MESSAGE", data);
     },
+    sendMessageAtPosition({ commit, state }, data) {
+      // Only send messages when player is there
+      if (state.player.pos.x === data.position[0] && state.player.pos.y === data.position[1]) {
+        commit("ADD_MESSAGE", { entity: data.entity, message: data.message });
+      }
+    },
     enterCommand({ commit, state }, text) {
       commit("ADD_MESSAGE", {
         entity: state.playerName,
-        message: text
+        message: text,
       });
       commit("SET_INPUT_TEXT", "");
     },
@@ -123,16 +179,16 @@ const store = new Vuex.Store({
     movePlayer({ commit, state }, dir) {
       switch (dir.toUpperCase()) {
         case "UP":
-          commit("MOVE_PLAYER_UP");
+          commit("MOVE_PLAYER", [0, -1]);
           break;
         case "DOWN":
-          commit("MOVE_PLAYER_DOWN");
+          commit("MOVE_PLAYER", [0, 1]);
           break;
         case "LEFT":
-          commit("MOVE_PLAYER_LEFT");
+          commit("MOVE_PLAYER", [-1, 0]);
           break;
         case "RIGHT":
-          commit("MOVE_PLAYER_RIGHT");
+          commit("MOVE_PLAYER", [1, 0]);
           break;
       }
     },
@@ -145,6 +201,13 @@ const store = new Vuex.Store({
     moveCreature({ commit }, data) {
       commit("MOVE_CREATURE", data);
     },
+    highlight({ commit }, tiles) {
+      if (tiles) {
+        commit("HIGHLIGHT_TILES", tiles);
+      } else {
+        commit("CLEAR_HIGHLIGHTED");
+      }
+    },
   },
 
   mutations: {
@@ -154,7 +217,7 @@ const store = new Vuex.Store({
     ADD_MESSAGE(state, data) {
       state.messages.push({
         entity: data.entity,
-        message: data.message
+        message: data.message,
       });
     },
     SET_COMMAND_MODE(state, mode) {
@@ -178,33 +241,12 @@ const store = new Vuex.Store({
     SET_DISPLAY_ORIGIN(state, pos) {
       state.displayOrigin = pos;
     },
-    MOVE_PLAYER_UP(state) {
+    MOVE_PLAYER(state, delta) {
       const pos = {
-        x: state.player.pos.x,
-        y: state.player.pos.y - 1,
+        x: state.player.pos.x + delta[0],
+        y: state.player.pos.y + delta[1],
       };
-      state.player = Object.assign({}, state.player, {pos});
-    },
-    MOVE_PLAYER_DOWN(state) {
-      const pos = {
-        x: state.player.pos.x,
-        y: state.player.pos.y + 1,
-      };
-      state.player = Object.assign({}, state.player, {pos});
-    },
-    MOVE_PLAYER_LEFT(state) {
-      const pos = {
-        x: state.player.pos.x - 1,
-        y: state.player.pos.y,
-      };
-      state.player = Object.assign({}, state.player, {pos});
-    },
-    MOVE_PLAYER_RIGHT(state) {
-      const pos = {
-        x: state.player.pos.x + 1,
-        y: state.player.pos.y,
-      };
-      state.player = Object.assign({}, state.player, {pos});
+      state.player = Object.assign(state.player, { pos });
     },
     ADD_CREATURE(state, creature) {
       if (state.creatures[creature.pos]) {
@@ -218,18 +260,39 @@ const store = new Vuex.Store({
       if (state.creatures[data.newPos]) {
         state.creatures[data.newPos].push(
           ...state.creatures[data.creature.pos].splice(
-            state.creatures[data.creature.pos].indexOf(data.creature), 1
+            state.creatures[data.creature.pos].indexOf(data.creature),
+            1
           )
         );
         state.creatures[data.newPos].sort((a, b) => b.level - a.level);
       } else {
-        Vue.set(state.creatures, data.newPos,
+        Vue.set(
+          state.creatures,
+          data.newPos,
           state.creatures[data.creature.pos].splice(
-            state.creatures[data.creature.pos].indexOf(data.creature), 1
-          ));
+            state.creatures[data.creature.pos].indexOf(data.creature),
+            1
+          )
+        );
       }
     },
-  }
+    HIGHLIGHT_TILES(state, tiles) {
+      state.highlit = tiles;
+    },
+    CLEAR_HIGHLIGHTED(state) {
+      state.highlit = [];
+    },
+  },
 });
+
+function getDirFromVector(x, y) {
+  let dir = [];
+  if (y < 0) dir.push("north");
+  else if (y > 0) dir.push("south");
+  if (x < 0) dir.push("west");
+  else if (x > 0) dir.push("east");
+  if (!x && !y) dir.push("here");
+  return dir.join(" ");
+}
 
 export default store;

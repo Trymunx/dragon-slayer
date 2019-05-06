@@ -78,7 +78,7 @@ export default {
 <style>
 #context-menu {
   position: absolute;
-  max-width: 160px;
+  max-width: 240px;
   max-height: 90vh;
   color: var(--text-blur);
   background: var(--ui-border);

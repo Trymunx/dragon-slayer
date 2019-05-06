@@ -1,8 +1,9 @@
 {
   "main": {
     "bg": "#1e1e1e",
-    "fontFamily": "monospace",
-    "fontSize": 32
+    "fontFamily": "Anonymous Pro",
+    "fontSize": 28,
+    "forceSquareRatio": true
   },
   "start": {
     "fontFamily": "Cinzel",

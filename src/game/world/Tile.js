@@ -1,5 +1,5 @@
-import genTree from "../genTree";
-import genCreatures from "../genCreatures";
+import genCreatures from "../creatures/genCreatures";
+import genTree from "./genTree";
 
 export default class Tile {
   constructor(x, y, chunk, terrain) {
@@ -19,19 +19,18 @@ export default class Tile {
         break;
       default:
         this.display = "·";
-        this.foreground = "#855e40"
+        this.foreground = "#855e40";
         break;
     }
     // this.generators = [];
     this.spawnRateModifiers = new Map();
   }
 
-  setSpawnRateMod (creature, spawnrate) {
+  setSpawnRateMod(creature, spawnrate) {
     this.spawnRateModifiers.set(creature, spawnrate);
   }
-  
-  getSpawnRateMod (creature) {
+
+  getSpawnRateMod(creature) {
     return this.spawnRateModifiers.has(creature) ? this.spawnRateModifiers.get(creature) : 1;
   }
-
 }

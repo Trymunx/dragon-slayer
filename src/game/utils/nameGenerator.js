@@ -178,7 +178,7 @@ const firstNames = [
   "Esi",
   "Skudis",
   "Eenaah",
-  "Biza"
+  "Biza",
 ];
 
 const lastNames = [
@@ -360,7 +360,7 @@ const lastNames = [
   "Snowgrain",
   "Gloomwalker",
   "Hazesword",
-  "Grandstream"
+  "Grandstream",
 ];
 
 const fullNames = [
@@ -413,7 +413,7 @@ const fullNames = [
   "Grand Duchess Richmal",
   "Princess Lunete",
   "Countess Ela",
-  "Countess Isota"
+  "Countess Isota",
 ];
 
 const genName = () => {
@@ -428,6 +428,6 @@ const genName = () => {
     name = `${firstNames[f]} ${lastNames[l]}`;
   }
   return name;
-}
+};
 
 export default genName;

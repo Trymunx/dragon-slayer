@@ -1,5 +1,5 @@
-import PlayerTemplate from "../db/Player.json";
-import GenerateName from "./NameGenerator";
+import GenerateName from "../utils/nameGenerator";
+import PlayerTemplate from "./PlayerTemplate.json";
 
 class Inventory {
   constructor() {

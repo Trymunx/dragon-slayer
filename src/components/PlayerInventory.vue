@@ -1,6 +1,8 @@
 <template>
   <div id="player-inventory">
-    Player Inventory
+    <!-- At some point this will show player inventory, but for now it will show position -->
+    Player position:
+    {{playerPos.x}},{{playerPos.y}}
   </div>
 </template>
 
@@ -8,7 +10,13 @@
 export default {
   data() {
     return {};
-  }
+  },
+  computed: {
+    playerPos() {
+      const pos = this.$store.getters.playerPos;
+      return pos ? pos : { x: 0, y: 0 };
+    },
+  },
 };
 </script>
 

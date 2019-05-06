@@ -1,36 +1,63 @@
 <template>
   <div id="surroundings-output">
     <template v-if="worldExists">
-      {{surroundings.creatures.length}} Creature{{surroundings.creatures.length === 1 ? '' : 's'}}:
-      <div class="table-wrapper">
-        <table class="surrounds-categories">
-          <tbody>
-            <tr v-for="(entity, index) in surroundings.creatures"
-                :key="index"
-                @mouseenter="highlight(entity)"
-                @mouseleave="highlight()">
-              <td :style="getStyle(entity.level)" class="symbol">{{entity.symbol}}</td>
-              <td class="creature-name">{{entity.name}}</td>
-              <td class="creature-level">Level</td>
-              <td :style="getStyle(entity.level)">{{entity.level}}</td>
-              <td>(<span :style="entity.dir === 'here' ? getStyle(entity.level) : ''">{{entity.dir}}</span>)</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="creatures-wrapper">
+        Creatures:
+        <div class="table-wrapper">
+          <table class="surrounds-categories">
+            <tbody>
+              <tr v-for="(creatureData, index) in surroundings.creatures"
+                  :key="`creature-${index}`"
+                  @mouseenter="highlight(creatureData.creature)"
+                  @mouseleave="highlight()">
+                <td :style="getStyle(creatureData.creature.level)" class="symbol">
+                  {{creatureData.creature.symbol}}
+                </td>
+                <td class="creature-name">
+                  {{creatureData.creature.isDead() ? "dead " : ""}}{{creatureData.creature.name}}
+                </td>
+                <td class="creature-level">
+                  Level
+                </td>
+                <td :style="getStyle(creatureData.creature.level)">
+                  {{creatureData.creature.level}}
+                </td>
+                <td class="direction">
+                  (<span :style="creatureData.dir === 'here' ? getStyle(creatureData.creature.level) : ''">{{creatureData.dir}}</span>)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      {{surroundings.items.length}} Item{{surroundings.items.length === 1 ? '' : 's'}}:
-      <div class="table-wrapper">
-        <table class="surrounds-categories">
-          <tbody>
-            <tr v-for="(entity, index) in surroundings.items" :key="index">
-              <!-- <td :style="getStyle(entity.level)" class="symbol">{{entity.symbol}}</td> -->
-              <td class="item-name">{{entity.name}}</td>
-              <!-- <td class="creature-level">Level</td> -->
-              <!-- <td :style="getStyle(entity.level)">{{entity.level}}</td> -->
-              <td>({{entity.dir}})</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="surrounding-items-wrapper">
+        Items:
+        <div class="table-wrapper">
+          <div class="surrounds-categories">
+            <div v-for="(item, i) in surroundings.items"
+                 :key="`item-${i}`"
+                 @mouseenter="highlight(null, item.locations)"
+                 @mouseleave="highlight()"
+                 @click.left="toggleExpanded(item)"
+                 class="item-list-wrapper">
+              <span class="item-count">{{item.count}}</span>
+              <span class="item-name">{{item.count === 1 ? item.name : item.plural}}</span>
+              <div v-for="(expanded, i) in item.expanded"
+                   :key="`expanded-${i}`"
+                   @mouseenter="highlight(null, expanded.loc)"
+                   @mouseleave="highlight()"
+                   v-show="expandedItem === item.name"
+                   class="expanded-items">
+                <span class="item-count">{{expanded.count}}</span>
+                <span class="expanded-name">
+                  {{expanded.count === 1 ? expanded.name : expanded.plural}}
+                </span>
+                <span class="item-value">{{expanded.totalValue}}</span>
+                <span class="direction">({{expanded.dir}})</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </template>
   </div>
@@ -38,29 +65,45 @@
 
 <script>
 import { levelColour } from "../game/utils/colours";
-import display from "../game/overview/Display";
 
 export default {
+  data() {
+    return {
+      expandedItem: "",
+    };
+  },
   computed: {
     worldExists() {
       return this.$store.getters.worldExists;
     },
     surroundings() {
-      return this.$store.getters.surroundings(2);
+      return this.$store.getters.surroundings();
     },
   },
   methods: {
     getStyle(lvl) {
       return "color: " + levelColour(lvl);
     },
-    highlight(entity) {
-      if (entity) {
-        let displayOptions = display.getOptions();
-        let a = Math.floor(displayOptions.width / 2) + entity.loc[0];
-        let b = Math.floor(displayOptions.height / 2) + entity.loc[1];
-        display.draw(a, b, entity.symbol, levelColour(entity.level, 50), "#0a0a0a");
+    toggleExpanded(item) {
+      if (item.name === this.expandedItem) {
+        this.expandedItem = "";
       } else {
-        display.drawWorld();
+        this.expandedItem = item.name;
+      }
+    },
+    highlight(entity, locations) {
+      if (entity) {
+        let highlit = {
+          [entity.pos]: {
+            symbol: entity.symbol,
+            colour: entity.isDead() ? "#888" : levelColour(entity.level, 30),
+          },
+        };
+        this.$store.dispatch("highlight", highlit);
+      } else if (locations) {
+        this.$store.dispatch("highlight", locations);
+      } else {
+        this.$store.dispatch("highlight");
       }
     },
   },
@@ -69,12 +112,14 @@ export default {
 
 <style>
 #surroundings-output {
-  padding: 20px 8px 20px 15px;
   color: var(--text-blur);
   background-color: var(--ui-darker);
   border-color: var(--ui-border);
   font-family: "Ubuntu Mono", monospace;
-  font-size: 18px;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .table-wrapper::-webkit-scrollbar {
@@ -94,6 +139,7 @@ export default {
   padding: 0px;
   width: 100%;
   font-size: 14px;
+  cursor: default;
 }
 
 .surrounds-categories tr:hover {
@@ -104,25 +150,34 @@ export default {
   padding: 3px 4px;
 }
 
-.surrounds-categories td:last-child {
+.direction {
   text-align: right;
   text-transform: capitalize;
-  width: 110px;
+  width: 85px;
+  margin-left: 10px;
+}
+
+.creatures-wrapper,
+.surrounding-items-wrapper {
+  /* margin: 16px 8px 20px 15px; */
+  margin: 0px 8px 0px 15px;
+  flex: 1 1 0;
+  max-height: 48%;
 }
 
 .table-wrapper {
   margin: 6px 0px 16px;
-  height: 40%;
+  max-height: 85%;
   overflow-y: scroll;
 }
 
 .symbol {
-  font-size: 22px;
+  font-size: 20px;
   width: 14px;
 }
 
 .creature-name {
-  font-size: 1.2em;
+  font-size: 1.1em;
   text-transform: capitalize;
   width: 100px;
 }
@@ -130,5 +185,42 @@ export default {
 .creature-level {
   text-align: right;
   width: 40px;
+}
+
+.item-list-wrapper {
+  padding: 2px 0px;
+  cursor: pointer;
+}
+
+.item-name {
+  font-size: 1.1em;
+  width: 280px;
+}
+
+.item-count {
+  color: white;
+  flex: 0 0 25px;
+}
+
+.item-value {
+  flex: 0 0 25px;
+  color: yellow;
+}
+
+.expanded-items {
+  background-color: #1e1e1e;
+  padding: 2px 0px 2px 10px;
+  width: 95%;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: baseline;
+}
+
+.item-list-wrapper > div:first-of-type {
+  margin-top: 3px;
+}
+
+.expanded-name {
+  margin-right: auto;
 }
 </style>

@@ -1,0 +1,15 @@
+[
+  {
+    "name": "bone",
+    "plural": "bones",
+    "val": [12, 35]
+  },
+  {
+    "name": "dragon blood",
+    "val": [80, 160]
+  },
+  {
+    "name": "venom",
+    "val": [3, 20]
+  }
+]

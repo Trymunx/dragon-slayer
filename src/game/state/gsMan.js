@@ -1,5 +1,5 @@
-import gsStart from "./gStates/gsStart";
 import gsMain from "./gStates/gsMain";
+import gsStart from "./gStates/gsStart";
 // import gData from "./data";
 // import store from "../../vuex/store";
 
@@ -13,9 +13,20 @@ class GameStateManager {
     this.state.init();
   }
 
-  receiveInput(input) {
-    if (this.state) {
-      this.state.receiveInput(input);
+  receiveInputKeyUp(input) {
+    if (this.state && this.state.keyUp) {
+      this.state.keyUp(input);
+    }
+  }
+  receiveInputKeyDown(input) {
+    if (this.state && this.state.keyDown) {
+      this.state.keyDown(input);
+    }
+  }
+  receiveInputText(text) {
+    console.log(text);
+    if (this.state && this.state.receiveInputText) {
+      this.state.receiveInputText(text);
     }
   }
 
