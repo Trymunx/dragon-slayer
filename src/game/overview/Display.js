@@ -4,7 +4,6 @@ import store from "../../vuex/store";
 
 ROT.Display.prototype.drawWorld = function() {
   const world = store.getters.world;
-  // const creatures = store.getters.creatures;
   const player = store.getters.player;
 
   this.clear();
