@@ -1,6 +1,6 @@
 <template>
   <div id="surroundings-output">
-    <div v-if="worldExists" class="wrapper">
+    <template v-if="worldExists">
       <div class="creatures-wrapper">
         Creatures:
         <div class="table-wrapper">
@@ -59,12 +59,11 @@
           </div>
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
 <script>
-import display from "../game/overview/Display";
 import { levelColour } from "../game/utils/colours";
 
 export default {
@@ -113,12 +112,14 @@ export default {
 
 <style>
 #surroundings-output {
-  padding: 20px 8px 20px 15px;
   color: var(--text-blur);
   background-color: var(--ui-darker);
   border-color: var(--ui-border);
   font-family: "Ubuntu Mono", monospace;
   font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .table-wrapper::-webkit-scrollbar {
@@ -154,14 +155,6 @@ export default {
   text-transform: capitalize;
   width: 85px;
   margin-left: 10px;
-}
-
-.wrapper {
-  height: 100%;
-  overflow-y: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
 }
 
 .creatures-wrapper,
