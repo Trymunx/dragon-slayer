@@ -78,7 +78,7 @@ export default {
       return this.$store.getters.worldExists;
     },
     surroundings() {
-      return this.$store.getters.surroundings(2);
+      return this.$store.getters.surroundings();
     },
   },
   methods: {

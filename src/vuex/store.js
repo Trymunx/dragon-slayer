@@ -76,8 +76,21 @@ const store = new Vuex.Store({
               if (surr.items[item.name]) {
                 surr.items[item.name].count++;
                 surr.items[item.name].locations[pos] = {};
-                surr.items[item.name].expanded[[x, y]].count++;
-                surr.items[item.name].expanded[[x, y]].totalValue += item.val;
+                if (surr.items[item.name].expanded[[x, y]]) {
+                  surr.items[item.name].expanded[[x, y]].count++;
+                  surr.items[item.name].expanded[[x, y]].totalValue += item.val;
+                } else {
+                  surr.items[item.name].expanded[[x, y]] = {
+                    name: item.name,
+                    plural: item.plural,
+                    count: 1,
+                    totalValue: item.val,
+                    dir: getDirFromVector(x, y),
+                    loc: {
+                      [pos]: {},
+                    },
+                  };
+                }
               } else {
                 surr.items[item.name] = {
                   name: item.name,
@@ -106,9 +119,9 @@ const store = new Vuex.Store({
       }
 
       surr.creatures.sort((a, b) => {
-        if (a.dist - b.dist !== 0) {
+        if (a.dist !== b.dist) {
           return a.dist - b.dist; // Sort by distance
-        } else if (a.creature.level - b.creature.level !== 0) {
+        } else if (a.creature.level !== b.creature.level) {
           return b.creature.level - a.creature.level; // Then descending order of level
         } else {
           return b.creature.hp - a.creature.hp; // Then amount of hp
@@ -233,7 +246,7 @@ const store = new Vuex.Store({
         x: state.player.pos.x + delta[0],
         y: state.player.pos.y + delta[1],
       };
-      state.player = Object.assign({}, state.player, { pos });
+      state.player = Object.assign(state.player, { pos });
     },
     ADD_CREATURE(state, creature) {
       if (state.creatures[creature.pos]) {
