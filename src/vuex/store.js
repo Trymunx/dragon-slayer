@@ -11,6 +11,9 @@ const store = new Vuex.Store({
     addMessage({ commit }, data) {
       commit("ADD_MESSAGE", data);
     },
+    dropItems({ commit }, data) {
+      commit("DROP_ITEMS", data);
+    },
     enterCommand({ commit, state }, text) {
       commit("ADD_MESSAGE", {
         entity: state.playerName,
@@ -215,6 +218,10 @@ const store = new Vuex.Store({
     },
     CLEAR_HIGHLIGHTED(state) {
       state.highlit = [];
+    },
+    DROP_ITEMS(state, data) {
+      const tile = state.world.getTile(...data.pos);
+      tile.items.push(...data.items);
     },
     HIGHLIGHT_TILES(state, tiles) {
       state.highlit = tiles;

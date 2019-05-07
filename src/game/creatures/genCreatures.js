@@ -88,8 +88,7 @@ class Creature {
   }
 
   dropItems() {
-    const tile = store.getters.world.getTile(...this.pos);
-    tile.items.push(...this.items);
+    store.dispatch("dropItems", { pos: this.pos, items: this.items.splice(0) });
   }
 
   getHPReport() {
@@ -122,7 +121,6 @@ class Creature {
   }
 
   move() {
-    let tile = store.getters.world.getTile(this.pos[0], this.pos[1]);
     switch (~~(Math.random() * 4)) {
       case 0:
         store.dispatch("moveCreature", {
@@ -239,8 +237,6 @@ const getRandomPos = (chunkSize, left, top) => [
 ];
 
 const genCreatures = (chunkSize, left, top, playerLevel = 1) => {
-  let chunkCreatures = [];
-
   Creatures.forEach(c => {
     let numberInChunk = Math.round(c.attributes.spawnChance * 0.5 * chunkSize ** 2);
     for (let i = 0; i < numberInChunk; i++) {
