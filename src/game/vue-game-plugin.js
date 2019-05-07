@@ -1,6 +1,5 @@
 import display from "./overview/Display";
 import gData from "./state/data";
-import GenerateName from "./utils/nameGenerator";
 import gsMan from "./state/gsMan";
 // import store from "../vuex/store";
 // import CommandParser from "./Commands/CommandParser";

@@ -2,7 +2,7 @@ import display from "../../overview/Display";
 import displayConf from "../../config/display";
 import gameloop from "../../gameloop";
 import GameState from "../GameState";
-import gsMan from "../gsMan";
+// import gsMan from "../gsMan";
 // import gData from "../data";
 import store from "../../../vuex/store";
 import World from "../../world/World";

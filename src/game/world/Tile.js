@@ -1,4 +1,3 @@
-import genCreatures from "../creatures/genCreatures";
 import genTree from "./genTree";
 
 export default class Tile {
