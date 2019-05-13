@@ -1,8 +1,8 @@
+import * as ROT from "rot-js";
 import ActivityStates from "./ActivityStates";
 import CreaturesJSON from "./Creatures.json";
 import gameItems from "../items/gameItems";
 import RNG from "../utils/RNG";
-import ROT from "rot-js";
 import store from "../../vuex/store";
 
 const Creatures = new Map(Object.entries(CreaturesJSON));

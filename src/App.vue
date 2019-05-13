@@ -47,7 +47,7 @@ export default {
       }
     },
     handleKeyDown(event) {
-      if (event.key !== "Enter" || event.key !== "Escape" && this.$store.getters.instantMode) {
+      if ((event.key !== "Enter" || event.key !== "Escape") && this.$store.getters.instantMode) {
         this.$game.receiveInputKeyDown(event.key);
       }
     },

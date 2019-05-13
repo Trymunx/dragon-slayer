@@ -1,10 +1,9 @@
 module.exports = {
   root: true,
-  env: { node: true, es6: true },
-  extends: ["eslint:recommended", "plugin:vue/essential"],
-  parserOptions: {
-    sourceType: "module",
+  env: {
+    node: true,
   },
+  extends: ["plugin:vue/essential", "@vue/standard", "@vue/typescript"],
   rules: {
     "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
@@ -24,5 +23,12 @@ module.exports = {
         memberSyntaxSortOrder: ["none", "all", "single", "multiple"],
       },
     ],
+    "space-before-function-paren": [
+      "error",
+      { anonymous: "never", asyncArrow: "never", named: "never" },
+    ],
+  },
+  parserOptions: {
+    parser: "@typescript-eslint/parser",
   },
 };

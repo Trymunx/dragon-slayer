@@ -53,8 +53,8 @@ export default {
               const itemDrops = creature.getItemsPrettyOutput();
               this.$store.dispatch("addMessage", {
                 entity: `Examine ${creature.name}:`,
-                message: `The ${creature.name} is level ${creature.level} and has ${creature.hp}HP.`
-                + ` It will drop ${itemDrops ? itemDrops : "nothing"}.`,
+                message: `The ${creature.name} is level ${creature.level} and has ` +
+                  `${creature.hp}HP. It will drop ${itemDrops || "nothing"}.`,
               });
               this.$store.dispatch("addMessage", {
                 entity: "",
@@ -80,7 +80,9 @@ export default {
             count: 1,
             text: `1 ${item.name} (${item.val})`,
             // Have to use old school function so that this points to this object
-            action: function() {console.log(this);},
+            action: function () {
+              console.log(this);
+            },
           };
           arr.push(newItemEntry);
         }
