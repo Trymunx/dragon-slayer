@@ -29,6 +29,7 @@ module.exports = {
       { anonymous: "never", asyncArrow: "never", named: "never" },
     ],
     "generator-star-spacing": ["error", { before: false, after: true }],
+    "no-fallthrough": ["error", { commentPattern: "break[\\s\\w]*omitted" }],
   },
   parserOptions: {
     parser: "@typescript-eslint/parser",

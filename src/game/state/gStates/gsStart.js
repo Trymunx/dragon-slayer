@@ -4,7 +4,7 @@ import GameState from "../GameState";
 import generateName from "../../utils/nameGenerator";
 import gsMan from "../gsMan";
 // import gData from "../data";
-import newPlayer from "../../player/NewPlayer";
+import newPlayer from "../../entities/player";
 import store from "../../../vuex/store";
 
 var gsStart = new GameState("start");
@@ -59,6 +59,7 @@ gsStart.confirmPlayerName = function(input) {
     case "/gen":
     case "/generate":
       input = generateName();
+    // break omitted
     default:
       this.playerName = input;
       store.dispatch("setPlayerName", input);

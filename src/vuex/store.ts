@@ -1,6 +1,7 @@
+import { Player } from "../game/entities/player";
 import Vue from "vue";
 import Vuex from "vuex";
-import { Creature, Item, Message, Player, Position, SurroundingsItem } from "../types";
+import { Creature, Item, Message, Position, SurroundingsItem } from "../types";
 
 Vue.use(Vuex);
 
@@ -26,6 +27,13 @@ const InitialState: InitialState = {
   inputText: "",
   messages: [],
   player: {
+    attributes: {
+      armour: 0,
+      attackChance: 0.45,
+      damage: 10,
+      dodgeChance: 0.15,
+    },
+    creaturesSlain: {},
     hp: {
       current: 100,
       max: 100,
@@ -33,6 +41,7 @@ const InitialState: InitialState = {
     level: 1,
     name: "",
     pos: [0, 0],
+    xp: 0,
   },
   splash: true,
   world: null,
