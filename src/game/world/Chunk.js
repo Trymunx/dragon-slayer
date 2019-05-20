@@ -41,10 +41,10 @@ export default class Chunk {
     return this.tiles[x][y];
   }
 
-  getTileFromWorldCoords(tile_x, tile_y) {
+  getTileFromWorldCoords(tileX, tileY) {
     return this.getTile(
-      Math.abs((Chunk.size + tile_x) % Chunk.size),
-      Math.abs((Chunk.size + tile_y) % Chunk.size)
+      Math.abs((Chunk.size + tileX) % Chunk.size),
+      Math.abs((Chunk.size + tileY) % Chunk.size)
     );
   }
 

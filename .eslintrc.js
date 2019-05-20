@@ -23,10 +23,12 @@ module.exports = {
         memberSyntaxSortOrder: ["none", "all", "single", "multiple"],
       },
     ],
+    "sort-keys": ["warn", "asc", { caseSensitive: true, natural: true }],
     "space-before-function-paren": [
       "error",
       { anonymous: "never", asyncArrow: "never", named: "never" },
     ],
+    "generator-star-spacing": ["error", { before: false, after: true }],
   },
   parserOptions: {
     parser: "@typescript-eslint/parser",

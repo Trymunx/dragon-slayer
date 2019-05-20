@@ -8,11 +8,11 @@ ROT.Display.prototype.drawWorld = function() {
 
   this.clear();
   const curOpts = this.getOptions();
-  let top = Math.ceil(player.pos.y - curOpts.height / 2);
-  let bot = Math.ceil(player.pos.y + curOpts.height / 2);
-  let left = Math.ceil(player.pos.x - curOpts.width / 2);
-  let right = Math.ceil(player.pos.x + curOpts.width / 2);
-  store.dispatch("setDisplayOrigin", { x: left, y: top });
+  let top = Math.ceil(player.pos[1] - curOpts.height / 2);
+  let bot = Math.ceil(player.pos[1] + curOpts.height / 2);
+  let left = Math.ceil(player.pos[0] - curOpts.width / 2);
+  let right = Math.ceil(player.pos[0] + curOpts.width / 2);
+  store.dispatch("setDisplayOrigin", [left, top]);
 
   for (let i = 0, y = top; y < bot; y++) {
     for (let j = 0, x = left; x < right; x++) {
@@ -42,7 +42,7 @@ ROT.Display.prototype.drawWorld = function() {
         bg = `hsla(0, 0%, 100%, ${Math.min(tile.items.length / 12, 0.8)})`;
       }
 
-      if (x === player.pos.x && y === player.pos.y) {
+      if (x === player.pos[0] && y === player.pos[1]) {
         symbol = "※";
         // symbol = "«※»";
         // symbol = "🧙";

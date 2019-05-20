@@ -29,9 +29,9 @@ export default class World {
     this.chunks.set(Chunk.chunkKey(chunkX, chunkY), chunk);
     return chunk;
   }
-  getChunkFromTile(tile_x, tile_y) {
+  getChunkFromTile(tileX, tileY) {
     // Can't use ~~ here because values can be negative
-    let chunkCoords = [Math.floor(tile_x / Chunk.size), Math.floor(tile_y / Chunk.size)];
+    let chunkCoords = [Math.floor(tileX / Chunk.size), Math.floor(tileY / Chunk.size)];
     if (this.chunkExists(...chunkCoords)) {
       return this.getChunk(...chunkCoords);
     } else {
@@ -63,8 +63,5 @@ export default class World {
 }
 
 function randomPosition() {
-  return {
-    x: ~~RNG(Chunk.size),
-    y: ~~RNG(Chunk.size),
-  };
+  return [~~RNG(Chunk.size), ~~RNG(Chunk.size)];
 }

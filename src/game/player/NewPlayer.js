@@ -34,7 +34,7 @@ class Player {
   constructor(name, level = 1) {
     this.name = name || GenerateName();
     this.level = level;
-    this.pos = { x: 0, y: 0 };
+    this.pos = [0, 0];
     this.attributes = Object.assign({}, PlayerTemplate.attributes);
     this.attributes.level = level || this.attributes.level;
     this.attributes.currentHP = this.attributes.totalHP = this.calcMaxHP();
