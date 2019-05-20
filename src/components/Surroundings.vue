@@ -67,36 +67,29 @@
 import { levelColour } from "../game/utils/colours";
 
 export default {
+  computed: {
+    surroundings() {
+      return this.$store.getters.surroundings();
+    },
+    worldExists() {
+      return this.$store.getters.worldExists;
+    },
+  },
   data() {
     return {
       expandedItem: "",
     };
   },
-  computed: {
-    worldExists() {
-      return this.$store.getters.worldExists;
-    },
-    surroundings() {
-      return this.$store.getters.surroundings();
-    },
-  },
   methods: {
     getStyle(lvl) {
       return "color: " + levelColour(lvl);
-    },
-    toggleExpanded(item) {
-      if (item.name === this.expandedItem) {
-        this.expandedItem = "";
-      } else {
-        this.expandedItem = item.name;
-      }
     },
     highlight(entity, locations) {
       if (entity) {
         let highlit = {
           [entity.pos]: {
-            symbol: entity.symbol,
             colour: entity.isDead() ? "#888" : levelColour(entity.level, 30),
+            symbol: entity.symbol,
           },
         };
         this.$store.dispatch("highlight", highlit);
@@ -104,6 +97,13 @@ export default {
         this.$store.dispatch("highlight", locations);
       } else {
         this.$store.dispatch("highlight");
+      }
+    },
+    toggleExpanded(item) {
+      if (item.name === this.expandedItem) {
+        this.expandedItem = "";
+      } else {
+        this.expandedItem = item.name;
       }
     },
   },

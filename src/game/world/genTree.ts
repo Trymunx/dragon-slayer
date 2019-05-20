@@ -1,64 +1,64 @@
 const genTree = () => {
   const trees = [
     {
-      symbol: "↟",
       prob: 40,
+      symbol: "↟",
     },
     // {
-    //   "symbol": "🌲",
-    //   "prob": 20
+    //   prob: 20
+    //   symbol: "🌲",
     // },
     // {
-    //   "symbol": "🌳",
-    //   "prob": 15
+    //   prob: 15
+    //   symbol: "🌳",
     // },
     {
-      symbol: "⇞",
       prob: 22,
+      symbol: "⇞",
     },
     {
-      symbol: "↑",
       prob: 18,
+      symbol: "↑",
     },
     {
-      symbol: "⇈",
       prob: 6,
+      symbol: "⇈",
     },
     {
-      symbol: "⭫",
       prob: 5,
+      symbol: "⭫",
     },
     {
-      symbol: "𐇲",
       prob: 10,
+      symbol: "𐇲",
     },
     {
+      prob: 4,
       symbol: "⇡",
-      prob: 4,
     },
     {
+      prob: 4,
       symbol: "⇑",
-      prob: 4,
     },
     {
+      prob: 2,
       symbol: "⥉",
-      prob: 2,
     },
     {
+      prob: 2,
       symbol: "⭎",
-      prob: 2,
     },
     {
-      symbol: "⤒",
       prob: 2,
+      symbol: "⤒",
     },
     // {
-    //   "symbol": "⭂",
     //   "prob": 1
+    //   "symbol": "⭂",
     // },
     {
-      symbol: "⭜",
       prob: 1,
+      symbol: "⭜",
     },
   ];
 

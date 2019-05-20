@@ -19,8 +19,8 @@ gsMain.init = () => {
   let overviewDiv = document.querySelector("#overview");
   let [width, height] = display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
   display.setOptions({
-    width: width,
     height: height,
+    width: width,
   });
 
   display.drawText(0, 0, "Main state initialised");

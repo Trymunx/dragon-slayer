@@ -1,18 +1,27 @@
-import { chunkSize } from "../config/world";
 import genCreatures from "../creatures/genCreatures";
-import parseDirection from "../utils/ParseDirection";
+import Position from "./position";
 import store from "../../vuex/store";
 import Tile from "./Tile";
+import World from "./World";
+import { Direction, parseDir } from "../utils/direction";
+
+const CHUNK_SIZE: number = 64;
 
 export default class Chunk {
-  constructor(x, y, world) {
-    this.x = x;
-    this.y = y;
+  pos: Position;
+  world: World;
+  tiles: Array<Tile[]>;
+
+  constructor(x: number, y: number, world: World) {
+    this.pos = new Position(x, y);
+    // this.x = x;
+    // this.y = y;
     this.world = world;
     this.tiles = [];
-    for (let i = 0; i < chunkSize; i++) {
+
+    for (let i = 0; i < CHUNK_SIZE; i++) {
       this.tiles[i] = [];
-      for (let j = 0; j < chunkSize; j++) {
+      for (let j = 0; j < CHUNK_SIZE; j++) {
         if (Math.random() > 0.4) {
           this.tiles[i][j] = new Tile(i, j, this, "forest");
         } else {
@@ -24,24 +33,20 @@ export default class Chunk {
     this.generate();
   }
 
-  static chunkKey(x, y) {
-    return x + "," + y;
-  }
-
   static get size() {
-    return chunkSize;
+    return CHUNK_SIZE;
   }
 
-  getAdjChunk(direction) {
-    let offset = parseDirection(direction);
-    return this.world.getChunk(this.x + offset.x, this.y + offset.y);
+  getAdjChunk(direction: Direction) {
+    let offset: Position = parseDir(direction);
+    return this.world.getChunk(new Position(this.pos.x + offset.x, this.pos.y + offset.y));
   }
 
-  getTile(x, y) {
+  getTile(x: number, y: number) {
     return this.tiles[x][y];
   }
 
-  getTileFromWorldCoords(tileX, tileY) {
+  getTileFromWorldCoords(tileX: number, tileY: number) {
     return this.getTile(
       Math.abs((Chunk.size + tileX) % Chunk.size),
       Math.abs((Chunk.size + tileY) % Chunk.size)
@@ -52,6 +57,6 @@ export default class Chunk {
     console.info("Generating: %O", this);
     // Terrain -> structure -> creatures -> player
     let pLvl = store.getters.playerLevel;
-    genCreatures(Chunk.size, this.x, this.y, pLvl);
+    genCreatures(Chunk.size, this.pos.x, this.pos.y, pLvl);
   }
 }

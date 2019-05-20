@@ -1,6 +1,6 @@
 import { CreatureName } from "./creatures";
 import GenerateName from "../utils/nameGenerator";
-import { Position } from "../world/position";
+import Position from "../world/position";
 
 export interface Player {
   attributes?: IAttributes;
@@ -38,10 +38,10 @@ const basePlayer: Player = {
   },
   level: 1,
   name: "",
-  pos: [0, 0],
+  pos: new Position(0, 0),
   xp: 0,
 };
 
-export default function newPlayer(name: string, level: number): Player {
+export default function newPlayer(name?: string, level?: number): Player {
   return Object.assign(basePlayer, { level, name });
 }

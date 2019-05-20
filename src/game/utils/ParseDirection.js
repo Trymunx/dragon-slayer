@@ -3,37 +3,36 @@ export default function parseDirection(direction) {
     return console.error("Arg must be a string");
   }
 
-  let x = 0,
-    y = 0;
+  let dir = [0, 0];
 
   switch (direction.toUpperCase()) {
     case "NORTH":
     case "U":
     case "UP":
-      y = 1;
+      dir[1] = 1;
       break;
 
     case "SOUTH":
     case "D":
     case "DOWN":
-      y = -1;
+      dir[1] = -1;
       break;
 
     case "WEST":
     case "L":
     case "LEFT":
-      x = -1;
+      dir[0] = -1;
       break;
 
     case "EAST":
     case "R":
     case "RIGHT":
-      x = 1;
+      dir[0] = 1;
       break;
 
     default:
       console.error(`${direction} is not a valid direction.`);
   }
 
-  return { x, y };
+  return dir;
 }
