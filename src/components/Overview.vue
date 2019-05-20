@@ -8,22 +8,7 @@ import _ from "lodash";
 import display from "../game/overview/Display";
 
 export default {
-  mounted() {
-    document.querySelector("#overview").appendChild(this.$game.display.getContainer());
-
-    window.addEventListener("resize", _.debounce(this.resizeOverview, 100));
-  },
   methods: {
-    resizeOverview() {
-      if (!this.$store.getters.splash) {
-        let overviewDiv = document.querySelector("#overview");
-        let [width, height] =
-          display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
-
-        display.setOptions({ width, height });
-        display.drawWorld();
-      }
-    },
     contextMenuItems(vm, items, event) {
       let pos = { x: event.x, y: event.y };
       let canvas = document.querySelector("#overview > canvas");
@@ -42,7 +27,6 @@ export default {
 
       creaturesOnTile = creaturesOnTile.map(creature => {
         return {
-          text: `Examine ${creature.isDead() ? "dead" : ""} ${creature.name}`,
           action: () => {
             if (creature.isDead()) {
               this.$store.dispatch("addMessage", {
@@ -62,6 +46,7 @@ export default {
               });
             }
           },
+          text: `Examine ${creature.isDead() ? "dead" : ""} ${creature.name}`,
         };
       });
 
@@ -74,15 +59,15 @@ export default {
           val.action = () => console.log(val);
         } else {
           let newItemEntry = {
-            name: item.name,
-            plural: item.plural,
-            val: item.val,
-            count: 1,
-            text: `1 ${item.name} (${item.val})`,
             // Have to use old school function so that this points to this object
-            action: function () {
+            action: function() {
               console.log(this);
             },
+            count: 1,
+            name: item.name,
+            plural: item.plural,
+            text: `1 ${item.name} (${item.val})`,
+            val: item.val,
           };
           arr.push(newItemEntry);
         }
@@ -91,6 +76,21 @@ export default {
 
       return [...creaturesOnTile, ...itemsOnTile];
     },
+    resizeOverview() {
+      if (!this.$store.getters.splash) {
+        let overviewDiv = document.querySelector("#overview");
+        let [width, height] =
+          display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
+
+        display.setOptions({ height, width });
+        display.drawWorld();
+      }
+    },
+  },
+  mounted() {
+    document.querySelector("#overview").appendChild(this.$game.display.getContainer());
+
+    window.addEventListener("resize", _.debounce(this.resizeOverview, 100));
   },
 };
 </script>
