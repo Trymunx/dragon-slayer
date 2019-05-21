@@ -233,7 +233,7 @@ const store = new Vuex.Store({
         } else if (a.creature.level !== b.creature.level) {
           return b.creature.level - a.creature.level; // Then descending order of level
         } else {
-          return b.creature.hp - a.creature.hp; // Then amount of hp
+          return b.creature.hp.current - a.creature.hp.current; // Then amount of hp
         }
       });
 

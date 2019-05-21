@@ -1,15 +1,13 @@
 import { CreatureName } from "./creatures";
 import GenerateName from "../utils/nameGenerator";
+import { HP } from "./sharedTypes";
 import Position from "../world/position";
 
 export interface Player {
   attributes?: IAttributes;
   creaturesSlain: { [key in CreatureName]?: number };
   inventory?: any;
-  hp: {
-    current: number;
-    max: number;
-  };
+  hp: HP;
   level: number;
   name: string;
   slots?: any;

@@ -18,18 +18,7 @@ export default {
       },
     },
   },
-  mounted() {
-    document.querySelector("#input-text").focus();
-  },
   methods: {
-    submit() {
-      // Only submit if there are non-whitespace chars
-      if (!/^\s*$/.test(this.inputText)) {
-        let input = this.inputText.trim();
-        this.$store.dispatch("enterCommand", input);
-        this.$game.receiveInputText(input);
-      }
-    },
     inputBar(state) {
       let colour = ["#434241", "#262626"];
 
@@ -47,6 +36,17 @@ export default {
       document.querySelector("#input-bar").style["background-color"] = colour;
       document.querySelector("#input-text").style["background-color"] = colour;
     },
+    submit() {
+      // Only submit if there are non-whitespace chars
+      if (!/^\s*$/.test(this.inputText)) {
+        let input = this.inputText.trim();
+        this.$store.dispatch("enterCommand", input);
+        this.$game.receiveInputText(input);
+      }
+    },
+  },
+  mounted() {
+    document.querySelector("#input-text").focus();
   },
 };
 </script>

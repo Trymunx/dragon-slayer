@@ -21,19 +21,22 @@ class ItemFactory {
     this.methods = {};
   }
 
-  newItem() {
-    const itemParams = {};
-
-    for (const key in this) {
-      if (Array.isArray(this[key]) && key !== "value" && key !== "val") {
-        itemParams[key] = ~~getRandomInRange(this[key][0], this[key][1]);
-      } else if (key !== "value") {
-        itemParams[key] = this[key];
+  newItem(n) {
+    const items = [];
+    for (let i = 0; i < n; i++) {
+      const itemParams = {};
+      for (const key in this) {
+        if (Array.isArray(this[key]) && key !== "value" && key !== "val") {
+          itemParams[key] = ~~getRandomInRange(this[key][0], this[key][1]);
+        } else if (key !== "value") {
+          itemParams[key] = this[key];
+        }
       }
+      itemParams.val = this.value.reduce((sum, fn) => (sum += fn(itemParams)), 0);
+      items.push(new Item(itemParams));
     }
-    itemParams.val = this.value.reduce((sum, fn) => (sum += fn(itemParams)), 0);
 
-    return new Item(itemParams);
+    return n > 1 ? items : items[0];
   }
 
   addMethod(methodName, fn) {

@@ -47,7 +47,7 @@ display.drawWorld = function() {
           } else if (b.isDead()) {
             return -1;
           } else {
-            return b.hp - a.hp;
+            return b.hp.current - a.hp.current;
           }
         });
       }
