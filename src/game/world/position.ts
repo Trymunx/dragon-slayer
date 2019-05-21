@@ -9,7 +9,7 @@ export default class Position {
     this.y = y;
   }
 
-  toKey(): string {
+  key(): string {
     return [this.x, this.y].join();
   }
 }

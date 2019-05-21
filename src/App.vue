@@ -36,7 +36,15 @@ export default {
     handleKeyUp(event) {
       switch (event.key) {
         case "Enter":
-          document.querySelector("#input-text").focus();
+          if (
+            document.querySelector("#input-text").value === "" &&
+            !this.$store.instantMode &&
+            this.$store.worldExists
+          ) {
+            document.querySelector("#input-text").blur();
+          } else {
+            document.querySelector("#input-text").focus();
+          }
           break;
         case "Escape":
           document.querySelector("#input-text").blur();

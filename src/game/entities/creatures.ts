@@ -26,22 +26,26 @@ export default class Creature {
   hp: number;
   level: number;
   pos: Position;
+  symbol: string;
 
   constructor({
     name,
     hp,
     level,
     pos,
+    symbol,
   }: {
     name: string;
     hp: number;
     level: number;
     pos: Position;
+    symbol: string;
   }) {
     this.name = name;
     this.hp = 10;
     this.level = 1;
     this.pos = new Position(pos.x, pos.y);
+    this.symbol = symbol;
   }
 
   isDead(): boolean {

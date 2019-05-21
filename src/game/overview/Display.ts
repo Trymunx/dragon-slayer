@@ -1,29 +1,45 @@
 import * as ROT from "rot-js";
+import Creature from "../entities/creatures";
 import { levelColour } from "../utils/colours";
+import { Player } from "../entities/player";
+import Position from "../world/position";
 import store from "../../vuex/store";
+import Tile from "../world/Tile";
+import World from "../world/World";
 
-ROT.Display.prototype.drawWorld = function() {
-  const world = store.getters.world;
-  const player = store.getters.player;
+interface Display extends ROT.Display {
+  drawWorld?: () => void;
+}
+
+const display: Display = new ROT.Display({
+  bg: "#1e1e1e",
+  fg: "#daddd8",
+  // bg: "#9e9e9e", // For debugging
+  forceSquareRatio: true,
+});
+
+display.drawWorld = function() {
+  const world: World = store.getters.world;
+  const player: Player = store.getters.player;
 
   this.clear();
   const curOpts = this.getOptions();
-  let top = Math.ceil(player.pos[1] - curOpts.height / 2);
-  let bot = Math.ceil(player.pos[1] + curOpts.height / 2);
-  let left = Math.ceil(player.pos[0] - curOpts.width / 2);
-  let right = Math.ceil(player.pos[0] + curOpts.width / 2);
+  let top = Math.ceil(player.pos.y - curOpts.height / 2);
+  let bot = Math.ceil(player.pos.y + curOpts.height / 2);
+  let left = Math.ceil(player.pos.x - curOpts.width / 2);
+  let right = Math.ceil(player.pos.x + curOpts.width / 2);
   store.dispatch("setDisplayOrigin", [left, top]);
 
   for (let i = 0, y = top; y < bot; y++) {
     for (let j = 0, x = left; x < right; x++) {
-      let tile = world.getTile(x, y);
-      let hl = store.getters.highlit[[x, y]];
+      let tile: Tile = world.getTile(new Position(x, y));
+      let hl = store.getters.highlit[[x, y].join()];
       let symbol = tile.display;
       let fg = tile.foreground;
       let bg = "#1e1e1e";
-      const creatures = store.getters.creaturesAt(x, y);
+      const creatures: Creature[] = store.getters.creaturesAt(x, y);
       if (creatures) {
-        creatures.sort((a, b) => {
+        creatures.sort((a: Creature, b: Creature) => {
           if (a.isDead() && b.isDead()) {
             return 0;
           } else if (a.isDead()) {
@@ -42,7 +58,7 @@ ROT.Display.prototype.drawWorld = function() {
         bg = `hsla(0, 0%, 100%, ${Math.min(tile.items.length / 12, 0.8)})`;
       }
 
-      if (x === player.pos[0] && y === player.pos[1]) {
+      if (x === player.pos.x && y === player.pos.y) {
         symbol = "※";
         // symbol = "«※»";
         // symbol = "🧙";
@@ -67,12 +83,5 @@ ROT.Display.prototype.drawWorld = function() {
     i++;
   }
 };
-
-var display = new ROT.Display({
-  fg: "#daddd8",
-  bg: "#1e1e1e",
-  // bg: "#9e9e9e", // For debugging
-  forceSquareRatio: true,
-});
 
 export default display;

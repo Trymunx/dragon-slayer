@@ -2,6 +2,7 @@ import Chunk from "./Chunk";
 import { Player } from "../entities/player";
 import Position from "./position";
 import RNG from "../utils/RNG";
+import Tile from "./Tile";
 
 export default class World {
   chunks: Map<string, Chunk>;
@@ -26,16 +27,16 @@ export default class World {
   }
 
   getChunk(pos: Position) {
-    return this.chunks.get(pos.toKey());
+    return this.chunks.get(pos.key());
   }
 
   chunkExists(pos: Position): boolean {
-    return this.chunks.has(pos.toKey());
+    return this.chunks.has(pos.key());
   }
 
   genChunk(pos: Position) {
     let chunk = new Chunk(pos.x, pos.y, this);
-    this.chunks.set(pos.toKey(), chunk);
+    this.chunks.set(pos.key(), chunk);
     return chunk;
   }
 
@@ -52,7 +53,7 @@ export default class World {
     }
   }
 
-  getTile(pos: Position) {
+  getTile(pos: Position): Tile {
     return this.getChunkFromTile(pos).getTileFromWorldCoords(pos.x, pos.y);
   }
 }

@@ -1,7 +1,8 @@
 import Chunk from "./Chunk";
+import Creature from "../entities/creatures";
 import genTree from "./genTree";
+import { Item } from "../../types";
 import Position from "./position";
-import { Creature, Item } from "../../types";
 
 type Terrain = "forest" | "mountain" | "hills" | "river";
 
