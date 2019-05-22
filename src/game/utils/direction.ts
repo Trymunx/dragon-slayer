@@ -1,27 +1,29 @@
 import Position from "../world/position";
-export type Direction = "UP" | "DOWN" | "LEFT" | "RIGHT" | "NORTH" | "SOUTH" | "WEST" | "EAST";
+
+export enum Direction {
+  NORTH = "north",
+  SOUTH = "south",
+  EAST = "east",
+  WEST = "west",
+}
 
 export function parseDir(direction: Direction): Position {
   let dir: Position = new Position(0, 0);
 
   switch (direction) {
-    case "NORTH":
-    case "UP":
+    case Direction.NORTH:
       dir.y = 1;
       break;
 
-    case "SOUTH":
-    case "DOWN":
+    case Direction.SOUTH:
       dir.y = -1;
       break;
 
-    case "WEST":
-    case "LEFT":
+    case Direction.WEST:
       dir.x = -1;
       break;
 
-    case "EAST":
-    case "RIGHT":
+    case Direction.EAST:
       dir.x = 1;
       break;
 
