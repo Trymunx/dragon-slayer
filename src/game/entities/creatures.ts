@@ -1,12 +1,12 @@
 import * as ROT from "rot-js";
 import CreaturesJSON from "./Creatures.json";
 import gameItems from "../items/gameItems";
-import { HP } from "./sharedTypes";
 import { Item } from "../../types";
 import { Player } from "./player";
-import Position from "../world/position";
 import RNG from "../utils/RNG";
 import store from "../../vuex/store";
+import { EntityType, HP } from "./sharedTypes";
+import Position, { getRandomPosInChunk } from "../world/position";
 
 export type CreatureName =
   | "dragon"
@@ -29,6 +29,8 @@ export type CreatureName =
   | "pig"
   | "rabbit";
 
+const AllCreatures = new Map(Object.entries(CreaturesJSON));
+
 enum ActivityState {
   MOVING = "moving",
   FIGHTING = "fighting",
@@ -47,6 +49,8 @@ type WeightedAttackMap = {
   [attackName: string]: number;
 };
 
+type HarvestItems = Array<{ name: string; quantity: number[] }>;
+
 interface CreatureTemplate {
   attacks: CreatureAttack[];
   attributes: {
@@ -62,13 +66,14 @@ interface CreatureTemplate {
       dropChance: number;
       max: number;
     };
-    harvest: Array<{ name: string; quantity: [number, number] }>;
+    harvest: HarvestItems;
     potions: {
       dropChance: number;
       max: number;
     };
   };
-  name: CreatureName;
+  name: string;
+  // name: CreatureName;
   namePlural: string;
   messages: {
     onDeath: string[];
@@ -78,6 +83,7 @@ interface CreatureTemplate {
 }
 
 export default class Creature {
+  aggressive: boolean;
   attacks: CreatureAttack[];
   attackSpeed: number;
   attacksToWeightsMap: WeightedAttackMap;
@@ -93,6 +99,7 @@ export default class Creature {
   slots?: any;
   symbol: string;
   target?: Creature | Player;
+  type: EntityType;
 
   constructor({
     level,
@@ -103,7 +110,7 @@ export default class Creature {
     pos: Position;
     template: CreatureTemplate;
   }) {
-    this.name = template.name;
+    this.name = template.name as CreatureName;
     const hp = ~~RNG(template.attributes.minTotalHP, template.attributes.maxTotalHP);
     this.hp = {
       current: hp,
@@ -112,13 +119,16 @@ export default class Creature {
     this.level = level;
     this.pos = pos;
     this.symbol = template.attributes.healthBar;
+    this.aggressive = template.attributes.aggressive;
+    this.type = EntityType.Creature;
 
     this.items = template.drops.harvest
       .filter(item => gameItems.has(item.name))
       .map(item => {
         const quantity = item.quantity[1] !== 1 ? ~~RNG(item.quantity[0], item.quantity[1]) : 1;
         return gameItems.get(item.name).newItem(quantity);
-      });
+      })
+      .concat(getGold(template.drops.gold));
 
     this.currentActivityState = ActivityState.MOVING;
     this.attackSpeed = 35;
@@ -139,4 +149,243 @@ export default class Creature {
   isDead(): boolean {
     return this.currentActivityState === ActivityState.DEAD;
   }
+
+  attack() {
+    if (!this.target) {
+      return;
+    }
+
+    if (RNG() < this.missChance) {
+      store.dispatch("sendMessageAtPosition", {
+        entity: "",
+        message: `The ${this.name} missed the ${this.target.name}.`,
+        position: this.pos,
+      });
+      return;
+    }
+
+    const attackName = ROT.RNG.getWeightedValue(this.attacksToWeightsMap);
+    const attack = this.attacks.find(att => att.name === attackName);
+    if (!attack) {
+      console.error(attackName + " doesn't exist for " + this.name);
+      return;
+    }
+    const damage = ~~(RNG(attack.minDamage, attack.maxDamage) * this.level) / 1.5;
+    this.target.receiveDamage(damage);
+
+    switch (this.target.type) {
+      case EntityType.Player:
+        console.log(this.target.name + " is a Player");
+
+        const attackMessage = attack.messages[~~RNG(attack.messages.length)] + damage + " HP";
+        store.dispatch("addMessage", {
+          entity: this.name,
+          message: attackMessage,
+        });
+        break;
+      case EntityType.Creature:
+        console.log(this.target.name + " is a Creature");
+
+        store.dispatch("sendMessageAtPosition", {
+          entity: "",
+          message: `The ${this.name} used ${attackName} on the ${this.target.name} for ${damage}.`,
+          position: this.pos,
+        });
+        break;
+      default:
+        console.error("Unknown entity type:", this.target.type);
+    }
+
+    if (this.target.isDead()) {
+      this.currentActivityState = ActivityState.MOVING;
+      this.cooldown = this.moveSpeed;
+      this.level++;
+    }
+  }
+
+  receiveDamage(damage: number) {
+    this.hp.current = Math.max(0, this.hp.current - damage);
+    if (this.hp.current === 0) {
+      store.dispatch("sendMessageAtPosition", {
+        entity: "",
+        message: `The ${this.name} died and dropped ${this.getItemsPrettyOutput()}.`,
+        position: this.pos,
+      });
+      this.currentActivityState = ActivityState.DEAD;
+      this.dropItems();
+    } else {
+      this.printHPReport();
+    }
+  }
+
+  printHPReport() {
+    const totalBarLength = 40;
+    const hpPercent = Math.round((this.hp.current / this.hp.max) * 100);
+    const currentHPLength = Math.round((totalBarLength / 100) * hpPercent);
+    const hpReportString = `[${this.symbol.repeat(currentHPLength).padEnd(totalBarLength)}] (${
+      this.hp.current
+    }HP)`;
+    store.dispatch("sendMessageAtPosition", {
+      entity: this.name,
+      message: hpReportString,
+      position: this.pos,
+    });
+  }
+
+  getItemsPrettyOutput(): string {
+    const items = this.items.reduce(
+      (acc, item) => {
+        if (item === undefined) return acc;
+        if (acc[item.name]) acc[item.name]++;
+        else acc[item.name] = 1;
+        return acc;
+      },
+      {} as { [itemName: string]: number }
+    );
+    const outputs = Object.keys(items).map(itemName => {
+      if (items[itemName] === 1) {
+        return `1 ${itemName}`;
+      } else {
+        // know this is not undefined because we only add to items when things exist in this.items
+        return `${items[itemName]} ${this.items.find(el => el.name === itemName)!.plural}`;
+      }
+    });
+    const output =
+      outputs.length > 1
+        ? outputs.slice(0, -1).join(", ") + ", and " + outputs.slice(-1)
+        : outputs[0] || "";
+
+    return output;
+  }
+
+  dropItems() {
+    store.dispatch("dropItems", { items: this.items.splice(0), pos: this.pos });
+  }
+
+  move() {
+    switch (~~(Math.random() * 4)) {
+      case 0:
+        store.dispatch("moveCreature", {
+          creature: this,
+          newPos: new Position(this.pos.x, this.pos.y - 1),
+        });
+        this.pos.y--;
+        break;
+      case 1:
+        store.dispatch("moveCreature", {
+          creature: this,
+          newPos: new Position(this.pos.x, this.pos.y + 1),
+        });
+        this.pos.y++;
+        break;
+      case 2:
+        store.dispatch("moveCreature", {
+          creature: this,
+          newPos: new Position(this.pos.x - 1, this.pos.y),
+        });
+        this.pos.x--;
+        break;
+      case 3:
+        store.dispatch("moveCreature", {
+          creature: this,
+          newPos: new Position(this.pos.x + 1, this.pos.y),
+        });
+        this.pos.x++;
+        break;
+    }
+  }
+
+  targetCreatures(creatures: Creature[]) {
+    for (const c of creatures) {
+      if (c === this) {
+        continue;
+      }
+      if (
+        c.hp.current < this.hp.current &&
+        this.currentActivityState === ActivityState.MOVING &&
+        c.currentActivityState === ActivityState.MOVING
+      ) {
+        console.info(`${this.pos}: ${this.name} attacking ${c.name}`);
+        this.currentActivityState = ActivityState.FIGHTING;
+        c.currentActivityState = ActivityState.FIGHTING;
+        this.target = c;
+        c.target = this;
+        this.cooldown = this.attackSpeed;
+        c.cooldown = c.attackSpeed + 10; // aggressor attacks first
+      }
+    }
+  }
+
+  update() {
+    if (this.cooldown > 0) {
+      this.cooldown--;
+      return;
+    }
+
+    switch (this.currentActivityState) {
+      case ActivityState.MOVING:
+        this.cooldown = this.moveSpeed;
+        this.move();
+        break;
+      case ActivityState.FIGHTING:
+        this.cooldown = this.attackSpeed;
+        this.attack();
+        break;
+      case ActivityState.DEAD:
+        this.cooldown = 0;
+        break;
+    }
+  }
 }
+
+const getGold = ({ max, dropChance }: { max: number; dropChance: number }): Item[] => {
+  const gold = [];
+  if (RNG() > dropChance) {
+    const quantity = ~~RNG(max);
+    for (let i = 0; i < quantity; i++) {
+      gold.push(gameItems.get("gold").newItem());
+    }
+  }
+  console.log(gold);
+  return gold;
+};
+
+const getItems = (creatureItemsArray: HarvestItems): Item[] => {
+  let items: Item[] = [];
+  creatureItemsArray.forEach(item => {
+    if (gameItems.has(item.name)) {
+      let quantity;
+      if (item.quantity[1] !== 1) {
+        quantity = ~~(Math.random() * (item.quantity[1] - item.quantity[0] + 1)) + item.quantity[0];
+      } else {
+        quantity = 1;
+      }
+      for (let i = 0; i < quantity; i++) {
+        let newItem = gameItems.get(item.name).newItem();
+        items.push(newItem);
+      }
+    }
+  });
+  return items;
+};
+
+export const genCreatures = (
+  chunkSize: number,
+  left: number,
+  top: number,
+  playerLevel: number = 1
+) => {
+  AllCreatures.forEach(c => {
+    let numberInChunk = Math.round(c.attributes.spawnChance * 0.5 * chunkSize ** 2);
+    for (let i = 0; i < numberInChunk; i++) {
+      let creatureLevel = Math.ceil(Math.random() * playerLevel * 1.5);
+      let pos = getRandomPosInChunk(chunkSize, left, top);
+      let creature = new Creature({
+        level: creatureLevel,
+        pos: pos,
+        template: c,
+      });
+      store.dispatch("addCreature", creature);
+    }
+  });
+};

@@ -8,14 +8,14 @@
 
 <script>
 export default {
-  data() {
-    return {};
-  },
   computed: {
     playerPos() {
       const pos = this.$store.getters.playerPos;
-      return pos ? pos : { x: 0, y: 0 };
+      return pos || { x: 0, y: 0 };
     },
+  },
+  data() {
+    return {};
   },
 };
 </script>
@@ -44,4 +44,3 @@ export default {
   background-color: var(--ui-border);
 }
 </style>
-

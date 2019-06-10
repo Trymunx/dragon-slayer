@@ -1,3 +1,4 @@
+import Creature from "./entities/creatures";
 import display from "./overview/Display";
 import store from "../vuex/store";
 
@@ -5,17 +6,17 @@ const gameloop = {
   run: () => {
     const locationsToCreaturesMap = getCreaturesToUpdate();
     for (const [location, creatures] of locationsToCreaturesMap) {
-      const aggressive = creatures.filter(c => c.attr.aggressive);
+      const aggressive: Creature[] = creatures.filter((creature: Creature) => creature.aggressive);
       if (aggressive.length > 1 && creatures.length > 1) {
         aggressive.forEach(aggressiveCreature => {
           aggressiveCreature.targetCreatures(creatures);
         });
       }
-      creatures.forEach(creature => {
+      creatures.forEach((creature: Creature) => {
         creature.update();
       });
     }
-    display.drawWorld();
+    display.drawWorld!();
     window.requestAnimationFrame(gameloop.run);
   },
 };

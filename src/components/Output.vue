@@ -9,9 +9,28 @@
 import Message from "./Message";
 
 export default {
+  components: {
+    Message,
+  },
   computed: {
     messages() {
       return this.$store.getters.messages;
+    },
+  },
+  methods: {
+    contextMenuItems(vm) {
+      return [
+        {
+          action: () => {
+            console.log(vm.$store);
+          },
+          text: "Log vuex",
+        },
+        {
+          action: () => {},
+          text: "Do Nothing",
+        },
+      ];
     },
   },
   watch: {
@@ -19,25 +38,6 @@ export default {
       this.$nextTick(() => {
         document.querySelector("#output").lastChild.scrollIntoView();
       });
-    },
-  },
-  components: {
-    Message,
-  },
-  methods: {
-    contextMenuItems(vm) {
-      return [
-        {
-          text: "Log vuex",
-          action: () => {
-            console.log(vm.$store);
-          },
-        },
-        {
-          text: "Do Nothing",
-          action: () => {},
-        },
-      ];
     },
   },
 };

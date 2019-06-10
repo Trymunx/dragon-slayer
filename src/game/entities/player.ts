@@ -1,17 +1,20 @@
 import { CreatureName } from "./creatures";
 import GenerateName from "../utils/nameGenerator";
-import { HP } from "./sharedTypes";
 import Position from "../world/position";
+import { EntityType, HP } from "./sharedTypes";
 
 export interface Player {
   attributes?: IAttributes;
   creaturesSlain: { [key in CreatureName]?: number };
-  inventory?: any;
   hp: HP;
+  inventory?: any;
+  isDead: () => boolean;
   level: number;
   name: string;
   slots?: any;
   pos: Position;
+  receiveDamage: (damage: number) => void;
+  type: EntityType;
   xp: number;
 }
 
@@ -34,9 +37,16 @@ const basePlayer: Player = {
     current: 100,
     max: 100,
   },
+  isDead: function() {
+    return this.hp.current <= 0;
+  },
   level: 1,
   name: "",
   pos: new Position(0, 0),
+  receiveDamage: function(damage) {
+    this.hp.current = Math.max(0, this.hp.current - damage);
+  },
+  type: EntityType.Player,
   xp: 0,
 };
 

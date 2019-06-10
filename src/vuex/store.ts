@@ -9,6 +9,8 @@ import newPlayer, { Player } from "../game/entities/player";
 
 Vue.use(Vuex);
 
+type Direction = "UP" | "DOWN" | "LEFT" | "RIGHT";
+
 interface InitialState {
   commandMode: string;
   creatures: {
@@ -59,11 +61,11 @@ const store = new Vuex.Store({
         commit("CLEAR_HIGHLIGHTED");
       }
     },
-    moveCreature({ commit }, data) {
-      commit("MOVE_CREATURE", data);
+    moveCreature({ commit }, { creature, newPos }: { creature: Creature; newPos: Position }) {
+      commit("MOVE_CREATURE", { creature, newPos });
     },
-    movePlayer({ commit }, dir) {
-      switch (dir.toUpperCase()) {
+    movePlayer({ commit }, dir: Direction) {
+      switch (dir) {
         case "UP":
           commit("MOVE_PLAYER", [0, -1]);
           break;
@@ -254,44 +256,44 @@ const store = new Vuex.Store({
         Vue.set(state.creatures, creature.pos.key(), [creature]);
       }
     },
-    ADD_MESSAGE(state, data: Message) {
+    ADD_MESSAGE(state, { entity, message }: Message) {
       state.messages.push({
-        entity: data.entity,
-        message: data.message,
+        entity: entity,
+        message: message,
       });
     },
     CLEAR_HIGHLIGHTED(state) {
       state.highlit = [];
     },
-    DROP_ITEMS(state, data) {
-      const tile = state.world!.getTile(data.pos as Position);
-      tile.items.push(...data.items);
+    DROP_ITEMS(state, { items, pos }: { items: Item[]; pos: Position }) {
+      const tile = state.world!.getTile(pos);
+      tile.items.push(...items);
     },
     HIGHLIGHT_TILES(state, tiles) {
       state.highlit = tiles;
     },
-    MOVE_CREATURE(state, data) {
-      if (state.creatures[data.newPos]) {
-        state.creatures[data.newPos].push(
-          ...state.creatures[data.creature.pos].splice(
-            state.creatures[data.creature.pos].indexOf(data.creature),
+    MOVE_CREATURE(state, { creature, newPos }: { creature: Creature; newPos: Position }) {
+      if (state.creatures[newPos.key()]) {
+        state.creatures[newPos.key()].push(
+          ...state.creatures[creature.pos.key()].splice(
+            state.creatures[creature.pos.key()].indexOf(creature),
             1
           )
         );
-        state.creatures[data.newPos].sort((a, b) => b.level - a.level);
+        state.creatures[newPos.key()].sort((a, b) => b.level - a.level);
       } else {
         Vue.set(
           state.creatures,
-          data.newPos,
-          state.creatures[data.creature.pos].splice(
-            state.creatures[data.creature.pos].indexOf(data.creature),
+          newPos.key(),
+          state.creatures[creature.pos.key()].splice(
+            state.creatures[creature.pos.key()].indexOf(creature),
             1
           )
         );
       }
     },
-    MOVE_PLAYER(state, delta) {
-      const pos = [state.player.pos.x + delta[0], state.player.pos.y + delta[1]];
+    MOVE_PLAYER(state, delta: [number, number]) {
+      const pos = new Position(state.player.pos.x + delta[0], state.player.pos.y + delta[1]);
       state.player = Object.assign(state.player, { pos });
     },
     SET_COMMAND_MODE(state, mode) {

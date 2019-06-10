@@ -1,4 +1,5 @@
-import genCreatures from "../creatures/genCreatures";
+// import genCreatures from "../creatures/genCreatures";
+import { genCreatures } from "../entities/creatures";
 import Position from "./position";
 import store from "../../vuex/store";
 import Tile from "./Tile";

@@ -3,7 +3,7 @@ interface SimpleVector {
   y: number;
 }
 
-type Direction = "UP" | "DOWN" | "LEFT" | "RIGHT" | "NORTH" | "SOUTH" | "WEST" | "EAST";
+export type Direction = "UP" | "DOWN" | "LEFT" | "RIGHT" | "NORTH" | "SOUTH" | "WEST" | "EAST";
 
 export default function parseDir(direction: Direction): SimpleVector {
   let x = 0;

@@ -88,7 +88,7 @@ class Creature {
   }
 
   dropItems() {
-    store.dispatch("dropItems", { pos: this.pos, items: this.items.splice(0) });
+    store.dispatch("dropItems", { items: this.items.splice(0), pos: this.pos });
   }
 
   getHPReport() {
@@ -231,10 +231,15 @@ const getItems = creatureItemsArray => {
   return items;
 };
 
-const getRandomPos = (chunkSize, left, top) => [
-  Math.floor(Math.random() * chunkSize) + left * chunkSize,
-  Math.floor(Math.random() * chunkSize) + top * chunkSize,
-];
+const getRandomPos = (chunkSize, left, top) => {
+  const x = Math.floor(Math.random() * chunkSize) + left * chunkSize;
+  const y = Math.floor(Math.random() * chunkSize) + top * chunkSize;
+  return {
+    key: () => [x, y].join(),
+    x,
+    y,
+  };
+};
 
 const genCreatures = (chunkSize, left, top, playerLevel = 1) => {
   Creatures.forEach(c => {

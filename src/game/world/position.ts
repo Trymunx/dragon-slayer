@@ -13,3 +13,9 @@ export default class Position {
     return [this.x, this.y].join();
   }
 }
+
+export const getRandomPosInChunk = (chunkSize: number, left: number, top: number): Position =>
+  new Position(
+    Math.floor(Math.random() * chunkSize) + left * chunkSize,
+    Math.floor(Math.random() * chunkSize) + top * chunkSize
+  );
