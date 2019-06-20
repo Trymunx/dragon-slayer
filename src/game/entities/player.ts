@@ -2,7 +2,7 @@ import { CreatureName } from "./creatures";
 import GenerateName from "../utils/nameGenerator";
 import Position from "../world/position";
 import store from "../../vuex/store";
-import { ActivityState, HumanoidBody, Entity, EntityType } from "./entity";
+import { ActivityState, Entity, EntityType, HumanoidBody } from "./entity";
 
 // export interface Player {
 //   creaturesSlain: { [key in CreatureName]?: number };
@@ -26,13 +26,7 @@ export class Player extends Entity {
       cooldown: 35,
       currentActivityState: ActivityState.MOVING,
       equipmentSlots: {
-        back: {
-          equipped: null,
-        },
-        feet: {
-          equipped: null,
-        },
-        hands: [
+        arms: [
           {
             fingers: [
               { equipped: null },
@@ -62,6 +56,12 @@ export class Player extends Entity {
             },
           },
         ],
+        back: {
+          equipped: null,
+        },
+        feet: {
+          equipped: null,
+        },
         heads: [
           {
             head: { equipped: null },

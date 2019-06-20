@@ -48,13 +48,13 @@ interface EquipmentSlot {
 }
 
 export interface HumanoidBody {
-  back: EquipmentSlot;
-  feet: EquipmentSlot;
-  hands?: Array<{
+  arms?: Array<{
     fingers: Array<EquipmentSlot>;
     hand: EquipmentSlot;
     wrist: EquipmentSlot;
   }>;
+  back: EquipmentSlot;
+  feet: EquipmentSlot;
   heads: Array<{
     head: EquipmentSlot;
     neck: EquipmentSlot;
