@@ -1,11 +1,11 @@
-import Creature from "../game/entities/creatures";
+import { Creature } from "../game/entities/creatures";
 import { getDirFromVector } from "../game/utils/direction";
+import { Player } from "../game/entities/player";
 import Position from "../game/world/position";
 import Vue from "vue";
 import Vuex from "vuex";
 import World from "../game/world/World";
 import { Item, Message, SurroundingsItem } from "../types";
-import newPlayer, { Player } from "../game/entities/player";
 
 Vue.use(Vuex);
 
@@ -32,7 +32,7 @@ const InitialState: InitialState = {
   highlit: [],
   inputText: "",
   messages: [],
-  player: newPlayer(),
+  player: new Player(),
   splash: true,
 };
 
@@ -86,10 +86,10 @@ const store = new Vuex.Store({
     // receiveInput({ commit }, input) {
     // gsMan.receiveInput(input);
     // },
-    sendMessageAtPosition({ commit, state }, data) {
+    sendMessageAtPosition({ commit, state }, { entity, message, position }) {
       // Only send messages when player is there
-      if (state.player.pos.x === data.position[0] && state.player.pos.y === data.position[1]) {
-        commit("ADD_MESSAGE", { entity: data.entity, message: data.message });
+      if (state.player.position.x === position[0] && state.player.position.y === position[1]) {
+        commit("ADD_MESSAGE", { entity, message });
       }
     },
     setCommandMode({ commit }, mode) {
@@ -145,7 +145,7 @@ const store = new Vuex.Store({
     player: state => state.player,
     playerLevel: state => state.player.level,
     playerName: state => state.player.name,
-    playerPos: state => state.player.pos,
+    playerPos: state => state.player.position,
     splash: state => state.splash,
     surroundings: state => (radius: number = 2) => {
       interface Surroundings {
@@ -166,7 +166,10 @@ const store = new Vuex.Store({
 
       for (let y = -radius; y <= radius; y++) {
         for (let x = -radius; x <= radius; x++) {
-          const pos: Position = new Position(state.player.pos.x + x, state.player.pos.y + y);
+          const pos: Position = new Position(
+            state.player.position.x + x,
+            state.player.position.y + y
+          );
 
           if (state.creatures[pos.key()] && state.creatures[pos.key()].length > 0) {
             const dir = getDirFromVector(x, y);
@@ -247,13 +250,13 @@ const store = new Vuex.Store({
 
   mutations: {
     ADD_CREATURE(state, creature: Creature) {
-      if (state.creatures[creature.pos.key()]) {
-        const creatures = state.creatures[creature.pos.key()]
+      if (state.creatures[creature.position.key()]) {
+        const creatures = state.creatures[creature.position.key()]
           .concat([creature])
           .sort((a, b) => b.level - a.level);
-        state.creatures[creature.pos.key()] = creatures;
+        state.creatures[creature.position.key()] = creatures;
       } else {
-        Vue.set(state.creatures, creature.pos.key(), [creature]);
+        Vue.set(state.creatures, creature.position.key(), [creature]);
       }
     },
     ADD_MESSAGE(state, { entity, message }: Message) {
@@ -275,8 +278,8 @@ const store = new Vuex.Store({
     MOVE_CREATURE(state, { creature, newPos }: { creature: Creature; newPos: Position }) {
       if (state.creatures[newPos.key()]) {
         state.creatures[newPos.key()].push(
-          ...state.creatures[creature.pos.key()].splice(
-            state.creatures[creature.pos.key()].indexOf(creature),
+          ...state.creatures[creature.position.key()].splice(
+            state.creatures[creature.position.key()].indexOf(creature),
             1
           )
         );
@@ -285,15 +288,18 @@ const store = new Vuex.Store({
         Vue.set(
           state.creatures,
           newPos.key(),
-          state.creatures[creature.pos.key()].splice(
-            state.creatures[creature.pos.key()].indexOf(creature),
+          state.creatures[creature.position.key()].splice(
+            state.creatures[creature.position.key()].indexOf(creature),
             1
           )
         );
       }
     },
     MOVE_PLAYER(state, delta: [number, number]) {
-      const pos = new Position(state.player.pos.x + delta[0], state.player.pos.y + delta[1]);
+      const pos = new Position(
+        state.player.position.x + delta[0],
+        state.player.position.y + delta[1]
+      );
       state.player = Object.assign(state.player, { pos });
     },
     SET_COMMAND_MODE(state, mode) {

@@ -1,5 +1,5 @@
 import * as ROT from "rot-js";
-import Creature from "../entities/creatures";
+import { Creature } from "../entities/creatures";
 import { levelColour } from "../utils/colours";
 import { Player } from "../entities/player";
 import Position from "../world/position";
@@ -24,10 +24,10 @@ display.drawWorld = function() {
 
   this.clear();
   const curOpts = this.getOptions();
-  let top = Math.ceil(player.pos.y - curOpts.height / 2);
-  let bot = Math.ceil(player.pos.y + curOpts.height / 2);
-  let left = Math.ceil(player.pos.x - curOpts.width / 2);
-  let right = Math.ceil(player.pos.x + curOpts.width / 2);
+  let top = Math.ceil(player.position.y - curOpts.height / 2);
+  let bot = Math.ceil(player.position.y + curOpts.height / 2);
+  let left = Math.ceil(player.position.x - curOpts.width / 2);
+  let right = Math.ceil(player.position.x + curOpts.width / 2);
   store.dispatch("setDisplayOrigin", [left, top]);
 
   for (let i = 0, y = top; y < bot; y++) {
@@ -58,7 +58,7 @@ display.drawWorld = function() {
         bg = `hsla(0, 0%, 100%, ${Math.min(tile.items.length / 12, 0.8)})`;
       }
 
-      if (x === player.pos.x && y === player.pos.y) {
+      if (x === player.position.x && y === player.position.y) {
         symbol = "※";
         // symbol = "«※»";
         // symbol = "🧙";

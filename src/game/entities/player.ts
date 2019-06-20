@@ -1,55 +1,70 @@
 import { CreatureName } from "./creatures";
 import GenerateName from "../utils/nameGenerator";
 import Position from "../world/position";
-import { EntityType, HP } from "./sharedTypes";
+import store from "../../vuex/store";
+import { ActivityState, Entity, EntityType } from "./entity";
 
-export interface Player {
-  attributes?: IAttributes;
+// export interface Player {
+//   creaturesSlain: { [key in CreatureName]?: number };
+//   inventory?: any;
+//   slots?: any;
+// }
+
+export class Player extends Entity {
   creaturesSlain: { [key in CreatureName]?: number };
-  hp: HP;
-  inventory?: any;
-  isDead: () => boolean;
-  level: number;
   name: string;
-  slots?: any;
-  pos: Position;
-  receiveDamage: (damage: number) => void;
-  type: EntityType;
-  xp: number;
-}
 
-interface IAttributes {
-  armour: number;
-  attackChance: number;
-  damage: number;
-  dodgeChance: number;
-}
+  constructor(name: string = "", level: number = 1) {
+    super({
+      attributes: {
+        armour: 0,
+        attackChance: 0.45,
+        attackSpeed: 30,
+        damage: 10,
+        dodgeChance: 0.15,
+      },
+      cooldown: 35,
+      currentActivityState: ActivityState.MOVING,
+      equipmentSlots: {},
+      hp: {
+        current: 100,
+        max: 100,
+      },
+      items: [],
+      level: level,
+      position: new Position(0, 0),
+      symbol: "|",
+      type: EntityType.Player,
+      xp: 0,
+    });
 
-const basePlayer: Player = {
-  attributes: {
-    armour: 0,
-    attackChance: 0.45,
-    damage: 10,
-    dodgeChance: 0.15,
-  },
-  creaturesSlain: {},
-  hp: {
-    current: 100,
-    max: 100,
-  },
-  isDead: function() {
-    return this.hp.current <= 0;
-  },
-  level: 1,
-  name: "",
-  pos: new Position(0, 0),
-  receiveDamage: function(damage) {
+    this.name = name;
+    this.creaturesSlain = {};
+  }
+
+  printHPReport() {
+    const totalBarLength = 40;
+    const hpPercent = Math.round((this.hp.current / this.hp.max) * 100);
+    const currentHPLength = Math.round((totalBarLength / 100) * hpPercent);
+    const hpReportString = `[${this.symbol.repeat(currentHPLength).padEnd(totalBarLength)}] (${
+      this.hp.current
+    }HP)`;
+    store.dispatch("addMessage", {
+      entity: this.name,
+      message: hpReportString,
+    });
+  }
+
+  receiveDamage(damage: number) {
     this.hp.current = Math.max(0, this.hp.current - damage);
-  },
-  type: EntityType.Player,
-  xp: 0,
-};
-
-export default function newPlayer(name?: string, level?: number): Player {
-  return Object.assign(basePlayer, { level, name });
+    if (this.hp.current === 0) {
+      store.dispatch("addMessage", {
+        entity: "",
+        message: "Game over.", // Do creature report here
+      });
+      this.currentActivityState = ActivityState.DEAD;
+    } else {
+      this.printHPReport();
+    }
+  }
 }

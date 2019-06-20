@@ -1,4 +1,4 @@
-import Creature from "./entities/creatures";
+import { Creature } from "./entities/creatures";
 import display from "./overview/Display";
 import store from "../vuex/store";
 

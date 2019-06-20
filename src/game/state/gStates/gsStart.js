@@ -4,7 +4,7 @@ import GameState from "../GameState";
 import generateName from "../../utils/nameGenerator";
 import gsMan from "../gsMan";
 // import gData from "../data";
-import newPlayer from "../../entities/player";
+import { Player } from "../../entities/player";
 import store from "../../../vuex/store";
 
 var gsStart = new GameState("start");
@@ -31,7 +31,7 @@ gsStart.receiveInputText = function(input) {
     switch (input.toUpperCase()) {
       case "YES":
       case "Y":
-        store.dispatch("setPlayer", newPlayer(this.playerName));
+        store.dispatch("setPlayer", new Player(this.playerName));
         store.dispatch("setSplash", false);
         gsMan.nextState(this.name);
         break;
