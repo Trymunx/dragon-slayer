@@ -301,7 +301,7 @@ export class Creature extends Entity {
         this.currentActivityState === ActivityState.MOVING &&
         c.currentActivityState === ActivityState.MOVING
       ) {
-        console.info(`${this.position}: ${this.species.name} attacking ${c.species.name}`);
+        console.info(`${this.position.key()}: ${this.species.name} attacking ${c.species.name}`);
         this.currentActivityState = ActivityState.FIGHTING;
         c.currentActivityState = ActivityState.FIGHTING;
         this.target = c;
