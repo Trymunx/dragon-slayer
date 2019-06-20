@@ -1,5 +1,3 @@
-import Position from "../world/position";
-
 export enum Direction {
   NORTH = "north",
   SOUTH = "south",
@@ -7,34 +5,23 @@ export enum Direction {
   WEST = "west",
 }
 
-export function parseDir(direction: Direction): Position {
-  let dir: Position = new Position(0, 0);
-
+export function parseDir(direction: Direction): [number, number] {
   switch (direction) {
     case Direction.NORTH:
-      dir.y = 1;
-      break;
-
+      return [0, 1];
     case Direction.SOUTH:
-      dir.y = -1;
-      break;
-
+      return [0, -1];
     case Direction.WEST:
-      dir.x = -1;
-      break;
-
+      return [-1, 0];
     case Direction.EAST:
-      dir.x = 1;
-      break;
-
+      return [1, 0];
     default:
       console.error(`${direction} is not a valid direction.`);
   }
-
-  return dir;
+  return [0, 0];
 }
 
-export function getDirFromVector(x: number, y: number): string {
+export function getDirStringFromVector(x: number, y: number): string {
   let dir = [];
   if (y < 0) dir.push("north");
   else if (y > 0) dir.push("south");

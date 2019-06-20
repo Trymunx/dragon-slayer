@@ -39,8 +39,8 @@ export default class Chunk {
   }
 
   getAdjChunk(direction: Direction) {
-    let offset: Position = parseDir(direction);
-    return this.world.getChunk(new Position(this.pos.x + offset.x, this.pos.y + offset.y));
+    const [x, y] = parseDir(direction);
+    return this.world.getChunk(new Position(this.pos.x + x, this.pos.y + y));
   }
 
   getTile(x: number, y: number) {

@@ -1,5 +1,5 @@
 import { Creature } from "../game/entities/creatures";
-import { getDirFromVector } from "../game/utils/direction";
+import { getDirStringFromVector } from "../game/utils/direction";
 import { Player } from "../game/entities/player";
 import Position from "../game/world/position";
 import Vue from "vue";
@@ -145,7 +145,7 @@ const store = new Vuex.Store({
     player: state => state.player,
     playerLevel: state => state.player.level,
     playerName: state => state.player.name,
-    playerPos: state => state.player.position,
+    playerPos: state => state.player.position || new Position(0, 0),
     splash: state => state.splash,
     surroundings: state => (radius: number = 2) => {
       interface Surroundings {
@@ -172,7 +172,7 @@ const store = new Vuex.Store({
           );
 
           if (state.creatures[pos.key()] && state.creatures[pos.key()].length > 0) {
-            const dir = getDirFromVector(x, y);
+            const dir = getDirStringFromVector(x, y);
             const dist = Math.abs(x) + Math.abs(y);
             const creaturesHere = state.creatures[pos.key()]
               .filter((creature: Creature) => !creature.isDead())
@@ -196,7 +196,7 @@ const store = new Vuex.Store({
                 } else {
                   surr.items[item.name].expanded[new Position(x, y).key()] = {
                     count: 1,
-                    dir: getDirFromVector(x, y),
+                    dir: getDirStringFromVector(x, y),
                     loc: {
                       [pos.key()]: {},
                     },
@@ -211,7 +211,7 @@ const store = new Vuex.Store({
                   expanded: {
                     [new Position(x, y).key()]: {
                       count: 1,
-                      dir: getDirFromVector(x, y),
+                      dir: getDirStringFromVector(x, y),
                       loc: {
                         [pos.key()]: {},
                       },

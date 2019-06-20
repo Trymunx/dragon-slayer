@@ -10,8 +10,7 @@
 export default {
   computed: {
     playerPos() {
-      const pos = this.$store.getters.playerPos;
-      return pos || { x: 0, y: 0 };
+      return this.$store.getters.playerPos;
     },
   },
   data() {
