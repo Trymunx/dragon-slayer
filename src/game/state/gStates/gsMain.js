@@ -52,22 +52,22 @@ gsMain.keyDown = input => {
     switch (input) {
       case "ArrowUp":
       case "w":
-        store.dispatch("movePlayer", "UP");
+        store.dispatch("movePlayer", "north");
         display.drawWorld();
         break;
       case "ArrowDown":
       case "s":
-        store.dispatch("movePlayer", "DOWN");
+        store.dispatch("movePlayer", "south");
         display.drawWorld();
         break;
       case "ArrowLeft":
       case "a":
-        store.dispatch("movePlayer", "LEFT");
+        store.dispatch("movePlayer", "west");
         display.drawWorld();
         break;
       case "ArrowRight":
       case "d":
-        store.dispatch("movePlayer", "RIGHT");
+        store.dispatch("movePlayer", "east");
         display.drawWorld();
         break;
       default:

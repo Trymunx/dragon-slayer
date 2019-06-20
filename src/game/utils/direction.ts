@@ -8,9 +8,9 @@ export enum Direction {
 export function parseDir(direction: Direction): [number, number] {
   switch (direction) {
     case Direction.NORTH:
-      return [0, 1];
-    case Direction.SOUTH:
       return [0, -1];
+    case Direction.SOUTH:
+      return [0, 1];
     case Direction.WEST:
       return [-1, 0];
     case Direction.EAST:

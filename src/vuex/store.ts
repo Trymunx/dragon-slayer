@@ -1,15 +1,13 @@
 import { Creature } from "../game/entities/creatures";
-import { getDirStringFromVector } from "../game/utils/direction";
 import { Player } from "../game/entities/player";
 import Position from "../game/world/position";
 import Vue from "vue";
 import Vuex from "vuex";
 import World from "../game/world/World";
+import { Direction, getDirStringFromVector, parseDir } from "../game/utils/direction";
 import { Item, Message, SurroundingsItem } from "../types";
 
 Vue.use(Vuex);
-
-type Direction = "UP" | "DOWN" | "LEFT" | "RIGHT";
 
 interface InitialState {
   commandMode: string;
@@ -65,20 +63,8 @@ const store = new Vuex.Store({
       commit("MOVE_CREATURE", { creature, newPos });
     },
     movePlayer({ commit }, dir: Direction) {
-      switch (dir) {
-        case "UP":
-          commit("MOVE_PLAYER", [0, -1]);
-          break;
-        case "DOWN":
-          commit("MOVE_PLAYER", [0, 1]);
-          break;
-        case "LEFT":
-          commit("MOVE_PLAYER", [-1, 0]);
-          break;
-        case "RIGHT":
-          commit("MOVE_PLAYER", [1, 0]);
-          break;
-      }
+      const vector = parseDir(dir);
+      commit("MOVE_PLAYER", vector);
     },
     parseCommand(_, command) {
       console.log("Parsing", command);
@@ -295,12 +281,9 @@ const store = new Vuex.Store({
         );
       }
     },
-    MOVE_PLAYER(state, delta: [number, number]) {
-      const pos = new Position(
-        state.player.position.x + delta[0],
-        state.player.position.y + delta[1]
-      );
-      state.player = Object.assign(state.player, { pos });
+    MOVE_PLAYER(state, [x, y]) {
+      const pos = new Position(state.player.position.x + x, state.player.position.y + y);
+      state.player = Object.assign(state.player, { position: pos });
     },
     SET_COMMAND_MODE(state, mode) {
       state.commandMode = mode;
