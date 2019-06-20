@@ -30,11 +30,45 @@ export interface HP {
   max: number;
 }
 
+// type EquipmentSlotName =
+//   | "head"
+//   | "neck"
+//   | "torso"
+//   | "back"
+//   | "wrist"
+//   | "hand"
+//   | "finger"
+//   | "waist"
+//   | "legs"
+//   | "feet";
+
+interface EquipmentSlot {
+  equipped: Item | null;
+  // name: EquipmentSlotName;
+}
+
+export interface HumanoidBody {
+  back: EquipmentSlot;
+  feet: EquipmentSlot;
+  hands?: Array<{
+    fingers: Array<EquipmentSlot>;
+    hand: EquipmentSlot;
+    wrist: EquipmentSlot;
+  }>;
+  heads: Array<{
+    head: EquipmentSlot;
+    neck: EquipmentSlot;
+  }>;
+  legs: EquipmentSlot;
+  torso: EquipmentSlot;
+  waist: EquipmentSlot;
+}
+
 export class Entity {
   attributes: IAttributes;
   cooldown: number;
   currentActivityState: ActivityState;
-  equipmentSlots?: {};
+  equipmentSlots?: HumanoidBody;
   hp: HP;
   items: Item[];
   level: number;
@@ -61,7 +95,7 @@ export class Entity {
     attributes: IAttributes;
     cooldown: number;
     currentActivityState: ActivityState;
-    equipmentSlots?: {};
+    equipmentSlots?: HumanoidBody;
     hp: HP;
     items: Item[];
     level: number;
