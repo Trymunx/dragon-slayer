@@ -63,8 +63,7 @@ const store = new Vuex.Store({
       commit("MOVE_CREATURE", { creature, newPos });
     },
     movePlayer({ commit }, dir: Direction) {
-      const vector = parseDir(dir);
-      commit("MOVE_PLAYER", vector);
+      commit("MOVE_PLAYER", parseDir(dir));
     },
     parseCommand(_, command) {
       console.log("Parsing", command);
