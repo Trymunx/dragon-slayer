@@ -5,7 +5,7 @@
 
 <script>
 import _ from "lodash";
-import display from "../game/overview/Display";
+import { display } from "../game/overview/Display";
 
 export default {
   methods: {

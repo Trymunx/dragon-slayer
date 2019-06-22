@@ -1,4 +1,4 @@
-import display from "../../overview/Display";
+import { display } from "../../overview/Display";
 import displayConf from "../../config/display";
 import gameloop from "../../gameloop";
 import GameState from "../GameState";

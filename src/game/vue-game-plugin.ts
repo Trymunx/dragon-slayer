@@ -1,6 +1,6 @@
-import display from "./overview/Display";
+import { display } from "./overview/Display";
 import gData from "./state/data";
-import gsMan from "./state/gsMan";
+import { gsMan } from "./state/gsMan";
 import { Display } from "rot-js";
 // import PluginFunction from "vue/types";
 import _Vue from "vue";
@@ -44,4 +44,4 @@ export default function install<T>(Vue: typeof _Vue, options?: T): void {
     },
     display: display,
   } as gamePlugin;
-};
+}

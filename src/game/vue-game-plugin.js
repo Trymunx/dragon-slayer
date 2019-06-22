@@ -1,4 +1,4 @@
-import display from "./overview/Display";
+import { display } from "./overview/Display";
 import gData from "./state/data";
 import gsMan from "./state/gsMan";
 // import store from "../vuex/store";
