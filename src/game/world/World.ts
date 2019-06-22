@@ -23,7 +23,7 @@ export default class World {
     //   this.chunks = new Map();
     //   this.type = type; // Example types: dungeon, forest, dragon-lair
     //   this.size = size > 0 ? size : 8; // Arbitrary limit for player spawn chunk
-    //   let spawnChunk = this.genChunk(~~(RNG(this.size)), ~~(RNG(this.size)));
+    //   let spawnChunk = this.genChunk(Math.floor(RNG(this.size)), Math.floor(RNG(this.size)));
   }
 
   getChunk(pos: Position) {
@@ -41,7 +41,6 @@ export default class World {
   }
 
   getChunkFromTile(tile: Position): Chunk {
-    // Can't use ~~ here because values can be negative
     const chunkCoords = new Position(
       Math.floor(tile.x / Chunk.size),
       Math.floor(tile.y / Chunk.size)

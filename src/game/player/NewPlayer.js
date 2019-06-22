@@ -57,7 +57,7 @@ class Player {
   }
 
   calcMaxHP(level = this.attributes.level) {
-    return 10 * ~~((10 * level ** 1.3 + 90) / 10);
+    return 10 * Math.floor((10 * level ** 1.3 + 90) / 10);
   }
 
   get expToNextLevel() {

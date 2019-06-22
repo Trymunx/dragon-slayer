@@ -27,7 +27,7 @@ class ItemFactory {
       const itemParams = {};
       for (const key in this) {
         if (Array.isArray(this[key]) && key !== "value" && key !== "val") {
-          itemParams[key] = ~~getRandomInRange(this[key][0], this[key][1]);
+          itemParams[key] = Math.floor(getRandomInRange(this[key][0], this[key][1]));
         } else if (key !== "value") {
           itemParams[key] = this[key];
         }
@@ -45,7 +45,7 @@ class ItemFactory {
 }
 
 function getRandomInRange(min, max) {
-  return ~~(Math.random() * (max - min + 1)) + min;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 /**
@@ -55,7 +55,7 @@ function getRandomInRange(min, max) {
 function getItemValue(item, prop, range) {
   let val = item[prop];
   let slope = (item.val[1] - item.val[0] + 1) / (range[1] - range[0] + 1);
-  return ~~((val - range[0]) * slope + item.val[0]);
+  return Math.floor((val - range[0]) * slope + item.val[0]);
 }
 
 Crafting.forEach(i => {

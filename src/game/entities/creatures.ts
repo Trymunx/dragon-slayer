@@ -96,8 +96,8 @@ export class Creature extends Entity {
     pos: Position;
     template: CreatureTemplate;
   }) {
-    const moveSpeed = ~~RNG(20, 600);
-    const hp = ~~RNG(template.attributes.minTotalHP, template.attributes.maxTotalHP);
+    const moveSpeed = Math.floor(RNG(20, 600));
+    const hp = Math.floor(RNG(template.attributes.minTotalHP, template.attributes.maxTotalHP));
     super({
       attributes: {
         armour: 1,
@@ -129,7 +129,8 @@ export class Creature extends Entity {
     this.items = template.drops.harvest
       .filter(item => gameItems.has(item.name))
       .map(item => {
-        const quantity = item.quantity[1] !== 1 ? ~~RNG(item.quantity[0], item.quantity[1]) : 1;
+        const quantity =
+          item.quantity[1] !== 1 ? Math.floor(RNG(item.quantity[0], item.quantity[1])) : 1;
         return gameItems.get(item.name).newItem(quantity);
       })
       .concat(getGold(template.drops.gold));
@@ -173,7 +174,7 @@ export class Creature extends Entity {
       console.error(attackName + " doesn't exist for " + this.species.name);
       return;
     }
-    const damage = ~~(RNG(attack.minDamage, attack.maxDamage) * this.level) / 1.5;
+    const damage = Math.floor(RNG(attack.minDamage, attack.maxDamage) * this.level) / 1.5;
     this.target.receiveDamage(damage);
 
     if (this.target instanceof Creature) {
@@ -185,7 +186,8 @@ export class Creature extends Entity {
         position: this.position,
       });
     } else if (this.target instanceof Player) {
-      const attackMessage = attack.messages[~~RNG(attack.messages.length)] + damage + " HP";
+      const attackMessage =
+        attack.messages[Math.floor(RNG(attack.messages.length))] + damage + " HP";
       store.dispatch("addMessage", {
         entity: this.species.name,
         message: attackMessage,
@@ -259,7 +261,7 @@ export class Creature extends Entity {
   }
 
   move() {
-    switch (~~(Math.random() * 4)) {
+    switch (Math.floor(Math.random() * 4)) {
       case 0:
         store.dispatch("moveCreature", {
           creature: this,
@@ -337,7 +339,7 @@ export class Creature extends Entity {
 const getGold = ({ max, dropChance }: { max: number; dropChance: number }): Item[] => {
   const gold = [];
   if (RNG() > dropChance) {
-    const quantity = ~~RNG(max);
+    const quantity = Math.floor(RNG(max));
     for (let i = 0; i < quantity; i++) {
       gold.push(gameItems.get("gold").newItem());
     }
@@ -352,7 +354,8 @@ const getItems = (creatureItemsArray: HarvestItems): Item[] => {
     if (gameItems.has(item.name)) {
       let quantity;
       if (item.quantity[1] !== 1) {
-        quantity = ~~(Math.random() * (item.quantity[1] - item.quantity[0] + 1)) + item.quantity[0];
+        quantity =
+          Math.floor(Math.random() * (item.quantity[1] - item.quantity[0] + 1)) + item.quantity[0];
       } else {
         quantity = 1;
       }

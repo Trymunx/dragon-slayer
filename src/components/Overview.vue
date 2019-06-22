@@ -13,8 +13,8 @@ export default {
       let pos = { x: event.x, y: event.y };
       let canvas = document.querySelector("#overview > canvas");
       let dOpts = display.getOptions();
-      let displayX = ~~((pos.x - canvas.offsetLeft) * dOpts.width / canvas.offsetWidth);
-      let displayY = ~~((pos.y - canvas.offsetTop) * dOpts.height / canvas.offsetHeight);
+      let displayX = Math.floor((pos.x - canvas.offsetLeft) * dOpts.width / canvas.offsetWidth);
+      let displayY = Math.floor((pos.y - canvas.offsetTop) * dOpts.height / canvas.offsetHeight);
       let displayOrigin = this.$store.getters.displayOrigin;
       let creaturesOnTile = this.$store.getters.creaturesAt(
         displayX + displayOrigin.x,

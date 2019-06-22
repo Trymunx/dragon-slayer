@@ -64,7 +64,7 @@ const genTree = () => {
 
   trees.sort((a, b) => b.prob - a.prob);
   let total = trees.reduce((acc, el) => (el.prob += acc), 0);
-  let rand = ~~(Math.random() * total);
+  let rand = Math.floor(Math.random() * total);
   let tree = 0;
   while (rand >= trees[tree + 1].prob) {
     tree++;
