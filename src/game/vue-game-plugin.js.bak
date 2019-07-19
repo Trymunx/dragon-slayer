@@ -1,35 +1,35 @@
 import { display } from "./overview/Display";
 import gData from "./state/data";
-import gsMan from "./state/gsMan";
+import { gsMan } from "./state/gsMan";
 // import store from "../vuex/store";
 // import CommandParser from "./Commands/CommandParser";
 
 export default {
   install: Vue => {
     Vue.prototype.$game = {
-      start() {
-        gsMan.StartGame();
-      },
-      receiveInputKeyUp(input) {
-        gsMan.receiveInputKeyUp(input);
-      },
-      receiveInputKeyDown(input) {
-        gsMan.receiveInputKeyDown(input);
-      },
-      receiveInputText(text) {
-        gsMan.receiveInputText(text);
+      display: display,
+      displaySplash() {
+        return gData.displaySplash;
       },
       parseCommand(command) {
         // return CommandParser.ParseCommand(command);
         console.log("Parsing " + command);
       },
+      receiveInputKeyDown(input) {
+        gsMan.receiveInputKeyDown(input);
+      },
+      receiveInputKeyUp(input) {
+        gsMan.receiveInputKeyUp(input);
+      },
+      receiveInputText(text) {
+        gsMan.receiveInputText(text);
+      },
+      start() {
+        gsMan.StartGame();
+      },
       worldExists() {
         return gData.world !== null;
       },
-      displaySplash() {
-        return gData.displaySplash;
-      },
-      display: display,
     };
   },
 };

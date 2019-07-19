@@ -1,9 +1,8 @@
-import { display } from "./overview/Display";
+import _Vue from "vue";
 import gData from "./state/data";
 import { gsMan } from "./state/gsMan";
-import { Display } from "rot-js";
+import { display, Display } from "./overview/Display";
 // import PluginFunction from "vue/types";
-import _Vue from "vue";
 // import store from "../vuex/store";
 // import CommandParser from "./Commands/CommandParser";
 
@@ -20,28 +19,28 @@ export interface gamePlugin {
 
 export default function install<T>(Vue: typeof _Vue, options?: T): void {
   Vue.prototype.$game = {
-    start() {
-      gsMan.StartGame();
-    },
-    receiveInputKeyUp(input) {
-      gsMan.receiveInputKeyUp(input);
-    },
-    receiveInputKeyDown(input) {
-      gsMan.receiveInputKeyDown(input);
-    },
-    receiveInputText(text) {
-      gsMan.receiveInputText(text);
+    display: display,
+    displaySplash() {
+      return gData.displaySplash;
     },
     parseCommand(command) {
       // return CommandParser.ParseCommand(command);
       console.log("Parsing " + command);
     },
+    receiveInputKeyDown(input) {
+      gsMan.receiveInputKeyDown(input);
+    },
+    receiveInputKeyUp(input) {
+      gsMan.receiveInputKeyUp(input);
+    },
+    receiveInputText(text) {
+      gsMan.receiveInputText(text);
+    },
+    start() {
+      gsMan.StartGame();
+    },
     worldExists() {
       return gData.world !== null;
     },
-    displaySplash() {
-      return gData.displaySplash;
-    },
-    display: display,
   } as gamePlugin;
 }
