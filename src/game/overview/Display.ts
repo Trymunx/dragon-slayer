@@ -1,4 +1,4 @@
-import { Display } from "rot-js";
+import * as ROT from "rot-js";
 import { Creature } from "../entities/creatures";
 import { levelColour } from "../utils/colours";
 import { Player } from "../entities/player";
@@ -7,38 +7,16 @@ import store from "../../vuex/store";
 import Tile from "../world/Tile";
 import World from "../world/World";
 
-// Copied from source, removed layoutOptions because I didn't want to import that interface too.
-interface DisplayOptions {
-  width: number;
-  height: number;
-  transpose: boolean;
-  fontSize: number;
-  spacing: number;
-  border: number;
-  forceSquareRatio: boolean;
-  fontFamily: string;
-  fontStyle: string;
-  fg: string;
-  bg: string;
-  tileWidth: number;
-  tileHeight: number;
-  tileMap: {
-    [key: string]: [number, number];
-  };
-  tileSet: null | HTMLCanvasElement | HTMLImageElement | HTMLVideoElement | ImageBitmap;
-  tileColorize: Boolean;
-}
-
-export interface Display {
+export interface Display extends ROT.Display {
   drawWorld: () => void;
 }
 
-export const display: Display = new Display({
+export const display = new ROT.Display({
   bg: "#1e1e1e",
   fg: "#daddd8",
   // bg: "#9e9e9e", // For debugging
   forceSquareRatio: true,
-});
+}) as Display;
 
 display.drawWorld = function() {
   const world: World = store.getters.world;
