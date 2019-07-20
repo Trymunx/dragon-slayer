@@ -15,7 +15,7 @@ export default class World {
     this.spawnChunk = this.genChunk(new Position(0, 0));
     // Generate surrounding chunks
     [[0, 1], [0, -1], [1, 0], [-1, 0]].forEach(c => {
-      console.log("generating chunk", c[0], c[1]);
+      // console.log("generating chunk", c[0], c[1]);
       this.genChunk(new Position(c[0], c[1]));
     });
 

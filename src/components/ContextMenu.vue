@@ -13,12 +13,16 @@ let data = {
   items: [],
   pos: {
     x: 0,
-    y: 0
-  }
+    y: 0,
+  },
 };
 
 export const mixin = {
   methods: {
+    contextMenuItems(vm, menuItems, event) {},
+    hideContextMenu() {
+      data.items = [];
+    },
     showContextMenu(event) {
       let pos = { x: event.x, y: event.y };
       let items = [];
@@ -29,15 +33,34 @@ export const mixin = {
         comp = comp.$parent;
       }
       data.items = items;
-      this.$nextTick(() => data.pos = pos);
+      this.$nextTick(() => {
+        data.pos = pos;
+      });
     },
-    contextMenuItems(vm, menuItems, event) {},
-    hideContextMenu() {
-      data.items = [];
-    }
-  }
+  },
 };
 export default {
+  computed: {
+    show() {
+      return this.items.length > 0;
+    },
+    style() {
+      const { offsetWidth, offsetHeight } = document.getElementById(
+        "context-menu"
+      ) || { offsetHeight: 0, offsetWidth: 0 };
+      const [posX, posY] = [this.pos.x, this.pos.y];
+      return {
+        left:
+          posX + offsetWidth < window.innerWidth
+            ? `${posX}px`
+            : `${posX - offsetWidth}px`,
+        top:
+          posY + offsetHeight < window.innerHeight
+            ? `${posY}px`
+            : `${posY - offsetHeight}px`,
+      };
+    },
+  },
   data() {
     return data;
   },
@@ -49,29 +72,8 @@ export default {
         item.action();
         this.hideContextMenu();
       }
-    }
-  },
-  computed: {
-    show() {
-      return this.items.length > 0
     },
-    style() {
-      const { offsetWidth, offsetHeight } = document.getElementById(
-        "context-menu"
-      ) || { offsetWidth: 0, offsetHeight: 0 };
-      const [posX, posY] = [this.pos.x, this.pos.y];
-      return {
-        left:
-          posX + offsetWidth < window.innerWidth
-            ? `${posX}px`
-            : `${posX - offsetWidth}px`,
-        top:
-          posY + offsetHeight < window.innerHeight
-            ? `${posY}px`
-            : `${posY - offsetHeight}px`
-      };
-    }
-  }
+  },
 };
 </script>
 

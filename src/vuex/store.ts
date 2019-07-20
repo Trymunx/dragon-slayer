@@ -25,7 +25,7 @@ interface InitialState {
   creatures: {
     [location: string]: Creature[];
   };
-  displayOrigin: Position;
+  displayOrigin: [number, number];
   highlit: [];
   inputText: string;
   messages: Message[];
@@ -37,7 +37,7 @@ interface InitialState {
 const InitialState: InitialState = {
   commandMode: "text",
   creatures: {},
-  displayOrigin: new Position(0, 0),
+  displayOrigin: [0, 0],
   highlit: [],
   inputText: "",
   messages: [],
@@ -91,8 +91,8 @@ const store = new Vuex.Store({
     setCommandMode({ commit }, mode) {
       commit("SET_COMMAND_MODE", mode);
     },
-    setDisplayOrigin({ commit }, pos) {
-      commit("SET_DISPLAY_ORIGIN", pos);
+    setDisplayOrigin({ commit }, vector) {
+      commit("SET_DISPLAY_ORIGIN", vector);
     },
     setInputText({ commit }, text) {
       commit("SET_INPUT_TEXT", text);
@@ -117,7 +117,7 @@ const store = new Vuex.Store({
   getters: {
     creatures: state => state.creatures,
     creaturesAt: state => (x: number, y: number) => {
-      return state.creatures[new Position(x, y).key()];
+      return state.creatures[new Position(x, y).key()] || [];
     },
     creaturesWithinRadius: state => (pos: Position, radius: number = 10) => {
       if (!pos) {
@@ -137,6 +137,11 @@ const store = new Vuex.Store({
     highlit: state => state.highlit,
     inputText: state => state.inputText,
     instantMode: state => state.commandMode === "instant",
+    itemsOnTile: state => (x: number, y: number) => {
+      console.log(x, y);
+      const tile = state.world && state.world.getTile(new Position(x, y));
+      return tile ? tile.items : [];
+    },
     messages: state => state.messages,
     player: state => state.player,
     playerLevel: state => state.player.level,
@@ -287,8 +292,8 @@ const store = new Vuex.Store({
     SET_COMMAND_MODE(state, mode) {
       state.commandMode = mode;
     },
-    SET_DISPLAY_ORIGIN(state, pos) {
-      state.displayOrigin = pos;
+    SET_DISPLAY_ORIGIN(state, vector) {
+      state.displayOrigin = vector;
     },
     SET_INPUT_TEXT(state, text) {
       state.inputText = text;

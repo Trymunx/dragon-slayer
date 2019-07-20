@@ -201,18 +201,27 @@ export class Creature extends Entity {
     }
   }
 
-  printHPReport() {
+  printHPReport(global: boolean = false) {
     const totalBarLength = 40;
     const hpPercent = Math.round((this.hp.current / this.hp.max) * 100);
     const currentHPLength = Math.round((totalBarLength / 100) * hpPercent);
     const hpReportString = `[${this.symbol.repeat(currentHPLength).padEnd(totalBarLength)}] (${
       this.hp.current
     }HP)`;
-    store.dispatch("sendMessageAtPosition", {
-      entity: this.species.name,
-      message: hpReportString,
-      position: this.position,
-    });
+
+    // Disable eslint because it complains about ternary indentation
+    /* eslint-disable */
+    global
+      ? store.dispatch("addMessage", {
+          entity: this.species.name,
+          message: hpReportString,
+        })
+      : store.dispatch("sendMessageAtPosition", {
+          entity: this.species.name,
+          message: hpReportString,
+          position: this.position,
+        });
+    /* eslint-enable */
   }
 
   receiveDamage(damage: number) {

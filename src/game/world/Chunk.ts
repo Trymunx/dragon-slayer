@@ -55,7 +55,7 @@ export default class Chunk {
   }
 
   generate() {
-    console.info("Generating: %O", this);
+    // console.info("Generating: %O", this);
     // Terrain -> structure -> creatures -> player
     let pLvl = store.getters.playerLevel;
     genCreatures(Chunk.size, this.pos.x, this.pos.y, pLvl);
