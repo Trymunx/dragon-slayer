@@ -175,7 +175,6 @@ export class Creature extends Entity {
       return;
     }
     const damage = Math.floor((RNG(attack.minDamage, attack.maxDamage) * this.level) / 1.5);
-    this.target.receiveDamage(damage);
 
     if (this.target instanceof Creature) {
       store.dispatch("sendMessageAtPosition", {
@@ -193,6 +192,8 @@ export class Creature extends Entity {
         message: attackMessage,
       });
     }
+
+    this.target.receiveDamage(damage);
 
     if (this.target.isDead()) {
       this.currentActivityState = ActivityState.MOVING;

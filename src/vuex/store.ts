@@ -84,7 +84,7 @@ const store = new Vuex.Store({
     // },
     sendMessageAtPosition({ commit, state }, { entity, message, position }) {
       // Only send messages when player is there
-      if (state.player.position.x === position[0] && state.player.position.y === position[1]) {
+      if (state.player.position.x === position.x && state.player.position.y === position.y) {
         commit("ADD_MESSAGE", { entity, message });
       }
     },
