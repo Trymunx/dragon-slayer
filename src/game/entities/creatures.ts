@@ -338,13 +338,12 @@ export class Creature extends Entity {
 
 const getGold = ({ max, dropChance }: { max: number; dropChance: number }): Item[] => {
   const gold = [];
-  if (RNG() > dropChance) {
+  if (RNG() < dropChance) {
     const quantity = Math.floor(RNG(max));
     for (let i = 0; i < quantity; i++) {
       gold.push(gameItems.get("gold").newItem());
     }
   }
-  // console.log(gold);
   return gold;
 };
 
