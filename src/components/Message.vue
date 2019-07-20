@@ -7,20 +7,18 @@
 
 <script>
 export default {
-  props: ["entity", "message"],
   methods: {
     contextMenuItems(vm) {
       return [
         {
-          text: "Resend message",
           action: () => {
             vm.$store.dispatch("setInputText",
               vm.message
             );
           },
+          text: "Resend message",
         },
         {
-          text: `Reply to ${vm.entity}`,
           action: () => {
             let entityName;
             if (vm.entity.split(" ").length > 1) {
@@ -30,16 +28,18 @@ export default {
             }
             vm.$store.dispatch("setInputText", `${entityName} `);
           },
+          text: `Reply to ${vm.entity}`,
         },
         {
-          text: `Inspect ${vm.entity}`,
           action: () => {
             console.log("TODO: pass more than just the name into the message to inspect.");
           },
+          text: `Inspect ${vm.entity}`,
         },
       ];
     },
   },
+  props: ["entity", "message"],
 };
 </script>
 
