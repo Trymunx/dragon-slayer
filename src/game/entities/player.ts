@@ -13,6 +13,7 @@ import { ActivityState, Entity, EntityType, HumanoidBody } from "./entity";
 export class Player extends Entity {
   creaturesSlain: { [key in CreatureName]?: number };
   name: string;
+  xp: number;
 
   constructor(name: string = "", level: number = 1) {
     super({
@@ -81,11 +82,44 @@ export class Player extends Entity {
       position: new Position(0, 0),
       symbol: "|",
       type: EntityType.Player,
-      xp: 0,
     });
 
     this.name = name;
     this.creaturesSlain = {};
+    this.xp = 0;
+  }
+
+  get xpToNextLevel(): number {
+    return Math.round(50 * this.level ** 1.3);
+  }
+
+  get isFullHealth(): boolean {
+    return this.hp.current >= this.hp.max;
+  }
+
+  addXP(xp: number) {
+    while (this.xpToNextLevel < xp) {
+      xp -= this.xpToNextLevel;
+      this.levelUp();
+    }
+    this.xp = xp;
+  }
+
+  heal(amount: number): number {
+    const healed = Math.min(this.hp.max - this.hp.current, amount);
+    this.hp.current += healed;
+
+    return healed;
+  }
+
+  levelUp() {
+    this.level++;
+    this.hp.max = 10 * Math.floor((10 * this.level ** 1.3 + 90) / 10);
+
+    store.dispatch("addMessage", {
+      entity: "Level up",
+      message: `Congratulations! You are now level ${this.level}.`,
+    });
   }
 
   printHPReport() {

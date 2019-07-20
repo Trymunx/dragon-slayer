@@ -76,7 +76,6 @@ export class Entity {
   symbol: string;
   target?: Creature | Player;
   type: EntityType;
-  xp?: number;
 
   constructor({
     attributes,
@@ -90,7 +89,6 @@ export class Entity {
     symbol,
     target,
     type,
-    xp,
   }: {
     attributes: IAttributes;
     cooldown: number;
@@ -103,7 +101,6 @@ export class Entity {
     symbol: string;
     target?: Creature | Player;
     type: EntityType;
-    xp?: number;
   }) {
     this.attributes = attributes;
     this.cooldown = cooldown;
@@ -116,7 +113,6 @@ export class Entity {
     this.symbol = symbol;
     this.target = target;
     this.type = type;
-    this.xp = xp;
   }
 
   isDead(): boolean {
