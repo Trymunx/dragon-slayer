@@ -5,6 +5,7 @@ import { GameState } from "../GameState";
 import { gsMan } from "../gsMan";
 import store from "../../../vuex/store";
 import World from "../../world/World";
+import * as Parser from "../../Commands/parser"
 
 export class MainGameState extends GameState {
   constructor() {
@@ -99,20 +100,7 @@ export class MainGameState extends GameState {
 
   receiveInputText(input: string) {
     if (!store.getters.instantMode) {
-      if (/^\/help$/.test(input)) {
-        store.dispatch("addMessage", {
-          entity: "Help",
-          message:
-            "Press 'enter' to enter typed command mode, and 'escape' to get back to command mode." +
-            "\nYou can right-click on the map to see what is on that tile.",
-        });
-      } else {
-        // Handle as text command
-        store.dispatch("addMessage", {
-          entity: "Main state",
-          message: "Response to " + input,
-        });
-      }
+      console.log(Parser.parse(input))
     }
   }
 }
