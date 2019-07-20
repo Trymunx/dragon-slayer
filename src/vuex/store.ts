@@ -9,6 +9,17 @@ import { Item, Message, SurroundingsItem } from "../types";
 
 Vue.use(Vuex);
 
+interface Surroundings {
+  creatures: {
+    creature: Creature;
+    dir: string;
+    dist: number;
+  }[];
+  items: {
+    [name: string]: SurroundingsItem;
+  };
+}
+
 interface InitialState {
   commandMode: string;
   creatures: {
@@ -133,17 +144,6 @@ const store = new Vuex.Store({
     playerPos: state => state.player.position || new Position(0, 0),
     splash: state => state.splash,
     surroundings: state => (radius: number = 2) => {
-      interface Surroundings {
-        creatures: {
-          creature: Creature;
-          dir: string;
-          dist: number;
-        }[];
-        items: {
-          [name: string]: SurroundingsItem;
-        };
-      }
-
       let surr: Surroundings = {
         creatures: [],
         items: {},
@@ -303,7 +303,7 @@ const store = new Vuex.Store({
       state.splash = val;
     },
     SET_WORLD(state, world) {
-      state.world = world;
+      Vue.set(state, "world", world);
     },
     START_GAME() {
       console.log("Probably not going to work here buddy");
