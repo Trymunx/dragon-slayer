@@ -40,8 +40,10 @@
                  @mouseleave="highlight()"
                  @click.left="toggleExpanded(item)"
                  class="item-list-wrapper">
-              <span class="item-count">{{item.count}}</span>
-              <span class="item-name">{{item.count === 1 ? item.name : item.plural}}</span>
+              <div class="flex-container">
+                <span class="item-count">{{item.count}}</span>
+                <span class="item-name">{{item.count === 1 ? item.name : item.plural}}</span>
+              </div>
               <div v-for="(expanded, i) in item.expanded"
                    :key="`expanded-${i}`"
                    @mouseenter="highlight(null, expanded.loc)"
@@ -187,9 +189,14 @@ export default {
   width: 40px;
 }
 
+.flex-container {
+  display: flex;
+  align-items: center;
+}
+
 .item-list-wrapper {
-  padding: 2px 0px;
   cursor: pointer;
+  padding: 2px 0px;
 }
 
 .item-name {
@@ -208,12 +215,13 @@ export default {
 }
 
 .expanded-items {
+  align-items: baseline;
   background-color: #1e1e1e;
-  padding: 2px 0px 2px 10px;
-  width: 95%;
   display: flex;
   flex-wrap: nowrap;
-  align-items: baseline;
+  margin: 5px 0px;
+  padding: 2px 0px 2px 10px;
+  width: 95%;
 }
 
 .item-list-wrapper > div:first-of-type {
