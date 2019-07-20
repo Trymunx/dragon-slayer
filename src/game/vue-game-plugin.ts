@@ -1,5 +1,4 @@
 import _Vue from "vue";
-import gData from "./state/data";
 import { gsMan } from "./state/gsMan";
 import { display, Display } from "./overview/Display";
 // import PluginFunction from "vue/types";
@@ -20,9 +19,6 @@ export interface gamePlugin {
 export default function install<T>(Vue: typeof _Vue, options?: T): void {
   Vue.prototype.$game = {
     display: display,
-    displaySplash() {
-      return gData.displaySplash;
-    },
     parseCommand(command) {
       // return CommandParser.ParseCommand(command);
       console.log("Parsing " + command);
@@ -38,9 +34,6 @@ export default function install<T>(Vue: typeof _Vue, options?: T): void {
     },
     start() {
       gsMan.StartGame();
-    },
-    worldExists() {
-      return gData.world !== null;
     },
   } as gamePlugin;
 }

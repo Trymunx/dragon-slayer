@@ -1,5 +1,4 @@
 import { CreatureName } from "./creatures";
-import GenerateName from "../utils/nameGenerator";
 import Position from "../world/position";
 import store from "../../vuex/store";
 import { ActivityState, Entity, EntityType, HumanoidBody } from "./entity";

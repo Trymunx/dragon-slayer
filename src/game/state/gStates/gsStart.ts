@@ -1,7 +1,7 @@
 import { display } from "../../overview/Display";
 import displayConf from "../../config/display.json";
 import { GameState } from "../GameState";
-import generateName from "../../utils/nameGenerator";
+import { generateName } from "../../utils/nameGenerator";
 import { gsMan } from "../gsMan";
 import { Player } from "../../entities/player";
 import store from "../../../vuex/store";

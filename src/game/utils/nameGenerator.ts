@@ -1,4 +1,4 @@
-const firstNames = [
+const firstNames: string[] = [
   "Anno",
   "Panteleon",
   "Orderic",
@@ -181,7 +181,7 @@ const firstNames = [
   "Biza",
 ];
 
-const lastNames = [
+const lastNames: string[] = [
   "Undertree",
   "Proudbottom",
   "Hairyfoot",
@@ -363,7 +363,7 @@ const lastNames = [
   "Grandstream",
 ];
 
-const fullNames = [
+const fullNames: string[] = [
   "Fredericus the Deviant",
   "Euvrouin the Bald",
   "Gilebert the Clever",
@@ -416,7 +416,7 @@ const fullNames = [
   "Countess Isota",
 ];
 
-const genName = () => {
+export const generateName = (): string => {
   let name = "";
 
   if (Math.random() < 0.1) {
@@ -429,5 +429,3 @@ const genName = () => {
   }
   return name;
 };
-
-export default genName;
