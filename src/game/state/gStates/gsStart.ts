@@ -64,7 +64,7 @@ export class StartGameState extends GameState {
   }
 
   confirmPlayerName(input: string): void {
-    if (/^gen$/.test(input) || /^generate$/.test(input)) {
+    if (/^\/gen$/.test(input) || /^\/generate$/.test(input)) {
       input = generateName();
     }
     this.playerName = input;
