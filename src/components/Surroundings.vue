@@ -14,7 +14,8 @@
                   {{creatureData.creature.symbol}}
                 </td>
                 <td class="creature-name">
-                  {{creatureData.creature.isDead() ? "dead " : ""}}{{creatureData.creature.name}}
+                  {{creatureData.creature.isDead() ? "dead" : ""}}
+                  {{creatureData.creature.species.name}}
                 </td>
                 <td class="creature-level">
                   Level
@@ -91,7 +92,7 @@ export default {
     highlight(entity, locations) {
       if (entity) {
         let highlit = {
-          [entity.pos]: {
+          [entity.position.key()]: {
             colour: entity.isDead() ? "#888" : levelColour(entity.level, 30),
             symbol: entity.symbol,
           },
@@ -100,7 +101,7 @@ export default {
       } else if (locations) {
         this.$store.dispatch("highlight", locations);
       } else {
-        this.$store.dispatch("highlight");
+        this.$store.dispatch("clearHighlight");
       }
     },
     toggleExpanded(item) {

@@ -53,6 +53,9 @@ const store = new Vuex.Store({
     addMessage({ commit }, data) {
       commit("ADD_MESSAGE", data);
     },
+    clearHighlight({ commit }) {
+      commit("CLEAR_HIGHLIGHTED");
+    },
     dropItems({ commit }, data) {
       commit("DROP_ITEMS", data);
     },
@@ -64,11 +67,7 @@ const store = new Vuex.Store({
       commit("SET_INPUT_TEXT", "");
     },
     highlight({ commit }, tiles) {
-      if (tiles) {
-        commit("HIGHLIGHT_TILES", tiles);
-      } else {
-        commit("CLEAR_HIGHLIGHTED");
-      }
+      commit("HIGHLIGHT_TILES", tiles);
     },
     moveCreature({ commit }, { creature, newPos }: { creature: Creature; newPos: Position }) {
       commit("MOVE_CREATURE", { creature, newPos });
@@ -134,11 +133,10 @@ const store = new Vuex.Store({
       return creatures;
     },
     displayOrigin: state => state.displayOrigin,
-    highlit: state => state.highlit,
+    highlit: state => state.highlit || [],
     inputText: state => state.inputText,
     instantMode: state => state.commandMode === "instant",
     itemsOnTile: state => (x: number, y: number) => {
-      console.log(x, y);
       const tile = state.world && state.world.getTile(new Position(x, y));
       return tile ? tile.items : [];
     },
