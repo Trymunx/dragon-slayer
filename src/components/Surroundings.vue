@@ -23,7 +23,9 @@
                   {{creatureData.creature.level}}
                 </td>
                 <td class="direction">
-                  (<span :style="creatureData.dir === 'here' ? getStyle(creatureData.creature.level) : ''">{{creatureData.dir}}</span>)
+                  (<span
+                     :style="creatureData.dist ? '' : getStyle(creatureData.creature.level)"
+                     >{{creatureData.dir}}</span>)
                 </td>
               </tr>
             </tbody>
