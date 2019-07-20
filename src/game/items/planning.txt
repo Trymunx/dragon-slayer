@@ -42,3 +42,93 @@ If creature doesn't have slots available, give more experience for higher value,
 
 
 Weapons get stronger the longer you use them for, as you learn their unique traits
+
+Item spec:
+- need to be stackable, e.g. gold shouldn't be stored in individual items.
+- should they only stack if they have exactly the same attributes? Seems unlikely that this would be
+  the case if they're generated randomly. Gold would be a special case if so though
+- need a way to calculate the value based on what they can do
+- need to define what the items can be used for:
+  - slot for equipable
+  - properties for alchemy?
+  - healing values for food? (e.g. cooked, uncooked, combined etc.)
+  - uses for crafting
+- need an easy concise way of defining templates and adding new items, as well as generating items
+  from this template. Item Factory might be the way to go
+
+structure:
+{
+  name: string;
+  value: [() => number]
+}
+
+My way of defining items with components:
+
+Item:
+  generalProperties: {
+    name: string,
+    value: number, // memoised from other properties
+    components: [ food, crafting, ingredient, ],
+  },
+  food: {
+    cooked: [1, 3],
+    uncooked: [3, 6],
+    cookChance: 0.5,
+    isCooked: boolean,
+  },
+  crafting: {
+    use: ???
+  },
+
+E.g. can only cook items with food component
+values for each can be ranges, in order to give some variety (although this isn't universally popular).
+can create a fire to see what things are cookable (have food component).
+
+Would be useful to use modifiers randomly, so the value defined for them is the max.
+Do I want a minimum as well? Could just do half of the maximum for laziness sake, might work nicely.
+can have modifiers defined for easily adding them: e.g.
+gob.addModifier(Modifiers.damage.base.damage, 10)
+Modifiers: {
+  damage: {
+    base: {
+      damage: number;
+      attackChance: number;
+      attackSpeed: number;
+    },
+    DOT: {
+      fire: number;
+      poison: number;
+    },
+    splash: {
+      fireSplash: number;
+      iceSplash: number;
+    },
+    slow: {
+      attackSpeed: number;
+      moveSpeed: number;
+    },
+  },
+  defence: {
+    base: {
+      armour: number;
+      dodgeChance: number;
+    },
+    elemental: {
+      fireResist: number;
+      iceResist: number;
+    },
+    slow: {
+      attackSpeed: number;
+      moveSpeed: number;
+    },
+  }
+}
+
+How do I want the better over time factor to work?
+could level the weapon with use?
+need to have the weapon linked to the entity using it, so don't think leveling the weapon works.
+Could have a map of experience with different weapons on the user.
+would it be desirable for old weapons to show up repeatedly for the player? would probably be good
+  to include a mechanic to make them disappear forever if they aren't used every time they appear.
+
+Thieves and other creatures should pick up equipment and some items from the floor when they're dropped.

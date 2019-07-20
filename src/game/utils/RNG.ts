@@ -1,13 +1,9 @@
-export default function RNG(min?: number, max?: number): number {
-  let result: number;
-
-  if (min && max) {
-    result = Math.random() * (max - min) + min;
-  } else if (min) {
-    result = Math.random() * min;
+export function RNG(min?: number, max?: number): number {
+  if (min !== undefined && max !== undefined) {
+    return Math.random() * (max - min) + min;
+  } else if (min !== undefined) {
+    return Math.random() * min;
   } else {
-    result = Math.random();
+    return Math.random();
   }
-
-  return result;
 }

@@ -18,10 +18,25 @@ export default {
       },
     },
   },
-  mounted() {
-    document.querySelector("#input-text").focus();
-  },
   methods: {
+    inputBar(state) {
+      const colours = ["#434241", "#262626"];
+      let colour;
+
+      switch (state) {
+        case "focus":
+          colour = colours[0];
+          this.$store.dispatch("setCommandMode", "text");
+          break;
+        case "blur":
+          colour = colours[1];
+          this.$store.dispatch("setCommandMode", "instant");
+          break;
+      }
+
+      document.querySelector("#input-bar").style["background-color"] = colour;
+      document.querySelector("#input-text").style["background-color"] = colour;
+    },
     submit() {
       // Only submit if there are non-whitespace chars
       if (!/^\s*$/.test(this.inputText)) {
@@ -30,23 +45,9 @@ export default {
         this.$game.receiveInputText(input);
       }
     },
-    inputBar(state) {
-      let colour = ["#434241", "#262626"];
-
-      switch (state) {
-        case "focus":
-          colour = colour[0];
-          this.$store.dispatch("setCommandMode", "text");
-          break;
-        case "blur":
-          colour = colour[1];
-          this.$store.dispatch("setCommandMode", "instant");
-          break;
-      }
-
-      document.querySelector("#input-bar").style["background-color"] = colour;
-      document.querySelector("#input-text").style["background-color"] = colour;
-    },
+  },
+  mounted() {
+    document.querySelector("#input-text").focus();
   },
 };
 </script>

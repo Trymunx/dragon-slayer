@@ -14,7 +14,8 @@
                   {{creatureData.creature.symbol}}
                 </td>
                 <td class="creature-name">
-                  {{creatureData.creature.isDead() ? "dead " : ""}}{{creatureData.creature.name}}
+                  {{creatureData.creature.isDead() ? "dead" : ""}}
+                  {{creatureData.creature.species.name}}
                 </td>
                 <td class="creature-level">
                   Level
@@ -23,7 +24,9 @@
                   {{creatureData.creature.level}}
                 </td>
                 <td class="direction">
-                  (<span :style="creatureData.dir === 'here' ? getStyle(creatureData.creature.level) : ''">{{creatureData.dir}}</span>)
+                  (<span
+                     :style="creatureData.dist ? '' : getStyle(creatureData.creature.level)"
+                     >{{creatureData.dir}}</span>)
                 </td>
               </tr>
             </tbody>
@@ -40,8 +43,10 @@
                  @mouseleave="highlight()"
                  @click.left="toggleExpanded(item)"
                  class="item-list-wrapper">
-              <span class="item-count">{{item.count}}</span>
-              <span class="item-name">{{item.count === 1 ? item.name : item.plural}}</span>
+              <div class="flex-container">
+                <span class="item-count">{{item.count}}</span>
+                <span class="item-name">{{item.count === 1 ? item.name : item.plural}}</span>
+              </div>
               <div v-for="(expanded, i) in item.expanded"
                    :key="`expanded-${i}`"
                    @mouseenter="highlight(null, expanded.loc)"
@@ -67,43 +72,43 @@
 import { levelColour } from "../game/utils/colours";
 
 export default {
+  computed: {
+    surroundings() {
+      return this.$store.getters.surroundings();
+    },
+    worldExists() {
+      return this.$store.getters.worldExists;
+    },
+  },
   data() {
     return {
       expandedItem: "",
     };
   },
-  computed: {
-    worldExists() {
-      return this.$store.getters.worldExists;
-    },
-    surroundings() {
-      return this.$store.getters.surroundings();
-    },
-  },
   methods: {
     getStyle(lvl) {
       return "color: " + levelColour(lvl);
     },
-    toggleExpanded(item) {
-      if (item.name === this.expandedItem) {
-        this.expandedItem = "";
-      } else {
-        this.expandedItem = item.name;
-      }
-    },
     highlight(entity, locations) {
       if (entity) {
         let highlit = {
-          [entity.pos]: {
-            symbol: entity.symbol,
+          [entity.position.key()]: {
             colour: entity.isDead() ? "#888" : levelColour(entity.level, 30),
+            symbol: entity.symbol,
           },
         };
         this.$store.dispatch("highlight", highlit);
       } else if (locations) {
         this.$store.dispatch("highlight", locations);
       } else {
-        this.$store.dispatch("highlight");
+        this.$store.dispatch("clearHighlight");
+      }
+    },
+    toggleExpanded(item) {
+      if (item.name === this.expandedItem) {
+        this.expandedItem = "";
+      } else {
+        this.expandedItem = item.name;
       }
     },
   },
@@ -187,9 +192,14 @@ export default {
   width: 40px;
 }
 
+.flex-container {
+  display: flex;
+  align-items: center;
+}
+
 .item-list-wrapper {
-  padding: 2px 0px;
   cursor: pointer;
+  padding: 2px 0px;
 }
 
 .item-name {
@@ -208,12 +218,13 @@ export default {
 }
 
 .expanded-items {
+  align-items: baseline;
   background-color: #1e1e1e;
-  padding: 2px 0px 2px 10px;
-  width: 95%;
   display: flex;
   flex-wrap: nowrap;
-  align-items: baseline;
+  margin: 5px 0px;
+  padding: 2px 0px 2px 10px;
+  width: 95%;
 }
 
 .item-list-wrapper > div:first-of-type {

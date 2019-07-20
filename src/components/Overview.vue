@@ -3,84 +3,91 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import _ from "lodash";
-import display from "../game/overview/Display";
+import { Creature } from "../game/entities/creatures";
+import { display } from "../game/overview/Display";
+import { Item } from "../types/item";
+import store from "../vuex/store";
+import Vue from "vue";
 
-export default {
-  mounted() {
-    document.querySelector("#overview").appendChild(this.$game.display.getContainer());
-
-    window.addEventListener("resize", _.debounce(this.resizeOverview, 100));
-  },
+export default Vue.extend({
   methods: {
-    resizeOverview() {
-      if (!this.$store.getters.splash) {
-        let overviewDiv = document.querySelector("#overview");
-        let [width, height] =
-          display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
+    contextMenuItems(vm: HTMLElement, items: Item[], event: any) {
+      const pos = { x: event.x, y: event.y };
+      const canvas = document.querySelector("#overview > canvas") as HTMLCanvasElement;
+      if (!canvas) return;
+      const dOpts = display.getOptions();
+      const displayX = Math.floor((pos.x - canvas.offsetLeft) * dOpts.width / canvas.offsetWidth);
+      const displayY = Math.floor((pos.y - canvas.offsetTop) * dOpts.height / canvas.offsetHeight);
+      const [displayOriginX, displayOriginY] = this.$store.getters.displayOrigin;
+      console.log(displayOriginX, displayOriginY);
 
-        display.setOptions({ width, height });
-        display.drawWorld();
-      }
-    },
-    contextMenuItems(vm, items, event) {
-      let pos = { x: event.x, y: event.y };
-      let canvas = document.querySelector("#overview > canvas");
-      let dOpts = display.getOptions();
-      let displayX = ~~((pos.x - canvas.offsetLeft) * dOpts.width / canvas.offsetWidth);
-      let displayY = ~~((pos.y - canvas.offsetTop) * dOpts.height / canvas.offsetHeight);
-      let displayOrigin = this.$store.getters.displayOrigin;
-      let creaturesOnTile = this.$store.getters.creaturesAt(
-        displayX + displayOrigin.x,
-        displayY + displayOrigin.y
-      ) || [];
-      let itemsOnTile = this.$store.getters.world.getTile(
-        displayX + displayOrigin.x,
-        displayY + displayOrigin.y
-      ).items || [];
-
-      creaturesOnTile = creaturesOnTile.map(creature => {
+      const creaturesOnTile = this.$store.getters.creaturesAt(
+        displayX + displayOriginX,
+        displayY + displayOriginY,
+      ).map((creature: Creature) => {
         return {
-          text: `Examine ${creature.isDead() ? "dead" : ""} ${creature.name}`,
           action: () => {
             if (creature.isDead()) {
               this.$store.dispatch("addMessage", {
-                entity: `Examine ${creature.name}:`,
-                message: `The ${creature.name} is dead.`,
+                entity: `Examine ${creature.species.name}:`,
+                message: `The ${creature.species.name} is dead.`,
               });
             } else {
               const itemDrops = creature.getItemsPrettyOutput();
               this.$store.dispatch("addMessage", {
-                entity: `Examine ${creature.name}:`,
-                message: `The ${creature.name} is level ${creature.level} and has ${creature.hp}HP.`
-                + ` It will drop ${itemDrops ? itemDrops : "nothing"}.`,
+                entity: `Examine ${creature.species.name}:`,
+                message: `The ${creature.species.name} is level ${creature.level} and has ` +
+                  `${creature.hp.current}HP. It will drop ${itemDrops || "nothing"}.`,
               });
               this.$store.dispatch("addMessage", {
                 entity: "",
-                message: creature.getHPReport(),
+                message: creature.printHPReport(true),
               });
             }
           },
+          text: `Examine ${creature.isDead() ? "dead" : ""} ${creature.species.name}`,
         };
       });
 
-      itemsOnTile = itemsOnTile.reduce((arr, item) => {
-        let val = arr.find(el => el.name === item.name);
+      interface ExamineItem {
+        action: () => void;
+        count: number;
+        name: string;
+        plural: string;
+        text: string;
+        val: number;
+      }
+
+      const itemsOnTile = this.$store.getters.itemsOnTile(
+        displayX + displayOriginX,
+        displayY + displayOriginY,
+      ).reduce((arr: ExamineItem[], item: Item) => {
+        const val = arr.find(el => el.name === item.name);
         if (val) {
           val.count++;
           val.val += item.val;
           val.text = `${val.count} ${val.count === 1 ? val.name : val.plural} (${val.val})`;
-          val.action = () => console.log(val);
+          val.action = () => {
+            store.dispatch("addMessage", {
+              entity: "",
+              message: `You examine the ${val.plural}. It is worth ${val.val} gold.`,
+            });
+          };
         } else {
           let newItemEntry = {
+            action: () => {
+              store.dispatch("addMessage", {
+                entity: "",
+                message: `You examine the ${item.name}. It is worth ${item.val} gold.`,
+              });
+            },
+            count: 1,
             name: item.name,
             plural: item.plural,
-            val: item.val,
-            count: 1,
             text: `1 ${item.name} (${item.val})`,
-            // Have to use old school function so that this points to this object
-            action: function() {console.log(this);},
+            val: item.val,
           };
           arr.push(newItemEntry);
         }
@@ -89,8 +96,24 @@ export default {
 
       return [...creaturesOnTile, ...itemsOnTile];
     },
+    resizeOverview() {
+      if (!this.$store.getters.splash) {
+        let overviewDiv = document.querySelector("#overview") as HTMLDivElement;
+        if (!overviewDiv) return;
+        let [width, height] =
+          display.computeSize(overviewDiv.offsetWidth, overviewDiv.offsetHeight);
+
+        display.setOptions({ height, width });
+        display.drawWorld();
+      }
+    },
   },
-};
+  mounted() {
+    document.querySelector("#overview")!.appendChild(display.getContainer()!);
+
+    window.addEventListener("resize", _.debounce(this.resizeOverview, 100));
+  },
+});
 </script>
 
 <style>
