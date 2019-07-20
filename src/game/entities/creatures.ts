@@ -174,7 +174,7 @@ export class Creature extends Entity {
       console.error(attackName + " doesn't exist for " + this.species.name);
       return;
     }
-    const damage = Math.floor(RNG(attack.minDamage, attack.maxDamage) * this.level) / 1.5;
+    const damage = Math.floor((RNG(attack.minDamage, attack.maxDamage) * this.level) / 1.5);
     this.target.receiveDamage(damage);
 
     if (this.target instanceof Creature) {
@@ -226,7 +226,7 @@ export class Creature extends Entity {
 
   receiveDamage(damage: number) {
     this.hp.current = Math.max(0, this.hp.current - damage);
-    if (this.hp.current === 0) {
+    if (this.hp.current <= 0) {
       store.dispatch("sendMessageAtPosition", {
         entity: "",
         message: `The ${this.species.name} died and dropped ${this.getItemsPrettyOutput()}.`,
