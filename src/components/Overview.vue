@@ -72,7 +72,7 @@ export default Vue.extend({
           val.action = () => {
             store.dispatch("addMessage", {
               entity: "",
-              message: `You examine the ${val.plural}. It is worth ${val.val}`,
+              message: `You examine the ${val.plural}. It is worth ${val.val} gold.`,
             });
           };
         } else {
@@ -80,7 +80,7 @@ export default Vue.extend({
             action: () => {
               store.dispatch("addMessage", {
                 entity: "",
-                message: `You examine the ${item.name}. It is worth ${item.val}`,
+                message: `You examine the ${item.name}. It is worth ${item.val} gold.`,
               });
             },
             count: 1,
