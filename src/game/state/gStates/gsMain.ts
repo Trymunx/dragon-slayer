@@ -1,10 +1,10 @@
 import { display } from "../../overview/Display";
 import displayConf from "../../config/display.json";
 import gameloop from "../../gameloop";
-// import gData from "../data";
+import { GameState } from "../GameState";
+import { gsMan } from "../gsMan";
 import store from "../../../vuex/store";
 import World from "../../world/World";
-import { GameState, gsMan } from "../gsMan";
 
 export class MainGameState extends GameState {
   constructor() {

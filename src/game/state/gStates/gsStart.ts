@@ -1,10 +1,10 @@
 import { display } from "../../overview/Display";
 import displayConf from "../../config/display.json";
+import { GameState } from "../GameState";
 import generateName from "../../utils/nameGenerator";
-// import gData from "../data";
+import { gsMan } from "../gsMan";
 import { Player } from "../../entities/player";
 import store from "../../../vuex/store";
-import { GameState, gsMan } from "../gsMan";
 
 export class StartGameState extends GameState {
   playerName: string;

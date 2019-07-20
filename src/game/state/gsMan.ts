@@ -1,19 +1,6 @@
+import { GameState } from "./GameState";
 import { gsMain, MainGameState } from "./gStates/gsMain";
 import { gsStart, StartGameState } from "./gStates/gsStart";
-// import gData from "./data";
-// import store from "../../vuex/store";
-
-export abstract class GameState {
-  readonly name: string;
-
-  constructor(name: string) {
-    this.name = name;
-  }
-
-  abstract init(): void;
-  abstract receiveInputText(text: string): void;
-  abstract redraw(): void;
-}
 
 class GameStateManager {
   state?: GameState;
