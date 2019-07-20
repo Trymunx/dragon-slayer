@@ -1,5 +1,5 @@
 import * as ROT from "rot-js";
-import CreaturesJSON from "./Creatures.json";
+import CreaturesJSON from "./CreaturesTemplates.json";
 import gameItems from "../items/gameItems";
 import { Item } from "../../types";
 import { Player } from "./player";
