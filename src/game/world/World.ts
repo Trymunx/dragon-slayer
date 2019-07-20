@@ -1,7 +1,7 @@
 import Chunk from "./Chunk";
 import { Player } from "../entities/player";
 import Position from "./position";
-import RNG from "../utils/RNG";
+import { RNG } from "../utils/RNG";
 import Tile from "./Tile";
 
 export default class World {

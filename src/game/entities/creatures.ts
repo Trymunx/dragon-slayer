@@ -3,7 +3,7 @@ import CreaturesJSON from "./Creatures.json";
 import gameItems from "../items/gameItems";
 import { Item } from "../../types";
 import { Player } from "./player";
-import RNG from "../utils/RNG";
+import { RNG } from "../utils/RNG";
 import store from "../../vuex/store";
 import { ActivityState, Entity, EntityType, HP } from "./entity";
 import Position, { getRandomPosInChunk } from "../world/position";

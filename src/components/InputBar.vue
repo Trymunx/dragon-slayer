@@ -20,15 +20,16 @@ export default {
   },
   methods: {
     inputBar(state) {
-      let colour = ["#434241", "#262626"];
+      const colours = ["#434241", "#262626"];
+      let colour;
 
       switch (state) {
         case "focus":
-          colour = colour[0];
+          colour = colours[0];
           this.$store.dispatch("setCommandMode", "text");
           break;
         case "blur":
-          colour = colour[1];
+          colour = colours[1];
           this.$store.dispatch("setCommandMode", "instant");
           break;
       }

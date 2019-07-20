@@ -2,7 +2,7 @@ import * as ROT from "rot-js";
 import ActivityStates from "./ActivityStates";
 import CreaturesJSON from "./Creatures.json";
 import gameItems from "../items/gameItems";
-import RNG from "../utils/RNG";
+import { RNG } from "../utils/RNG";
 import store from "../../vuex/store";
 
 const Creatures = new Map(Object.entries(CreaturesJSON));
@@ -13,10 +13,10 @@ class Creature {
     this.level = level;
     this.pos = pos;
     this.symbol = creature.attributes.healthBar;
-    this.hp = Math.floor(RNG(creature.attributes.minTotalHP, creature.attributes.maxTotalHP));
+    this.hp = ~~RNG(creature.attributes.minTotalHP, creature.attributes.maxTotalHP);
     this.totalHP = this.hp;
 
-    this.moveSpeed = () => Math.floor(RNG(20, 600));
+    this.moveSpeed = () => ~~RNG(20, 600);
     this.attackSpeed = () => 35;
     this.cooldown = this.moveSpeed(); // Default timeout before moving
     this.target = null;
@@ -45,8 +45,9 @@ class Creature {
     const attackChance = RNG();
     if (attackChance > this.missChance) {
       const attack = ROT.RNG.getWeightedValue(this.weightedAttacks);
-      const damage = Math.floor(
-        (RNG(this.attacks[attack].minDamage, this.attacks[attack].maxDamage) * this.level) / 1.5
+      const damage = ~~(
+        (RNG(this.attacks[attack].minDamage, this.attacks[attack].maxDamage) * this.level) /
+        1.5
       );
 
       store.dispatch("sendMessageAtPosition", {
@@ -120,7 +121,7 @@ class Creature {
   }
 
   move() {
-    switch (Math.floor(Math.random() * 4)) {
+    switch (~~(Math.random() * 4)) {
       case 0:
         store.dispatch("moveCreature", {
           creature: this,
@@ -203,7 +204,7 @@ class Creature {
 const getGold = ({ max, dropChance }) => {
   const gold = [];
   if (RNG() > dropChance) {
-    const quantity = Math.floor(RNG(max));
+    const quantity = ~~RNG(max);
     for (let i = 0; i < quantity; i++) {
       gold.push(gameItems.get("gold").newItem());
     }
@@ -217,8 +218,7 @@ const getItems = creatureItemsArray => {
     if (gameItems.has(item.name)) {
       let quantity;
       if (item.quantity[1] !== 1) {
-        quantity =
-          Math.floor(Math.random() * (item.quantity[1] - item.quantity[0] + 1)) + item.quantity[0];
+        quantity = ~~(Math.random() * (item.quantity[1] - item.quantity[0] + 1)) + item.quantity[0];
       } else {
         quantity = 1;
       }
