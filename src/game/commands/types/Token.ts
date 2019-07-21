@@ -21,17 +21,17 @@ export type TokenStream
 // to match a stream to a valid template.
 export enum TokenType {
   // Generic Tokens
-  GameCommand,
-  PlayerCommand,
-  Conjunction,
-  Number,
-  Word,
+  GameCommand = "GameCommandToken",
+  PlayerCommand = "PlayerCommandToken",
+  Conjunction = "ConjunctionToken",
+  Number = "NumberToken",
+  Word = "WordToken",
   // Contextual Tokens
-  Creature,
-  Item,
-  Direction,
-  // Error Token
-  Error
+  Creature = "CreatureToken",
+  Item = "ItemToken",
+  Direction = "DirectionToken",
+  // Error Token 
+  Error = "ErrorToken"
 }
 
 // Input checkers --------------------------------------------------------------
