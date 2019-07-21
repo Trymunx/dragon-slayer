@@ -5,7 +5,7 @@ import { GameState } from "../GameState";
 import { gsMan } from "../gsMan";
 import store from "../../../vuex/store";
 import World from "../../world/World";
-import * as Parser from "../../Commands/parser"
+import * as Parser from "../../commands/parser"
 
 export class MainGameState extends GameState {
   constructor() {
