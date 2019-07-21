@@ -1,6 +1,6 @@
 import { dictionary } from "./dictionary";
-import { matchTest } from "./templates";
-import { err, ok, Result } from "./types/Result";
+import { match, MatchError, MatchResult } from "./templates";
+import { err, isOk, map, mapErr, ok, Result } from "./types/Result";
 import {
   isConjunction,
   isGameCommand,
@@ -81,7 +81,7 @@ const contextualise = (tokenStream: TokenStream): TokenStream => {
   return contextualisedTokenStream;
 };
 
-export const run = (input: string): Result<string, TokenStream> => {
+export const run = (input: string): Result<string, MatchResult> => {
   const tokens = tokenise(input.split(" "));
   const firstToken: Token = tokens[0];
 
@@ -96,9 +96,17 @@ export const run = (input: string): Result<string, TokenStream> => {
   // turn all those Word tokens into something a lot more specific. This will
   // allow the template matching to do it's thing.
   const contextualisedTokens = contextualise(tokens);
-  const isValid = matchTest(contextualisedTokens);
+  const matchingTemplate = match(contextualisedTokens);
 
-  return isValid
-    ? ok(contextualisedTokens)
-    : err("Something went wrong");
+  console.log(matchingTemplate);
+
+  if (isOk(matchingTemplate)) {
+    return matchingTemplate;
+  } else {
+    // This might seem redundant, the error stored in this Result has the type
+    // MatchError. The return type of this function, however, is a plain string.
+    // This is because we can error out before now. This identity map is telling
+    // typescript to treat the error as a vanilla js string.
+    return mapErr(matchingTemplate, templateError => templateError as string);
+  }
 };
