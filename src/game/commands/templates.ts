@@ -7,14 +7,12 @@ import { Token, TokenStream, TokenType } from "./types/Token";
 type Predicate
   = (token: Token) => boolean
 
-// A template is a list of Predicates. Ideally, a list of tokens of tokens is
-// checked against the predicate that has the corresponding index. By having
-// multiple templates per command, we can easily allow for expressive
-// configurations of commands.
+// A template is a list of Predicates. Ideally, a list of tokens is checked
+// against the predicate that has the corresponding index. By having multiple
+// templates per command, we can easily allow for expressive configurations of
+// commands.
 type Template
   = Predicate[]
-
-//
 
 // Predicate functions ---------------------------------------------------------
 const hasType = (type: TokenType): Predicate => token =>
