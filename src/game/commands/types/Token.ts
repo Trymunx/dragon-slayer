@@ -6,7 +6,7 @@
 // message is a valid command.
 export interface Token {
   readonly type: TokenType,
-  value: string | number
+  value: string
 }
 
 // A simple type alias for an array of Tokens, but it contains a bit more
@@ -33,6 +33,11 @@ export enum TokenType {
   // Error Token
   Error = "ErrorToken"
 }
+
+export const emptyToken = {
+  type: TokenType.Error,
+  value: "",
+};
 
 // Input checkers --------------------------------------------------------------
 // These should all be largely self explanatory, and don't need individual
