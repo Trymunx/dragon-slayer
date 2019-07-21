@@ -1,10 +1,10 @@
-import { all, any, hasType, isExact, isPositive, Predicate, Template } from "./predicate";
-import { err, isErr, isOk, ok, Result } from "./types/Result";
-import { Token, TokenStream, TokenType } from "./types/Token";
+import { any, hasType, isExact, isPositive, Template } from "./predicate";
+import { emptyToken, TokenStream, TokenType } from "./types/Token";
+import { Err, err, isErr, isOk, ok, Result } from "./types/Result";
 
 // Types -----------------------------------------------------------------------
 export type MatchResult =
-  [ TokenStream, Template ]
+  [TokenStream, Template]
 
 export type MatchError =
   string
@@ -12,12 +12,6 @@ export type MatchError =
 const NO_MATCHES = "I couldn't find any commands that matched this sequence";
 const UNRECGONISED_INTIAL_TOKEN = "The first token in this sequence is not a " +
   "command I recognise.";
-const TOKEN_TYPE_ERROR = (command: string, pos: number, expected: string, got: string) =>
-  "While parsing " + command + " I expected a " + expected + " but got a " +
-  got + " at position: " + pos + ".";
-const MISSING_ARGUMENT = (command: string, expected: string) =>
-  "While parsing " + command + " I expected a " + expected + " but I ran out " +
-  "of input.";
 const TOO_MANY_ARGUMENTS = (command: string, got: string) =>
   "While parsing " + command + " I received an extra " + got + ".";
 
@@ -27,25 +21,25 @@ type R = Result<MatchError, MatchResult>
 
 // GameCommand templates -------------------------------------------------------
 const gameCommandTemplates: Template[] = [
-  [ isExact("help") ],
-  [ isExact("help"), any([hasType(TokenType.GameCommand), hasType(TokenType.PlayerCommand)]) ],
+  [isExact("help")],
+  [isExact("help"), any([hasType(TokenType.GameCommand), hasType(TokenType.PlayerCommand)])],
 ];
 
 // PlayerCommand templates -----------------------------------------------------
 const playerCommandTemplates: Template[] = [
-  [ any([isExact("walk"), isExact("move")]), hasType(TokenType.Direction) ],
-  [ any([isExact("walk"), isExact("move")]), isPositive, hasType(TokenType.Direction) ],
+  [any([isExact("walk"), isExact("move")]), hasType(TokenType.Direction)],
+  [any([isExact("walk"), isExact("move")]), isPositive, hasType(TokenType.Direction)],
 ];
 
 // Matching templates ----------------------------------------------------------
 const matchTemplate = (tokenStream: TokenStream, template: Template): R => {
-  const [ initialToken ] = tokenStream;
-  const [ initialPredicate ] = template;
+  const [initialToken] = tokenStream;
+  const [initialPredicate] = template;
 
   if (!initialPredicate(initialToken)) {
     return err(NO_MATCHES);
   } else if (tokenStream.length === 1 && template.length === 1) {
-    return ok([ tokenStream, template ]);
+    return ok([tokenStream, template]);
   } else {
     // We're using a for loop rather than some nicer looping construct because
     // we have two additional requirements: (1) we need to grab the current
@@ -55,12 +49,25 @@ const matchTemplate = (tokenStream: TokenStream, template: Template): R => {
       const token = tokenStream[i];
       const predicate = template[i];
 
+      // This if statements handles the case where our command input is longer
+      // than the template so there is no predicate to run.
+      if (predicate === undefined) {
+        return err(TOO_MANY_ARGUMENTS(initialToken.value as string, token.type));
+
+        // This else if handles the case where our command input was shorter than
+        // the template. We can pass in a special empty token to the current
+        // predicate and be confident it will Err out. This will give us a nice
+        // error message telling us what token it actually expected!
+      } else if (token === undefined) {
+        return predicate(emptyToken) as Err<string>;
+      }
+
       const result = predicate(token);
 
       if (isErr(result)) return result;
     }
 
-    return ok([ tokenStream, template ]);
+    return ok([tokenStream, template]);
   }
 };
 
@@ -69,7 +76,7 @@ export const match = (tokenStream: TokenStream): R => {
   // This is mostly necessary so we don't waste time matching against the
   // commands of different types. It also serves as an additional check if an
   // invalid token managed to sneak past the first check.
-  const [ firstToken ] = tokenStream;
+  const [firstToken] = tokenStream;
 
   // The curly braces around each case here might seem unecessary, but because
   // of javascript's scoping rules I wouldn't be able to define "match" twice.
