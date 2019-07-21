@@ -1,5 +1,4 @@
 import { dictionary } from "./dictionary";
-import { match, MatchError, MatchResult } from "./templates";
 import { err, isOk, map, mapErr, ok, Result } from "./types/Result";
 import {
   isConjunction,
@@ -10,6 +9,7 @@ import {
   TokenStream,
   TokenType,
 } from "./types/Token";
+import { match, MatchError, MatchResult } from "./templates";
 
 // Tokenise --------------------------------------------------------------------
 const tokenise = (input: string[]): TokenStream => {
@@ -21,7 +21,7 @@ const tokenise = (input: string[]): TokenStream => {
     } else if (isConjunction(token)) {
       return { type: TokenType.Conjunction, value: token };
     } else if (isNumber(token)) {
-      return { type: TokenType.Number, value: parseInt(token) };
+      return { type: TokenType.Number, value: token };
     } else {
       return { type: TokenType.Word, value: token };
     }
