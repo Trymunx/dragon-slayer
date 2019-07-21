@@ -1,4 +1,4 @@
-import { Token, TokenType, TokenStream } from './Token'
+import { Token, TokenType, TokenStream } from './types/Token'
 
 // Types -----------------------------------------------------------------------
 // We use Predicate functions to validate tokens according to some template

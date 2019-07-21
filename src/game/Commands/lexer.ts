@@ -1,5 +1,5 @@
-import { Token, TokenStream, TokenType, isGameCommand, isPlayerCommand, isConjunction, isNumber} from './Token'
-import { Result, ok, err } from './Result'
+import { Token, TokenStream, TokenType, isGameCommand, isPlayerCommand, isConjunction, isNumber} from './types/Token'
+import { Result, ok, err } from './types/Result'
 import { matchTest } from './templates'
 
 // Dictionary ------------------------------------------------------------------
