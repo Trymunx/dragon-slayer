@@ -48,8 +48,8 @@ type R = Result<any, any>
 // The following two functions, isOk and isErr, can be used in place of 
 // traditional pattern matching. We can have some Result type and check whether
 // it holds an Ok value or an Error.
-export const isOk = (result: R): boolean => result._kind === 'Ok'
-export const isErr = (result: R): boolean => result._kind === 'Err'
+export const isOk = (result: R): result is Ok<any> => result._kind === 'Ok'
+export const isErr = (result: R): result is Err<any> => result._kind === 'Err'
 
 // Unbox a Result. If the given Result was Ok then we'll take that value, if not
 // then use the default value supplied. This effectively ignores any Err values.
