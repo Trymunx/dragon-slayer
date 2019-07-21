@@ -1,4 +1,4 @@
-import { Token, TokenType, TokenStream } from './types/Token'
+import { Token, TokenStream, TokenType } from "./types/Token";
 
 // Types -----------------------------------------------------------------------
 // We use Predicate functions to validate tokens according to some template
@@ -9,7 +9,7 @@ type Predicate
 
 // A template is a list of Predicates. Ideally, a list of tokens of tokens is
 // checked against the predicate that has the corresponding index. By having
-// multiple templates per command, we can easily allow for expressive 
+// multiple templates per command, we can easily allow for expressive
 // configurations of commands.
 type Template
   = Predicate[]
@@ -17,41 +17,41 @@ type Template
 //
 
 // Predicate functions ---------------------------------------------------------
-const hasType = (type: TokenType): Predicate => token => 
-  token.type === type
+const hasType = (type: TokenType): Predicate => token =>
+  token.type === type;
 
 const isExact = (keyword: string): Predicate => token =>
- token.value === keyword
+  token.value === keyword;
 
-const isPositive: Predicate = token => 
-  token.value > 0
+const isPositive: Predicate = token =>
+  token.value > 0;
 
 // Predicate function composition ----------------------------------------------
 // Takes an array of predicates and attempts to satisfy ALL of them with the
 // current token.
 const all = (predicates: Predicate[]): Predicate => token =>
-  predicates.reduce((allMatch: boolean, predicate: Predicate) => 
+  predicates.reduce((allMatch: boolean, predicate: Predicate) =>
     allMatch && predicate(token), true
-  )
+  );
 
 // Takes an array of predicates and attempts to satisfy ANY of them with the
 // current token.
 const any = (predicates: Predicate[]): Predicate => token =>
-  predicates.reduce((anyMatch: boolean, predicate: Predicate) => 
+  predicates.reduce((anyMatch: boolean, predicate: Predicate) =>
     anyMatch || predicate(token), false
-  )
+  );
 
 // Testing ---------------------------------------------------------------------
 export const matchTest = (tokenStream: TokenStream): boolean => {
   const testTemplate = [
-    all([ hasType(TokenType.PlayerCommand), isExact('move') ]),
+    all([ hasType(TokenType.PlayerCommand), isExact("move") ]),
     isPositive,
-    hasType(TokenType.Direction)
-  ]
+    hasType(TokenType.Direction),
+  ];
 
   return testTemplate.reduce((isValid: boolean, predicate: Predicate, i: number) => {
-    const token: Token | undefined = tokenStream[i]
+    const token: Token | undefined = tokenStream[i];
 
-    return token !== undefined ? isValid && predicate(token) : false    
-  }, true)
-}
+    return token !== undefined ? isValid && predicate(token) : false;
+  }, true);
+};

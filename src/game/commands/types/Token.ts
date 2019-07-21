@@ -2,16 +2,16 @@
 // When parsing, we receive an array of strings that is the user-entered message
 // split on whitespace. What we want, then, is to encode some meaning alongside
 // each of those strings and that is what a Token does. By assigning each Token
-// a TokenType we can then perform some more involved checks to make sure a 
+// a TokenType we can then perform some more involved checks to make sure a
 // message is a valid command.
-export interface Token { 
-  readonly type: TokenType, 
-  value: string | number 
+export interface Token {
+  readonly type: TokenType,
+  value: string | number
 }
 
-// A simple type alias for an array of Tokens, but it contains a bit more 
+// A simple type alias for an array of Tokens, but it contains a bit more
 // meaning.
-export type TokenStream 
+export type TokenStream
   = Token[]
 
 // Tokens can be one of a number of types. They start off as generic token types
@@ -30,7 +30,7 @@ export enum TokenType {
   Creature = "CreatureToken",
   Item = "ItemToken",
   Direction = "DirectionToken",
-  // Error Token 
+  // Error Token
   Error = "ErrorToken"
 }
 
@@ -44,34 +44,34 @@ export enum TokenType {
 // rather incoming "raw" strings.
 export const isGameCommand = (input: string): boolean => {
   switch (input) {
-    case '/help':
-      return true
+    case "/help":
+      return true;
     default:
-      return false
+      return false;
   }
-}
+};
 
 export const isPlayerCommand = (input: string): boolean => {
   switch (input) {
-    case 'move':
-    case 'walk':
-    case 'drop':
-      return true
+    case "move":
+    case "walk":
+    case "drop":
+      return true;
     default:
-      return false
+      return false;
   }
-}
+};
 
 export const isConjunction = (input: string): boolean => {
   switch (input) {
-    case 'and':
-    case 'then':
-      return true
+    case "and":
+    case "then":
+      return true;
     default:
-      return false
+      return false;
   }
-}
+};
 
 export const isNumber = (input: string): boolean => {
-  return !isNaN(parseInt(input))
-}
+  return !isNaN(parseInt(input));
+};
