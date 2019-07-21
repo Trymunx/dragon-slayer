@@ -73,5 +73,5 @@ export const isConjunction = (input: string): boolean => {
 };
 
 export const isNumber = (input: string): boolean => {
-  return !isNaN(parseInt(input));
+  return /^\d+$/.test(input);
 };
