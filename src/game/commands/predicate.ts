@@ -1,5 +1,5 @@
 import { err, isErr, isOk, ok, Result } from "./types/Result";
-import { Token, TokenStream, TokenType } from "./types/Token";
+import { Token, TokenType } from "./types/Token";
 
 // Types -----------------------------------------------------------------------
 // We use Predicate functions to validate tokens according to some template
@@ -16,6 +16,16 @@ export type Template
   = Predicate[]
 
 // Predicate functions ---------------------------------------------------------
+// Message to developers:
+// * Predicates should be atomic and should attempt to check just *one* thing
+// about a token. Occassionally it is necessary to be *slightly* more
+// exhaustive (e.g the isPositive predicate confirms that a token is both a
+// number AND it is positive) but do so sparingly. Instead consider how these
+// predicates can compose with the `all` and `any` functions below.
+// * For now, predicates that are satisfied return an Ok-wrapped null. In the
+// future it seems reasonable to return the parsed token's value (or a default
+// if the predicate was optional).
+
 export const hasType = (type: TokenType): Predicate => token =>
   token.type === type
     ? ok(null)
@@ -28,7 +38,7 @@ export const isExact = (keyword: string): Predicate => token =>
 
 export const isPositive: Predicate = token =>
   token.type === TokenType.Number
-    ? token.value > 0
+    ? parseInt(token.value) > 0
       ? ok(null)
       : err(`Expected a positive number like 4 but got ${token.value}`)
     : err(`Expected a token of type NumberToken but got a ${token.type}`);
@@ -37,10 +47,10 @@ export const isPositive: Predicate = token =>
 // Takes an array of predicates and attempts to satisfy ALL of them with the
 // current token.
 export const all = (predicates: Predicate[]): Predicate => token =>
-  predicates.reduce((result: Result<string, null>, predicate: Predicate) => {
+  predicates.reduce((previousResult: Result<string, null>, predicate: Predicate) => {
     const currentResult = predicate(token);
 
-    if (isOk(currentResult) && isOk(result)) {
+    if (isOk(currentResult) && isOk(previousResult)) {
       return ok(null);
     } else {
       return currentResult;
@@ -50,14 +60,14 @@ export const all = (predicates: Predicate[]): Predicate => token =>
 // Takes an array of predicates and attempts to satisfy ANY of them with the
 // current token.
 export const any = (predicates: Predicate[]): Predicate => token =>
-  predicates.reduce((result: Result<string, null>, predicate: Predicate) => {
+  predicates.reduce((previousResult: Result<string, null>, predicate: Predicate) => {
     const currentResult = predicate(token);
 
-    if (isErr(currentResult)) {
+    if (isOk(currentResult) && isErr(previousResult)) {
       return currentResult;
-    } else if (isErr(result)) {
-      return result;
+    } else if (isOk(previousResult) && isErr(currentResult)) {
+      return previousResult;
     } else {
-      return ok(null);
+      return currentResult;
     }
-  }, ok(null));
+  }, err(""));
