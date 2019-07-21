@@ -16,6 +16,7 @@ const gameloop = {
         creature.update();
       });
     }
+    store.getters.player.update();
     display.drawWorld();
     window.requestAnimationFrame(gameloop.run);
   },

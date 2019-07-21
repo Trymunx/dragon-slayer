@@ -1,4 +1,5 @@
 import * as ROT from "rot-js";
+import { attackSuccessChance } from "../utils/fighting";
 import CreaturesJSON from "./CreaturesTemplates.json";
 import gameItems from "../items/gameItems";
 import { Item } from "../../types";
@@ -152,7 +153,12 @@ export class Creature extends Entity {
       return;
     }
 
-    if (this.attributes.attackChance > RNG()) {
+    const successChance = attackSuccessChance(
+      this.attributes.attackChance,
+      this.target.attributes.dodgeChance
+    );
+
+    if (successChance < RNG()) {
       if (this.target instanceof Creature) {
         store.dispatch("sendMessageAtPosition", {
           entity: "",

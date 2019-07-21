@@ -1,7 +1,9 @@
-import { CreatureName } from "./creatures";
 import Position from "../world/position";
+import { RNG } from "../utils/RNG";
 import store from "../../vuex/store";
-import { ActivityState, Entity, EntityType, HumanoidBody } from "./entity";
+import { ActivityState, Entity, EntityType, HumanoidBody, isPlayer } from "./entity";
+import { attackSuccessChance, maxDamage } from "../utils/fighting";
+import { Creature, CreatureName } from "./creatures";
 
 // export interface Player {
 //   creaturesSlain: { [key in CreatureName]?: number };
@@ -104,6 +106,46 @@ export class Player extends Entity {
     this.xp = xp;
   }
 
+  attack() {
+    if (!this.target || this.target.isDead() || isPlayer(this.target)) {
+      store.dispatch("addMessage", {
+        entity: "Game",
+        message: "There is nothing to attack!",
+      });
+      this.target = undefined;
+      return;
+    }
+
+    const successChance = attackSuccessChance(
+      this.attributes.attackChance,
+      this.target.attributes.dodgeChance
+    );
+
+    if (successChance < RNG()) {
+      store.dispatch("addMessage", {
+        entity: this.name,
+        message: `You missed the ${this.target.species.name}.`,
+      });
+      return;
+    }
+
+    // maxDamage gives value between 1 and this.attributes.damage.
+    // We use Math.ceil because we want 1 to be the minimum damage value.
+    const maxDmg = maxDamage(this.attributes.damage, this.target.attributes.armour);
+    const damage = Math.ceil(RNG(maxDmg));
+
+    store.dispatch("addMessage", {
+      entity: this.name,
+      message: `You attack the ${this.target.species.name} for ${damage}HP.`,
+    });
+
+    this.target.receiveDamage(damage);
+
+    if (this.target.isDead()) {
+      this.currentActivityState = ActivityState.MOVING;
+    }
+  }
+
   heal(amount: number): number {
     const healed = Math.min(this.hp.max - this.hp.current, amount);
     this.hp.current += healed;
@@ -113,6 +155,8 @@ export class Player extends Entity {
 
   levelUp() {
     this.level++;
+    this.attributes.damage += Math.round(this.level ** 0.5);
+    this.attributes.armour += Math.round(this.level ** 0.5);
     this.hp.max = 10 * Math.floor((10 * this.level ** 1.3 + 90) / 10);
 
     store.dispatch("addMessage", {
@@ -144,6 +188,27 @@ export class Player extends Entity {
       this.currentActivityState = ActivityState.DEAD;
     } else {
       this.printHPReport();
+    }
+  }
+
+  targetCreature(creature: Creature) {
+    this.target = creature;
+    creature.currentActivityState = ActivityState.FIGHTING;
+    creature.target = this;
+  }
+
+  update() {
+    if (this.cooldown > 0) {
+      this.cooldown--;
+      return;
+    }
+
+    this.cooldown = this.attributes.attackSpeed;
+
+    switch (this.currentActivityState) {
+      case ActivityState.FIGHTING:
+        this.attack();
+        break;
     }
   }
 }
