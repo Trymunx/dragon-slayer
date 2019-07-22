@@ -21,14 +21,18 @@ type R = Result<MatchError, MatchResult>
 
 // GameCommand templates -------------------------------------------------------
 const gameCommandTemplates: Template[] = [
-  [isExact("help")],
-  [isExact("help"), any([hasType(TokenType.GameCommand), hasType(TokenType.PlayerCommand)])],
+  [isExact("/help")],
+  [isExact("/help"), any([hasType(TokenType.GameCommand), hasType(TokenType.PlayerCommand)])],
 ];
 
 // PlayerCommand templates -----------------------------------------------------
 const playerCommandTemplates: Template[] = [
   [any([isExact("walk"), isExact("move")]), hasType(TokenType.Direction)],
   [any([isExact("walk"), isExact("move")]), isPositive, hasType(TokenType.Direction)],
+  [isExact("drop"), hasType(TokenType.Item)],
+  [isExact("drop"), isPositive, hasType(TokenType.Item)],
+  [any([isExact("fight"), isExact("attack")]), hasType(TokenType.Creature)],
+  [any([isExact("run"), isExact("flee")])],
 ];
 
 // Matching templates ----------------------------------------------------------
@@ -36,7 +40,7 @@ const matchTemplate = (tokenStream: TokenStream, template: Template): R => {
   const [initialToken] = tokenStream;
   const [initialPredicate] = template;
 
-  if (!initialPredicate(initialToken)) {
+  if (isErr(initialPredicate(initialToken))) {
     return err(NO_MATCHES);
   } else if (tokenStream.length === 1 && template.length === 1) {
     return ok([tokenStream, template]);
@@ -78,38 +82,24 @@ export const match = (tokenStream: TokenStream): R => {
   // invalid token managed to sneak past the first check.
   const [firstToken] = tokenStream;
 
-  // The curly braces around each case here might seem unecessary, but because
-  // of javascript's scoping rules I wouldn't be able to define "match" twice.
-  // I think we can agree that this is nicer than defining match *before* the
-  // switch with `let`.
-  switch (firstToken.type) {
-    case TokenType.GameCommand: {
-      let match: R = err(NO_MATCHES);
-
-      for (let i = 0; i < gameCommandTemplates.length; i++) {
-        const template = gameCommandTemplates[i];
-        match = matchTemplate(tokenStream, template);
-
-        if (isOk(match)) break;
-      }
-
-      return match;
-    }
-
-    case TokenType.PlayerCommand: {
-      let match: R = err(NO_MATCHES);
-
-      for (let i = 0; i < playerCommandTemplates.length; i++) {
-        const template = playerCommandTemplates[i];
-        match = matchTemplate(tokenStream, template);
-
-        if (isOk(match)) break;
-      }
-
-      return match;
-    }
-
-    default:
-      return err(UNRECGONISED_INTIAL_TOKEN);
+  if (firstToken.type !== TokenType.GameCommand && firstToken.type !== TokenType.PlayerCommand) {
+    return err(UNRECGONISED_INTIAL_TOKEN);
   }
+
+  const templates = firstToken.type === TokenType.GameCommand
+    ? gameCommandTemplates
+    : playerCommandTemplates;
+
+  const match = templates
+    .map(template => matchTemplate(tokenStream, template))
+    // Remove all entries where the command didn't even *begin* parsing.
+    .filter(a => !(isErr(a) && a.value === NO_MATCHES))
+    // Move all Ok results to the beginning of the array, so that when we shift
+    // if there *was* an Ok result we're guaranteed to get it. We still want
+    // to preserve the errors, however, which is why we don't simply filter the
+    // array if isOk
+    .sort((a, b) => isOk(a) && isErr(b) ? -1 : isErr(a) && isOk(b) ? 1 : 0)
+    .shift();
+
+  return match || err(NO_MATCHES);
 };
