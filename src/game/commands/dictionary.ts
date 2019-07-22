@@ -21,9 +21,13 @@ type Dictionary =
 // name.
 export const dictionary: Dictionary = [
   { type: TokenType.Direction, value: "north" },
+  { type: TokenType.Direction, value: "n" },
   { type: TokenType.Direction, value: "south" },
+  { type: TokenType.Direction, value: "s" },
   { type: TokenType.Direction, value: "west" },
+  { type: TokenType.Direction, value: "t" },
   { type: TokenType.Direction, value: "east" },
+  { type: TokenType.Direction, value: "e" },
 ];
 
 // Populate the dictionary with all the create names in the game. We use
