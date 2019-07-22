@@ -100,7 +100,7 @@ export class MainGameState extends GameState {
 
   receiveInputText(input: string) {
     if (!store.getters.instantMode) {
-      const result = Parser.parse(input);
+      const result = Parser.run(input.toLocaleLowerCase());
 
       console.log(result);
     }
