@@ -33,11 +33,12 @@ export enum TokenType {
   Item = "ItemToken",
   Direction = "DirectionToken",
   // Error Token
-  Error = "ErrorToken"
+  Error = "ErrorToken",
+  Empty = "EmptyToken"
 }
 
 export const emptyToken = {
-  type: TokenType.Error,
+  type: TokenType.Empty,
   value: "",
 };
 
