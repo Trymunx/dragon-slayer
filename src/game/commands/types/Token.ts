@@ -1,3 +1,5 @@
+import { gameCommands, playerCommands } from "../commands";
+
 // Types -----------------------------------------------------------------------
 // When parsing, we receive an array of strings that is the user-entered message
 // split on whitespace. What we want, then, is to encode some meaning alongside
@@ -47,25 +49,11 @@ export const emptyToken = {
 // Word token.
 // Note: These commands aren't for checking the type of existing *Tokens*, but
 // rather incoming "raw" strings.
-export const isGameCommand = (input: string): boolean => {
-  switch (input) {
-    case "/help":
-      return true;
-    default:
-      return false;
-  }
-};
+export const isGameCommand = (input: string): boolean =>
+  gameCommands.includes(input);
 
-export const isPlayerCommand = (input: string): boolean => {
-  switch (input) {
-    case "move":
-    case "walk":
-    case "drop":
-      return true;
-    default:
-      return false;
-  }
-};
+export const isPlayerCommand = (input: string): boolean =>
+  playerCommands.includes(input);
 
 export const isConjunction = (input: string): boolean => {
   switch (input) {
