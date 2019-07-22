@@ -1,3 +1,4 @@
+import * as Parser from "../../commands/parser";
 import { display } from "../../overview/Display";
 import displayConf from "../../config/display.json";
 import gameloop from "../../gameloop";
@@ -5,7 +6,6 @@ import { GameState } from "../GameState";
 import { gsMan } from "../gsMan";
 import store from "../../../vuex/store";
 import World from "../../world/World";
-import * as Parser from "../../commands/parser";
 
 export class MainGameState extends GameState {
   constructor() {
@@ -100,7 +100,9 @@ export class MainGameState extends GameState {
 
   receiveInputText(input: string) {
     if (!store.getters.instantMode) {
-      console.log(Parser.parse(input));
+      const result = Parser.parse(input);
+
+      console.log(result);
     }
   }
 }
