@@ -98,8 +98,6 @@ export const run = (input: string): Result<string, MatchResult> => {
   const contextualisedTokens = contextualise(tokens);
   const matchingTemplate = match(contextualisedTokens);
 
-  console.log(matchingTemplate);
-
   if (isOk(matchingTemplate)) {
     return matchingTemplate;
   } else {
