@@ -1,3 +1,4 @@
+import { dispatchAction } from "../../../vuex/actions";
 import { display } from "../../overview/Display";
 import displayConf from "../../config/display.json";
 import { GameState } from "../GameState";
@@ -19,7 +20,7 @@ export class StartGameState extends GameState {
     display.draw(4, 1, "Trymunx's", "#8a8c89", null);
     display.draw(4, 2, "Dragon Slayer", "#086623", null);
 
-    store.dispatch("addMessage", {
+    dispatchAction.AddMessage({
       entity: "Welcome",
       message:
         "Greetings adventurer. Please enter your name to begin, or type /generate to have one " +
@@ -34,15 +35,15 @@ export class StartGameState extends GameState {
       switch (input.toUpperCase()) {
         case "YES":
         case "Y":
-          store.dispatch("setPlayer", new Player(this.playerName));
-          store.dispatch("setSplash", false);
+          dispatchAction.SetPlayer(new Player(this.playerName));
+          dispatchAction.SetSplash(false);
           gsMan.nextState(this);
           break;
         case "NO":
         case "N":
           this.playerName = "";
-          store.dispatch("setPlayerName", null);
-          store.dispatch("addMessage", {
+          dispatchAction.SetPlayerName("");
+          dispatchAction.AddMessage({
             entity: "Game",
             message: "Please enter a name, or type /generate to have one generated for you.",
           });
@@ -68,8 +69,8 @@ export class StartGameState extends GameState {
       input = generateName();
     }
     this.playerName = input;
-    store.dispatch("setPlayerName", input);
-    store.dispatch("addMessage", {
+    dispatchAction.SetPlayerName(input);
+    dispatchAction.AddMessage({
       entity: "Confirm name:",
       message: `Your name is ${input}. Use this name? [yes/no]`,
     });

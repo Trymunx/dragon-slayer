@@ -1,3 +1,4 @@
+import { dispatchAction } from "../../vuex/actions";
 import Position from "../world/position";
 import { RNG } from "../utils/RNG";
 import store from "../../vuex/store";
@@ -108,7 +109,7 @@ export class Player extends Entity {
 
   attack() {
     if (!this.target || this.target.isDead() || isPlayer(this.target)) {
-      store.dispatch("addMessage", {
+      dispatchAction.AddMessage({
         entity: "Game",
         message: "There is nothing to attack!",
       });
@@ -122,7 +123,7 @@ export class Player extends Entity {
     );
 
     if (successChance < RNG()) {
-      store.dispatch("addMessage", {
+      dispatchAction.AddMessage({
         entity: this.name,
         message: `You missed the ${this.target.species.name}.`,
       });
@@ -134,7 +135,7 @@ export class Player extends Entity {
     const maxDmg = maxDamage(this.attributes.damage, this.target.attributes.armour);
     const damage = Math.ceil(RNG(maxDmg));
 
-    store.dispatch("addMessage", {
+    dispatchAction.AddMessage({
       entity: this.name,
       message: `You attack the ${this.target.species.name} for ${damage}HP.`,
     });
@@ -159,7 +160,7 @@ export class Player extends Entity {
     this.attributes.armour += Math.round(this.level ** 0.5);
     this.hp.max = 10 * Math.floor((10 * this.level ** 1.3 + 90) / 10);
 
-    store.dispatch("addMessage", {
+    dispatchAction.AddMessage({
       entity: "Level up",
       message: `Congratulations! You are now level ${this.level}.`,
     });
@@ -172,7 +173,7 @@ export class Player extends Entity {
     const hpReportString = `[${this.symbol.repeat(currentHPLength).padEnd(totalBarLength)}] (${
       this.hp.current
     }HP)`;
-    store.dispatch("addMessage", {
+    dispatchAction.AddMessage({
       entity: this.name,
       message: hpReportString,
     });
@@ -181,7 +182,7 @@ export class Player extends Entity {
   receiveDamage(damage: number) {
     this.hp.current = Math.max(0, this.hp.current - damage);
     if (this.hp.current === 0) {
-      store.dispatch("addMessage", {
+      dispatchAction.AddMessage({
         entity: "",
         message: "Game over.", // Do creature report here
       });

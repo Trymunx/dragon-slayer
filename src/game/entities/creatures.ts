@@ -1,11 +1,11 @@
 import * as ROT from "rot-js";
 import { attackSuccessChance } from "../utils/fighting";
 import CreaturesJSON from "./CreaturesTemplates.json";
+import { dispatchAction } from "../../vuex/actions";
 import gameItems from "../items/gameItems";
 import { Item } from "../../types";
 import { Player } from "./player";
 import { RNG } from "../utils/RNG";
-import store from "../../vuex/store";
 import { ActivityState, Entity, EntityType, HP } from "./entity";
 import Position, { getRandomPosInChunk } from "../world/position";
 
@@ -160,13 +160,13 @@ export class Creature extends Entity {
 
     if (successChance < RNG()) {
       if (this.target instanceof Creature) {
-        store.dispatch("sendMessageAtPosition", {
+        dispatchAction.AddMessageAtPosition({
           entity: "",
           message: `The ${this.species.name} missed the ${this.target.species.name}.`,
           position: this.position,
         });
       } else if (this.target instanceof Player) {
-        store.dispatch("addMessage", {
+        dispatchAction.AddMessage({
           entity: this.species.name,
           message: `The ${this.species.name} missed you.`,
         });
@@ -183,7 +183,7 @@ export class Creature extends Entity {
     const damage = Math.floor((RNG(attack.minDamage, attack.maxDamage) * this.level) / 1.5);
 
     if (this.target instanceof Creature) {
-      store.dispatch("sendMessageAtPosition", {
+      dispatchAction.AddMessageAtPosition({
         entity: "",
         message: `The ${this.species.name} used ${attackName} on the ${
           this.target.species.name
@@ -193,7 +193,7 @@ export class Creature extends Entity {
     } else if (this.target instanceof Player) {
       const attackMessage =
         attack.messages[Math.floor(RNG(attack.messages.length))] + damage + " HP";
-      store.dispatch("addMessage", {
+      dispatchAction.AddMessage({
         entity: this.species.name,
         message: attackMessage,
       });
@@ -219,11 +219,11 @@ export class Creature extends Entity {
     // Disable eslint because it complains about ternary indentation
     /* eslint-disable */
     global
-      ? store.dispatch("addMessage", {
+      ? dispatchAction.AddMessage({
           entity: this.species.name,
           message: hpReportString,
         })
-      : store.dispatch("sendMessageAtPosition", {
+      : dispatchAction.AddMessageAtPosition({
           entity: this.species.name,
           message: hpReportString,
           position: this.position,
@@ -234,7 +234,7 @@ export class Creature extends Entity {
   receiveDamage(damage: number) {
     this.hp.current = Math.max(0, this.hp.current - damage);
     if (this.hp.current <= 0) {
-      store.dispatch("sendMessageAtPosition", {
+      dispatchAction.AddMessageAtPosition({
         entity: "",
         message: `The ${this.species.name} died and dropped ${this.getItemsPrettyOutput()}.`,
         position: this.position,
@@ -273,34 +273,34 @@ export class Creature extends Entity {
   }
 
   dropItems() {
-    store.dispatch("dropItems", { items: this.items.splice(0), pos: this.position });
+    dispatchAction.DropItems({ items: this.items.splice(0), pos: this.position });
   }
 
   move() {
     switch (Math.floor(Math.random() * 4)) {
       case 0:
-        store.dispatch("moveCreature", {
+        dispatchAction.MoveCreature({
           creature: this,
           newPos: new Position(this.position.x, this.position.y - 1),
         });
         this.position.y--;
         break;
       case 1:
-        store.dispatch("moveCreature", {
+        dispatchAction.MoveCreature({
           creature: this,
           newPos: new Position(this.position.x, this.position.y + 1),
         });
         this.position.y++;
         break;
       case 2:
-        store.dispatch("moveCreature", {
+        dispatchAction.MoveCreature({
           creature: this,
           newPos: new Position(this.position.x - 1, this.position.y),
         });
         this.position.x--;
         break;
       case 3:
-        store.dispatch("moveCreature", {
+        dispatchAction.MoveCreature({
           creature: this,
           newPos: new Position(this.position.x + 1, this.position.y),
         });
@@ -399,7 +399,7 @@ export const genCreatures = (
         pos: pos,
         template: c,
       });
-      store.dispatch("addCreature", creature);
+      dispatchAction.AddCreature(creature);
     }
   });
 };
