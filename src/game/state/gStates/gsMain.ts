@@ -1,3 +1,4 @@
+import * as Parser from "../../commands/parser";
 import { display } from "../../overview/Display";
 import displayConf from "../../config/display.json";
 import gameloop from "../../gameloop";
@@ -99,20 +100,9 @@ export class MainGameState extends GameState {
 
   receiveInputText(input: string) {
     if (!store.getters.instantMode) {
-      if (/^\/help$/.test(input)) {
-        store.dispatch("addMessage", {
-          entity: "Help",
-          message:
-            "Press 'enter' to enter typed command mode, and 'escape' to get back to command mode." +
-            "\nYou can right-click on the map to see what is on that tile.",
-        });
-      } else {
-        // Handle as text command
-        store.dispatch("addMessage", {
-          entity: "Main state",
-          message: "Response to " + input,
-        });
-      }
+      const result = Parser.run(input.toLocaleLowerCase());
+
+      console.log(result);
     }
   }
 }
