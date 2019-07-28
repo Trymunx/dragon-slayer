@@ -1,4 +1,5 @@
 // import { actions } from "./actions";
+import { ActivityState } from "../game/entities/entity";
 import { Creature } from "../game/entities/creatures";
 import { Player } from "../game/entities/player";
 import Position from "../game/world/position";
@@ -79,8 +80,16 @@ const store = new Vuex.Store({
     moveCreature({ commit }, { creature, newPos }: { creature: Creature; newPos: Position }) {
       commit("MOVE_CREATURE", { creature, newPos });
     },
-    movePlayer({ commit }, dir: Direction) {
-      commit("MOVE_PLAYER", parseDir(dir));
+    movePlayer({ state, commit }, dir: Direction) {
+      if (state.player.currentActivityState === ActivityState.MOVING) {
+        commit("MOVE_PLAYER", parseDir(dir));
+      } else {
+        commit("ADD_MESSAGE", {
+          entity: "Can't esacpe!",
+          message:
+            "You can't move while you're being attacked. Type \"run\" to attempt to run away.",
+        });
+      }
     },
     parseCommand(_, command) {
       console.log("Parsing", command);
@@ -121,6 +130,7 @@ const store = new Vuex.Store({
     },
     creaturesWithinRadius: state => (pos: Position, radius: number = 10) => {
       if (!pos) {
+        console.warn("No player position in creatureWithinRadius, returning all creatures");
         return state.creatures;
       }
       const creatures = new Map();

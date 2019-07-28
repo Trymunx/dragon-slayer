@@ -330,6 +330,21 @@ export class Creature extends Entity {
     }
   }
 
+  targetPlayer(player: Player) {
+    if (
+      player.hp.current < this.hp.current &&
+      this.currentActivityState === ActivityState.MOVING &&
+      player.currentActivityState === ActivityState.MOVING
+    ) {
+      console.info(`${this.position.key()}: ${this.species.name} attacking ${player.name}`);
+      this.currentActivityState = ActivityState.FIGHTING;
+      player.currentActivityState = ActivityState.FIGHTING;
+      this.target = player;
+      player.target = this;
+      this.cooldown = this.attributes.attackSpeed;
+    }
+  }
+
   update() {
     if (this.cooldown > 0) {
       this.cooldown--;

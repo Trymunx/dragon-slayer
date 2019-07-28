@@ -114,6 +114,7 @@ export class Player extends Entity {
         message: "There is nothing to attack!",
       });
       this.target = undefined;
+      this.currentActivityState = ActivityState.MOVING;
       return;
     }
 
