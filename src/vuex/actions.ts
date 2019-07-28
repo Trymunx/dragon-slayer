@@ -11,6 +11,8 @@ function actionGen<P>(name: string) {
   return (payload: P) => store.dispatch(name, payload);
 }
 
+// type dispatcher<I, A extends keyof I> = (payload?: I[A]) => void;
+
 // To use, import dispatchAction then e.g. dispatchAction.SetPlayerName("new name"))
 export const dispatchAction = {
   AddCreature: actionGen<Creature>("addCreature"),
@@ -33,6 +35,12 @@ export const dispatchAction = {
   SetSplash: actionGen<boolean>("setSplash"),
   SetWorld: actionGen<World>("setWorld"),
 };
+
+// type ActionKey = keyof IActions;
+
+// type disp = {
+//   [name: ActionKey]: (payload?: IActions[typeof name]) => void;
+// }
 
 // type VuexAction<S, R, P> = (context: ActionContext<S, R>, payload: P) => void;
 type ActionHandlerWithPayload<S, R, P> = (
@@ -77,7 +85,7 @@ interface IActions extends ActionTree<InitialState, InitialState> {
   setWorld: ActionHandlerWithPayload<InitialState, InitialState, World>;
 }
 
-export const actions: IActions & ActionTree<InitialState, InitialState> = {
+export const actions: IActions = {
   addCreature: ({ commit }, creature) => {
     commit("ADD_CREATURE", creature);
   },

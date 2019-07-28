@@ -1,4 +1,4 @@
-import { actions } from "./actions";
+// import { actions } from "./actions";
 import { Creature } from "../game/entities/creatures";
 import { Player } from "../game/entities/player";
 import Position from "../game/world/position";
@@ -47,73 +47,72 @@ const InitialState: InitialState = {
 };
 
 const store = new Vuex.Store({
-  actions,
-  // : {
-  //   addCreature({ commit }, creature) {
-  //     commit("ADD_CREATURE", creature);
-  //   },
-  //   addMessage({ commit }, data) {
-  //     commit("ADD_MESSAGE", data);
-  //   },
-  //   clearHighlight({ commit }) {
-  //     commit("CLEAR_HIGHLIGHTED");
-  //   },
-  //   dropItems({ commit }, data) {
-  //     commit("DROP_ITEMS", data);
-  //   },
-  //   enterCommand({ commit, state }, text) {
-  //     commit("ADD_MESSAGE", {
-  //       entity: state.player.name,
-  //       message: text,
-  //     });
-  //     commit("SET_INPUT_TEXT", "");
-  //   },
-  //   highlight({ commit }, tiles) {
-  //     commit("HIGHLIGHT_TILES", tiles);
-  //   },
-  //   moveCreature({ commit }, { creature, newPos }: { creature: Creature; newPos: Position }) {
-  //     commit("MOVE_CREATURE", { creature, newPos });
-  //   },
-  //   movePlayer({ commit }, dir: Direction) {
-  //     commit("MOVE_PLAYER", parseDir(dir));
-  //   },
-  //   parseCommand(_, command) {
-  //     console.log("Parsing", command);
-  //   },
-  //   // receiveInput({ commit }, input) {
-  //   // gsMan.receiveInput(input);
-  //   // },
-  //   sendMessageAtPosition({ commit, state }, { entity, message, position }) {
-  //     // Only send messages when player is there
-  //     if (state.player.position.x === position.x && state.player.position.y === position.y) {
-  //       commit("ADD_MESSAGE", { entity, message });
-  //     }
-  //   },
-  //   setCommandMode({ commit }, mode) {
-  //     commit("SET_COMMAND_MODE", mode);
-  //   },
-  //   setDisplayOrigin({ commit }, vector) {
-  //     commit("SET_DISPLAY_ORIGIN", vector);
-  //   },
-  //   setInputText({ commit }, text) {
-  //     commit("SET_INPUT_TEXT", text);
-  //   },
-  //   setPlayer({ commit }, player) {
-  //     commit("SET_PLAYER", player);
-  //   },
-  //   setPlayerName({ commit }, name) {
-  //     commit("SET_PLAYER_NAME", name);
-  //   },
-  //   setSplash({ commit }, val) {
-  //     commit("SET_SPLASH", val);
-  //   },
-  //   setWorld({ commit }, world) {
-  //     commit("SET_WORLD", world);
-  //   },
-  //   // startGame({ commit }) {
-  //   // commit("START_GAME");
-  //   // },
-  // },
+  actions: {
+    addCreature({ commit }, creature: Creature) {
+      commit("ADD_CREATURE", creature);
+    },
+    addMessage({ commit }, data: { entity: string; message: string }) {
+      commit("ADD_MESSAGE", data);
+    },
+    addMessageAtPosition({ commit, state }, { entity, message, position }) {
+      // Only send messages when player is there
+      if (state.player.position.x === position.x && state.player.position.y === position.y) {
+        commit("ADD_MESSAGE", { entity, message });
+      }
+    },
+    clearHighlight({ commit }) {
+      commit("CLEAR_HIGHLIGHTED");
+    },
+    dropItems({ commit }, data) {
+      commit("DROP_ITEMS", data);
+    },
+    enterCommand({ commit, state }, text) {
+      commit("ADD_MESSAGE", {
+        entity: state.player.name,
+        message: text,
+      });
+      commit("SET_INPUT_TEXT", "");
+    },
+    highlight({ commit }, tiles) {
+      commit("HIGHLIGHT_TILES", tiles);
+    },
+    moveCreature({ commit }, { creature, newPos }: { creature: Creature; newPos: Position }) {
+      commit("MOVE_CREATURE", { creature, newPos });
+    },
+    movePlayer({ commit }, dir: Direction) {
+      commit("MOVE_PLAYER", parseDir(dir));
+    },
+    parseCommand(_, command) {
+      console.log("Parsing", command);
+    },
+    // receiveInput({ commit }, input) {
+    // gsMan.receiveInput(input);
+    // },
+    setCommandMode({ commit }, mode) {
+      commit("SET_COMMAND_MODE", mode);
+    },
+    setDisplayOrigin({ commit }, vector) {
+      commit("SET_DISPLAY_ORIGIN", vector);
+    },
+    setInputText({ commit }, text) {
+      commit("SET_INPUT_TEXT", text);
+    },
+    setPlayer({ commit }, player) {
+      commit("SET_PLAYER", player);
+    },
+    setPlayerName({ commit }, name) {
+      commit("SET_PLAYER_NAME", name);
+    },
+    setSplash({ commit }, val) {
+      commit("SET_SPLASH", val);
+    },
+    setWorld({ commit }, world) {
+      commit("SET_WORLD", world);
+    },
+    // startGame({ commit }) {
+    // commit("START_GAME");
+    // },
+  },
 
   getters: {
     creatures: state => state.creatures,
