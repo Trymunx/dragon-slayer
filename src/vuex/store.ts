@@ -21,7 +21,7 @@ interface Surroundings {
   };
 }
 
-interface InitialState {
+export interface InitialState {
   commandMode: string;
   creatures: {
     [location: string]: Creature[];

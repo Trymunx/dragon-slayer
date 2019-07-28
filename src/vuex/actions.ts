@@ -1,11 +1,11 @@
-import { ActionContext, ActionTree } from "vuex";
 import { Creature } from "../game/entities/creatures";
 import { Item } from "../types";
 import { Player } from "../game/entities/player";
 import Position from "../game/world/position";
-import store from "./store";
 import World from "../game/world/World";
+import { ActionContext, ActionTree, Store } from "vuex";
 import { Direction, parseDir } from "../game/utils/direction";
+import store, { InitialState } from "./store";
 
 function actionGen<P>(name: string) {
   return (payload: P) => store.dispatch(name, payload);
@@ -34,33 +34,54 @@ export const dispatchAction = {
   SetWorld: actionGen<World>("setWorld"),
 };
 
-type VuexAction<P> = (context: ActionContext<any, any>, payload: P) => void;
+// type VuexAction<S, R, P> = (context: ActionContext<S, R>, payload: P) => void;
+type ActionHandlerWithPayload<S, R, P> = (
+  this: Store<R>,
+  intjectee: ActionContext<S, R>,
+  payload: P
+) => any;
 
-interface IActions {
-  addCreature: VuexAction<Creature>;
-  addMessage: VuexAction<{ entity: string; message: string }>;
-  addMessageAtPosition: VuexAction<{ entity: string; message: string; position: Position }>;
-  clearHighlight: VuexAction<null>;
-  dropItems: VuexAction<{ items: Item[]; pos: Position }>;
-  enterCommand: VuexAction<string>;
-  highlight: VuexAction<Record<string, {} | { colour: string; symbol: string }>>;
-  moveCreature: VuexAction<{ creature: Creature; newPos: Position }>;
-  movePlayer: VuexAction<Direction>;
-  parseCommand: VuexAction<string>;
-  setCommandMode: VuexAction<string>;
-  setDisplayOrigin: VuexAction<[number, number]>;
-  setInputText: VuexAction<string>;
-  setPlayer: VuexAction<Player>;
-  setPlayerName: VuexAction<string>;
-  setSplash: VuexAction<boolean>;
-  setWorld: VuexAction<World>;
+interface IActions extends ActionTree<InitialState, InitialState> {
+  addCreature: ActionHandlerWithPayload<InitialState, InitialState, Creature>;
+  addMessage: ActionHandlerWithPayload<
+    InitialState,
+    InitialState,
+    { entity: string; message: string }
+  >;
+  addMessageAtPosition: ActionHandlerWithPayload<
+    InitialState,
+    InitialState,
+    { entity: string; message: string; position: Position }
+  >;
+  clearHighlight: ActionHandlerWithPayload<InitialState, InitialState, null>;
+  dropItems: ActionHandlerWithPayload<InitialState, InitialState, { items: Item[]; pos: Position }>;
+  enterCommand: ActionHandlerWithPayload<InitialState, InitialState, string>;
+  highlight: ActionHandlerWithPayload<
+    InitialState,
+    InitialState,
+    Record<string, {} | { colour: string; symbol: string }>
+  >;
+  moveCreature: ActionHandlerWithPayload<
+    InitialState,
+    InitialState,
+    { creature: Creature; newPos: Position }
+  >;
+  movePlayer: ActionHandlerWithPayload<InitialState, InitialState, Direction>;
+  parseCommand: ActionHandlerWithPayload<InitialState, InitialState, string>;
+  setCommandMode: ActionHandlerWithPayload<InitialState, InitialState, string>;
+  setDisplayOrigin: ActionHandlerWithPayload<InitialState, InitialState, [number, number]>;
+  setInputText: ActionHandlerWithPayload<InitialState, InitialState, string>;
+  setPlayer: ActionHandlerWithPayload<InitialState, InitialState, Player>;
+  setPlayerName: ActionHandlerWithPayload<InitialState, InitialState, string>;
+  setSplash: ActionHandlerWithPayload<InitialState, InitialState, boolean>;
+  setWorld: ActionHandlerWithPayload<InitialState, InitialState, World>;
 }
 
-export const actions: IActions = {
-  addCreature({ commit }, creature) {
+export const actions: IActions & ActionTree<InitialState, InitialState> = {
+  addCreature: ({ commit }, creature) => {
     commit("ADD_CREATURE", creature);
   },
-  addMessage({ commit }, data) {
+  addMessage: ({ commit }, data) => {
     commit("ADD_MESSAGE", data);
   },
   addMessageAtPosition({ commit, state }, { entity, message, position }) {
