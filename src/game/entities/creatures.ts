@@ -80,6 +80,10 @@ export class Creature extends Entity {
   aggressive: boolean;
   attacks: CreatureAttack[];
   attacksToWeightsMap: WeightedAttackMap;
+  messages: {
+    onDeath: string[];
+    onSpawn: string[];
+  };
   moveSpeed: number;
   slots?: any;
   species: {
@@ -146,6 +150,8 @@ export class Creature extends Entity {
       },
       {} as WeightedAttackMap
     );
+
+    this.messages = template.messages;
   }
 
   attack() {
@@ -192,7 +198,7 @@ export class Creature extends Entity {
       });
     } else if (this.target instanceof Player) {
       const attackMessage =
-        attack.messages[Math.floor(RNG(attack.messages.length))] + damage + " HP";
+        attack.messages[Math.floor(RNG(attack.messages.length))] + damage + " HP.";
       dispatchAction.AddMessage({
         entity: this.species.name,
         message: attackMessage,
@@ -206,6 +212,16 @@ export class Creature extends Entity {
       this.cooldown = this.moveSpeed;
       this.level++;
     }
+  }
+
+  getDeathMessage() {
+    const random = Math.floor(RNG() * this.messages.onDeath.length);
+    return this.messages.onDeath[random];
+  }
+
+  getSpawnMessage() {
+    const random = Math.floor(RNG() * this.messages.onSpawn.length);
+    return this.messages.onSpawn[random];
   }
 
   printHPReport(global: boolean = false) {
@@ -234,11 +250,20 @@ export class Creature extends Entity {
   receiveDamage(damage: number) {
     this.hp.current = Math.max(0, this.hp.current - damage);
     if (this.hp.current <= 0) {
-      dispatchAction.AddMessageAtPosition({
-        entity: "",
-        message: `The ${this.species.name} died and dropped ${this.getItemsPrettyOutput()}.`,
-        position: this.position,
-      });
+      if (this.target instanceof Player) {
+        dispatchAction.AddMessage({
+          entity: this.species.name,
+          message: this.getDeathMessage(),
+        });
+        this.target.resetActivityState();
+      } else if (this.target instanceof Creature) {
+        dispatchAction.AddMessageAtPosition({
+          entity: "",
+          message: `The ${this.species.name} died and dropped ${this.getItemsPrettyOutput()}.`,
+          position: this.position,
+        });
+        this.target.resetActivityState();
+      }
       this.currentActivityState = ActivityState.DEAD;
       this.dropItems();
     } else {
@@ -336,6 +361,10 @@ export class Creature extends Entity {
       player.currentActivityState === ActivityState.MOVING
     ) {
       console.info(`${this.position.key()}: ${this.species.name} attacking ${player.name}`);
+      dispatchAction.AddMessage({
+        entity: this.species.name,
+        message: this.getSpawnMessage(),
+      });
       this.currentActivityState = ActivityState.FIGHTING;
       player.currentActivityState = ActivityState.FIGHTING;
       this.target = player;

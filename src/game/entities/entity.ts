@@ -118,4 +118,9 @@ export class Entity {
   isDead(): boolean {
     return this.currentActivityState === ActivityState.DEAD || this.hp.current <= 0;
   }
+
+  resetActivityState() {
+    this.target = undefined;
+    this.currentActivityState = ActivityState.MOVING;
+  }
 }

@@ -86,8 +86,7 @@ const store = new Vuex.Store({
       } else {
         commit("ADD_MESSAGE", {
           entity: "Can't esacpe!",
-          message:
-            "You can't move while you're being attacked. Type \"run\" to attempt to run away.",
+          message: "You can't move while you're being attacked. Use \"r\" to attempt to run away.",
         });
       }
     },

@@ -67,30 +67,43 @@ export class MainGameState extends GameState {
       // Handle as an instant command
       switch (input) {
         case "ArrowUp":
-        case "w":
           dispatchAction.MovePlayer(Direction.NORTH);
           display.drawWorld();
           break;
         case "ArrowDown":
-        case "s":
           dispatchAction.MovePlayer(Direction.SOUTH);
           display.drawWorld();
           break;
         case "ArrowLeft":
-        case "a":
           dispatchAction.MovePlayer(Direction.WEST);
           display.drawWorld();
           break;
         case "ArrowRight":
-        case "d":
           dispatchAction.MovePlayer(Direction.EAST);
           display.drawWorld();
           break;
 
+        case "a":
+          const pos = store.getters.playerPos;
+          const creatures = store.getters.creaturesAt(pos.x, pos.y);
+          if (creatures) {
+            dispatchAction.AddMessage({
+              entity: "",
+              message: `You attack the ${creatures[0].species.name}.`,
+            });
+            store.getters.player.targetCreature(creatures[0]);
+          } else {
+            dispatchAction.AddMessage({
+              entity: "",
+              message: "There is nothing here to attack.",
+            });
+          }
+          break;
         case "r":
           store.getters.player.run();
           display.drawWorld();
           break;
+
         default:
           break;
       }

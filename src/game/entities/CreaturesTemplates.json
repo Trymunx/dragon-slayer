@@ -98,8 +98,8 @@
     },
     "messages": {
       "onSpawn": [
-        "It roars and spreads its wings as you approach, then attacks.",
-        "It lifts its head and a pillar of scorching flames erupts from its mouth. Its fierce eyes then lock onto you and it attacks."
+        "The dragon roars and spreads its wings as you approach, then attacks.",
+        "The dragon lifts its head and a pillar of scorching flames erupts from its mouth. Its fierce eyes then lock onto you and it attacks."
       ],
       "onDeath": [
         "With a deafening roar, the dragon lets out a final burst of flaming breath and falls, shaking the ground.",
@@ -183,8 +183,8 @@
     },
     "messages": {
       "onSpawn": [
-        "It lets out a booming roar as it walks towards you and attacks, each step shaking the earth.",
-        "It strides towards you and attacks, dragging its club along the ground behind it. The earth shakes with each step it takes."
+        "The giant lets out a booming roar as it walks towards you and attacks, each step shaking the earth.",
+        "The giant strides towards you and attacks, dragging its club along the ground behind it. The earth shakes with each step it takes."
       ],
       "onDeath": [
         "With a sickening bellow, the giant falls to the ground with a mighty thud.",
@@ -253,8 +253,8 @@
     },
     "messages": {
       "onSpawn": [
-        "It roars incoherently as you approach, beating its chest. It attacks you.",
-        "It roars and swings its arms clumsily in your direction as you approach, then attacks."
+        "The troll roars incoherently as you approach, beating its chest. It attacks you.",
+        "The troll roars and swings its arms clumsily in your direction as you approach, then attacks."
       ],
       "onDeath": [
         "The troll bellows and keels over, dead.",
@@ -342,8 +342,8 @@
     },
     "messages": {
       "onSpawn": [
-        "It shouts at you in a language you don't recognise. It spits as you approach, then attacks.",
-        "It bashes its sword against its shield, grunting menacingly at you as it attacks."
+        "The orc shouts at you in a language you don't recognise. It spits as you approach, then attacks.",
+        "The orc bashes its sword against its shield, grunting menacingly at you as it attacks."
       ],
       "onDeath": [
         "With a final swing of your sword the orc's headless corpse falls at your feet.",
@@ -431,8 +431,8 @@
     },
     "messages": {
       "onSpawn": [
-        "It shrieks at you and waves its sword as you approach, then attacks.",
-        "It cackles at you, beating the ground with its hands before it attacks."
+        "The goblin shrieks at you and waves its sword as you approach, then attacks.",
+        "The goblin cackles at you, beating the ground with its hands before it attacks."
       ],
       "onDeath": [
         "The goblin recoils, but not in time. Its corpse falls to the ground.",
@@ -623,8 +623,8 @@
     },
     "messages": {
       "onSpawn": [
-        "It walks towards you, its bones rattling against each other, then attacks.",
-        "It walks towards you, swinging its weapon as it attacks."
+        "The skeleton walks towards you, its bones rattling against each other, then attacks.",
+        "The skeleton walks towards you, swinging its weapon as it attacks."
       ],
       "onDeath": [
         "With an almighty clattering noise the skeleton collapses into a pile of bones.",
@@ -680,8 +680,8 @@
     },
     "messages": {
       "onSpawn": [
-        "You see its face contort in anger and it attacks, its form swirling in and out of view.",
-        "It lets out a wailing cry and attacks, its form swirling in and out of view."
+        "You see the ghost's face contort in anger and it attacks, its form swirling in and out of view.",
+        "The ghost lets out a wailing cry and attacks, its form swirling in and out of view."
       ],
       "onDeath": [
         "The ghost's form dissipates into the surroundings, released from the physical world.",
@@ -750,8 +750,8 @@
     },
     "messages": {
       "onSpawn": [
-        "It squeaks and bares its teeth as you approach, then attacks.",
-        "It squeaks and scurries towards you to attack, teeth bared."
+        "The giant rat squeaks and bares its teeth as you approach, then attacks.",
+        "The giant rat squeaks and scurries towards you to attack, teeth bared."
       ],
       "onDeath": [
         "The giant rat lets out a squeal as it dies.",
@@ -820,8 +820,8 @@
     },
     "messages": {
       "onSpawn": [
-        "You notice a large stinger protruding between its spinnerets. It scuttles towards you and attacks.",
-        "It scuttles out of its web to attack you, and you notice a large stinger protruding between its spinnerets."
+        "The giant spider scuttles towards you and attacks. You notice a large stinger protruding between its spinnerets.",
+        "The giant spider scuttles out of its web to attack you, and you notice a large stinger protruding between its spinnerets."
       ],
       "onDeath": [
         "The giant spider's legs curl inwards towards its body as it dies.",
@@ -898,8 +898,8 @@
     },
     "messages": {
       "onSpawn": [
-        "It circles you slowly with its hackles raised, growling menacingly before attacking you.",
-        "It growls menacingly, pawing the ground, then lifts its head and howls before attacking you."
+        "The wolf circles you slowly with its hackles raised, growling menacingly before attacking you.",
+        "The wolf growls menacingly, pawing the ground, then lifts its head and howls before attacking you."
       ],
       "onDeath": [
         "The wolf lets out a whine as it falls to the ground.",
@@ -972,8 +972,8 @@
     },
     "messages": {
       "onSpawn": [
-        "It lowers its head, pawing at the ground and charges at you.",
-        "It squeals and lowers its head before rushing towards you."
+        "The boar lowers its head, pawing at the ground and charges at you.",
+        "The boar squeals and lowers its head before rushing towards you."
       ],
       "onDeath": [
         "The boar lets out a high pitched squeal and collapses to the ground, its legs kicking out furiously until its final breath.",
@@ -1042,8 +1042,8 @@
     },
     "messages": {
       "onSpawn": [
-        "It hisses and bares its fangs as you attack.",
-        "It hisses, its tongue flicking in and out of its mouth as it watches you. Its head sways to follow you as you attack."
+        "The snake hisses and bares its fangs as it attacks.",
+        "The snake hisses, its tongue flicking in and out of its mouth as it watches you. Its head sways to follow you as you attack."
       ],
       "onDeath": [
         "The snake tries to slither away before curling up, dead.",
@@ -1108,8 +1108,8 @@
     },
     "messages": {
       "onSpawn": [
-        "It squeaks and runs in circles as you attack.",
-        "It squeaks and scurries towards you as you attack."
+        "The rat squeaks and runs in circles as you attack.",
+        "The rat squeaks and scurries towards you as you attack."
       ],
       "onDeath": [
         "With a squeak the rat dies.",
@@ -1170,8 +1170,8 @@
     },
     "messages": {
       "onSpawn": [
-        "It scuttles towards you as you attack.",
-        "It slowly drops down from above on a long strand of web as you attack."
+        "The spider scuttles towards you as you attack.",
+        "The spider slowly drops down from above on a long strand of web as you attack."
       ],
       "onDeath": [
         "The spider curls its legs into its body, dead.",
@@ -1240,8 +1240,8 @@
     },
     "messages": {
       "onSpawn": [
-        "It looks around at you, then with a bark runs towards you as you attack.",
-        "It barks then prepares for your attack."
+        "The fox looks around at you, then with a bark runs towards you as you attack.",
+        "The fox barks then prepares for your attack."
       ],
       "onDeath": [
         "The fox's lifeless body collapses to the ground.",
@@ -1310,8 +1310,8 @@
     },
     "messages": {
       "onSpawn": [
-        "It attempts to leap gracefully away from you as you approach, before turning as you attack.",
-        "It watches you carefully as you attack."
+        "The deer attempts to leap gracefully away from you as you approach, before turning as you attack.",
+        "The deer watches you carefully as you attack."
       ],
       "onDeath": [
         "The deer's lifeless body collapses to the ground.",
@@ -1376,8 +1376,8 @@
     },
     "messages": {
       "onSpawn": [
-        "It grunts and squeals as you attack.",
-        "It paws the ground, grunting frantically as you attack."
+        "The pig grunts and squeals as you attack.",
+        "The pig paws the ground, grunting frantically as you attack."
       ],
       "onDeath": [
         "With a high pitched squeal the pig's lifeless body collapses to the ground.",
@@ -1436,8 +1436,8 @@
     },
     "messages": {
       "onSpawn": [
-        "It squeaks as you attack.",
-        "It jumps up as you attack, squeaking."
+        "The rabbit squeaks as you attack.",
+        "The rabbit jumps up as you attack, squeaking."
       ],
       "onDeath": [
         "The rabbit dies with a whimper.",

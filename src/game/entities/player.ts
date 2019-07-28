@@ -195,7 +195,7 @@ export class Player extends Entity {
   }
 
   run(dir?: Direction) {
-    if (!this.target || isPlayer(this.target)) {
+    if (!this.target || this.target instanceof Player) {
       dispatchAction.AddMessage({
         entity: "",
         message: "You can't run away when you aren't being attacked.",
@@ -231,8 +231,18 @@ export class Player extends Entity {
 
   targetCreature(creature: Creature) {
     this.target = creature;
-    creature.currentActivityState = ActivityState.FIGHTING;
+    this.currentActivityState = ActivityState.FIGHTING;
+
+    dispatchAction.AddMessage({
+      entity: "",
+      message: creature.getSpawnMessage(),
+    });
+
+    this.attack();
+
     creature.target = this;
+    creature.currentActivityState = ActivityState.FIGHTING;
+    creature.cooldown = 20;
   }
 
   update() {
