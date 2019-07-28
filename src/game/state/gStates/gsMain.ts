@@ -86,6 +86,11 @@ export class MainGameState extends GameState {
           dispatchAction.MovePlayer(Direction.EAST);
           display.drawWorld();
           break;
+
+        case "r":
+          store.getters.player.run();
+          display.drawWorld();
+          break;
         default:
           break;
       }
