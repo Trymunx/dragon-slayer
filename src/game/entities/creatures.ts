@@ -332,7 +332,6 @@ export class Creature extends Entity {
 
   targetPlayer(player: Player) {
     if (
-      player.hp.current < this.hp.current &&
       this.currentActivityState === ActivityState.MOVING &&
       player.currentActivityState === ActivityState.MOVING
     ) {
