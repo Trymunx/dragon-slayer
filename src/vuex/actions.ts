@@ -8,7 +8,7 @@ import { Direction, parseDir } from "../game/utils/direction";
 import store, { InitialState } from "./store";
 
 function actionGen<P>(name: string) {
-  return (payload: P) => store.dispatch(name, payload);
+  return (payload?: P) => store.dispatch(name, payload);
 }
 
 // type dispatcher<I, A extends keyof I> = (payload?: I[A]) => void;
