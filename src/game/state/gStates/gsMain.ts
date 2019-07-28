@@ -1,3 +1,4 @@
+import { ActivityState } from "../../entities/entity";
 import { Direction } from "../../utils/direction";
 import { dispatchAction } from "../../../vuex/actions";
 import { display } from "../../overview/Display";
@@ -87,11 +88,31 @@ export class MainGameState extends GameState {
           const pos = store.getters.playerPos;
           const creatures = store.getters.creaturesAt(pos.x, pos.y);
           if (creatures) {
-            dispatchAction.AddMessage({
-              entity: "",
-              message: `You attack the ${creatures[0].species.name}.`,
-            });
-            store.getters.player.targetCreature(creatures[0]);
+            let target = 0;
+            let haveFoundTarget = false;
+            while (target < creatures.length && !haveFoundTarget) {
+              if (
+                !creatures[target].isDead() &&
+                creatures[target].currentActivityState === ActivityState.MOVING
+              ) {
+                haveFoundTarget = true;
+              }
+              target++;
+            }
+
+            if (haveFoundTarget) {
+              dispatchAction.AddMessage({
+                entity: "",
+                message: `You attack the ${creatures[target].species.name}.`,
+              });
+              store.getters.player.targetCreature(creatures[target]);
+            } else {
+              dispatchAction.AddMessage({
+                entity: "",
+                message:
+                  "You cannot attack these creatures because they are dead or already fighting.",
+              });
+            }
           } else {
             dispatchAction.AddMessage({
               entity: "",
