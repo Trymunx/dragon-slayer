@@ -30,3 +30,17 @@ export function getDirStringFromVector(x: number, y: number): string {
   if (!x && !y) dir.push("here");
   return dir.join(" ");
 }
+
+export const getRandomDirection = (): Direction => {
+  const random = Math.floor(Math.random() * 4);
+
+  if (random < 1) {
+    return Direction.NORTH;
+  } else if (random < 2) {
+    return Direction.SOUTH;
+  } else if (random < 3) {
+    return Direction.EAST;
+  } else {
+    return Direction.WEST;
+  }
+};

@@ -109,11 +109,15 @@ export class MainGameState extends GameState {
             "mode.\nYou can right-click on the map to see what is on that tile.",
         });
       } else {
-        // Handle as text command
-        dispatchAction.AddMessage({
-          entity: "Main state",
-          message: "Response to " + input,
-        });
+        if (/^run$/.test(input.trim())) {
+          store.getters.player.run();
+        } else {
+          // Handle as text command
+          dispatchAction.AddMessage({
+            entity: "Main state",
+            message: "Response to " + input,
+          });
+        }
       }
     }
   }

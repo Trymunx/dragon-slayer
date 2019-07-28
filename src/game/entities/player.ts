@@ -5,6 +5,7 @@ import store from "../../vuex/store";
 import { ActivityState, Entity, EntityType, HumanoidBody, isPlayer } from "./entity";
 import { attackSuccessChance, maxDamage } from "../utils/fighting";
 import { Creature, CreatureName } from "./creatures";
+import { Direction, getRandomDirection } from "../utils/direction";
 
 // export interface Player {
 //   creaturesSlain: { [key in CreatureName]?: number };
@@ -190,6 +191,41 @@ export class Player extends Entity {
       this.currentActivityState = ActivityState.DEAD;
     } else {
       this.printHPReport();
+    }
+  }
+
+  run(dir?: Direction) {
+    if (!this.target || isPlayer(this.target)) {
+      dispatchAction.AddMessage({
+        entity: "",
+        message: "You can't run away when you aren't being attacked.",
+      });
+      return;
+    }
+    if (RNG() < 0.5) {
+      this.target.target = undefined;
+      this.target.currentActivityState = ActivityState.MOVING;
+
+      this.target = undefined;
+      this.currentActivityState = ActivityState.MOVING;
+
+      if (dir) {
+        dispatchAction.MovePlayer(dir);
+      } else {
+        dispatchAction.MovePlayer(getRandomDirection());
+      }
+
+      dispatchAction.AddMessage({
+        entity: "",
+        message: "You manage to run away.",
+      });
+    } else {
+      dispatchAction.AddMessage({
+        entity: "Can't escape!",
+        message: `You attempt to run but the ${
+          this.target.species.name
+        } prevents you from fleeing.`,
+      });
     }
   }
 
