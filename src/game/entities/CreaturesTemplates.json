@@ -534,8 +534,8 @@
     },
     "messages": {
       "onSpawn": [
-        "He makes a grab for your gold but you are too quick. He attacks you angrily.",
-        "He tries to pilfer some of your possessions, but you catch him in the act and he attacks."
+        "The thief makes a grab for your gold but you are too quick. He attacks you angrily.",
+        "The thief tries to pilfer some of your possessions, but you catch him in the act and he attacks."
       ],
       "onDeath": [
         "You strike the final blow, killing the thief. All of his possessions are yours now!",
