@@ -1,3 +1,4 @@
+import { ActivityState } from "./entities/entity";
 import { Creature } from "./entities/creatures";
 import { display } from "./overview/Display";
 import store from "../vuex/store";
@@ -9,16 +10,19 @@ const gameloop = {
 
     const locationsToCreaturesMap = getCreaturesToUpdate(playerPos);
     for (const [location, creatures] of locationsToCreaturesMap) {
-      const aggressive: Creature[] = creatures.filter((creature: Creature) => creature.aggressive);
+      const idleAggressive: Creature[] = creatures.filter(
+        (creature: Creature) =>
+          creature.aggressive && creature.currentActivityState === ActivityState.MOVING
+      );
 
       // Attack player
       if (location === store.getters.playerPos.key()) {
-        aggressive.forEach(aggressiveCreature => aggressiveCreature.targetPlayer(player));
+        idleAggressive.forEach(aggressiveCreature => aggressiveCreature.targetPlayer(player));
       }
 
       // Fight other creatures
-      if (aggressive.length > 1 && creatures.length > 1) {
-        aggressive.forEach(aggressiveCreature => aggressiveCreature.targetCreatures(creatures));
+      if (idleAggressive.length > 1 && creatures.length > 1) {
+        idleAggressive.forEach(aggressiveCreature => aggressiveCreature.targetCreatures(creatures));
       }
 
       // Update cooldown
