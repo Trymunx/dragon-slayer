@@ -2,12 +2,12 @@
 import { ActivityState } from "../game/entities/entity";
 import { Creature } from "../game/entities/creatures";
 import { Player } from "../game/entities/player";
-import Position from "../game/world/position";
 import Vue from "vue";
 import Vuex from "vuex";
 import World from "../game/world/World";
 import { Direction, getDirStringFromVector, parseDir } from "../game/utils/direction";
 import { Item, Message, SurroundingsItem } from "../types";
+import Position, { Vector, VTS } from "../game/world/position";
 
 Vue.use(Vuex);
 
@@ -77,7 +77,7 @@ const store = new Vuex.Store({
     highlight({ commit }, tiles) {
       commit("HIGHLIGHT_TILES", tiles);
     },
-    moveCreature({ commit }, { creature, newPos }: { creature: Creature; newPos: Position }) {
+    moveCreature({ commit }, { creature, newPos }: { creature: Creature; newPos: Vector }) {
       commit("MOVE_CREATURE", { creature, newPos });
     },
     movePlayer({ state, commit }, dir: Direction) {
@@ -124,19 +124,22 @@ const store = new Vuex.Store({
 
   getters: {
     creatures: state => state.creatures,
-    creaturesAt: state => (x: number, y: number) => {
-      return state.creatures[new Position(x, y).key()] || [];
+    creaturesAt: state => (x: number, y: number): Array<Creature> => {
+      return state.creatures[VTS(x, y)] || [];
     },
-    creaturesWithinRadius: state => (pos: Position, radius: number = 10) => {
+    creaturesWithinRadius: state => (
+      pos: Position,
+      radius: number = 10
+    ): Record<string, Creature[]> => {
       if (!pos) {
         console.warn("No player position in creatureWithinRadius, returning all creatures");
         return state.creatures;
       }
-      const creatures = new Map();
+      const creatures: Record<string, Creature[]> = {};
       for (let y = pos.y - radius; y < pos.y + radius; y++) {
         for (let x = pos.x - radius; x < pos.x + radius; x++) {
-          if (state.creatures[new Position(x, y).key()]) {
-            creatures.set(new Position(x, y).key(), state.creatures[new Position(x, y).key()]);
+          if (state.creatures[VTS(x, y)]) {
+            creatures[VTS(x, y)] = state.creatures[VTS(x, y)];
           }
         }
       }
@@ -147,7 +150,7 @@ const store = new Vuex.Store({
     inputText: state => state.inputText,
     instantMode: state => state.commandMode === "instant",
     itemsOnTile: state => (x: number, y: number) => {
-      const tile = state.world && state.world.getTile(new Position(x, y));
+      const tile = state.world && state.world.getTile(x, y);
       return tile ? tile.items : [];
     },
     messages: state => state.messages,
@@ -164,15 +167,14 @@ const store = new Vuex.Store({
 
       for (let y = -radius; y <= radius; y++) {
         for (let x = -radius; x <= radius; x++) {
-          const pos: Position = new Position(
-            state.player.position.x + x,
-            state.player.position.y + y
-          );
+          const pos: Vector = [state.player.position.x + x, state.player.position.y + y];
 
-          if (state.creatures[pos.key()] && state.creatures[pos.key()].length > 0) {
+          const creatures = state.creatures[VTS(...pos)];
+
+          if (creatures && creatures.length > 0) {
             const dir = getDirStringFromVector(x, y);
             const dist = Math.abs(x) + Math.abs(y);
-            const creaturesHere = state.creatures[pos.key()]
+            const creaturesHere = creatures
               .filter((creature: Creature) => !creature.isDead())
               .map((creature: Creature) => ({
                 creature,
@@ -182,21 +184,21 @@ const store = new Vuex.Store({
             surr.creatures = surr.creatures.concat(creaturesHere);
           }
 
-          const tile = state.world!.getTile(pos);
+          const tile = state.world!.getTile(...pos);
           if (tile.items.length) {
             tile.items.forEach((item: Item) => {
               if (surr.items[item.name]) {
                 surr.items[item.name].count++;
-                surr.items[item.name].locations[pos.key()] = {};
-                if (surr.items[item.name].expanded[new Position(x, y).key()]) {
-                  surr.items[item.name].expanded[new Position(x, y).key()].count++;
-                  surr.items[item.name].expanded[new Position(x, y).key()].totalValue += item.val;
+                surr.items[item.name].locations[VTS(...pos)] = {};
+                if (surr.items[item.name].expanded[VTS(x, y)]) {
+                  surr.items[item.name].expanded[VTS(x, y)].count++;
+                  surr.items[item.name].expanded[VTS(x, y)].totalValue += item.val;
                 } else {
-                  surr.items[item.name].expanded[new Position(x, y).key()] = {
+                  surr.items[item.name].expanded[VTS(x, y)] = {
                     count: 1,
                     dir: getDirStringFromVector(x, y),
                     loc: {
-                      [pos.key()]: {},
+                      [VTS(...pos)]: {},
                     },
                     name: item.name,
                     plural: item.plural,
@@ -207,11 +209,11 @@ const store = new Vuex.Store({
                 surr.items[item.name] = {
                   count: 1,
                   expanded: {
-                    [new Position(x, y).key()]: {
+                    [VTS(x, y)]: {
                       count: 1,
                       dir: getDirStringFromVector(x, y),
                       loc: {
-                        [pos.key()]: {},
+                        [VTS(...pos)]: {},
                       },
                       name: item.name,
                       plural: item.plural,
@@ -219,7 +221,7 @@ const store = new Vuex.Store({
                     },
                   },
                   locations: {
-                    [pos.key()]: {},
+                    [VTS(...pos)]: {},
                   },
                   name: item.name,
                   plural: item.plural,
@@ -248,13 +250,13 @@ const store = new Vuex.Store({
 
   mutations: {
     ADD_CREATURE(state, creature: Creature) {
-      if (state.creatures[creature.position.key()]) {
-        const creatures = state.creatures[creature.position.key()]
+      if (state.creatures[VTS(creature.position.x, creature.position.y)]) {
+        const creatures = state.creatures[VTS(creature.position.x, creature.position.y)]
           .concat([creature])
           .sort((a, b) => b.level - a.level);
-        state.creatures[creature.position.key()] = creatures;
+        state.creatures[VTS(creature.position.x, creature.position.y)] = creatures;
       } else {
-        Vue.set(state.creatures, creature.position.key(), [creature]);
+        Vue.set(state.creatures, creature.position.key, [creature]);
       }
     },
     ADD_MESSAGE(state, { entity, message }: Message) {
@@ -267,35 +269,35 @@ const store = new Vuex.Store({
       state.highlit = {};
     },
     DROP_ITEMS(state, { items, pos }: { items: Item[]; pos: Position }) {
-      const tile = state.world!.getTile(pos);
+      const tile = state.world!.getTile(pos.x, pos.y);
       tile.items.push(...items);
     },
     HIGHLIGHT_TILES(state, tiles) {
       state.highlit = tiles;
     },
-    MOVE_CREATURE(state, { creature, newPos }: { creature: Creature; newPos: Position }) {
-      if (state.creatures[newPos.key()]) {
-        state.creatures[newPos.key()].push(
-          ...state.creatures[creature.position.key()].splice(
-            state.creatures[creature.position.key()].indexOf(creature),
+    MOVE_CREATURE(state, { creature, newPos }: { creature: Creature; newPos: Vector }) {
+      if (state.creatures[VTS(...newPos)]) {
+        state.creatures[VTS(...newPos)].push(
+          ...state.creatures[creature.position.key].splice(
+            state.creatures[creature.position.key].indexOf(creature),
             1
           )
         );
-        state.creatures[newPos.key()].sort((a, b) => b.level - a.level);
+        state.creatures[VTS(...newPos)].sort((a, b) => b.level - a.level);
       } else {
         Vue.set(
           state.creatures,
-          newPos.key(),
-          state.creatures[creature.position.key()].splice(
-            state.creatures[creature.position.key()].indexOf(creature),
+          VTS(...newPos),
+          state.creatures[creature.position.key].splice(
+            state.creatures[creature.position.key].indexOf(creature),
             1
           )
         );
       }
     },
     MOVE_PLAYER(state, [x, y]) {
-      const pos = new Position(state.player.position.x + x, state.player.position.y + y);
-      state.player = Object.assign(state.player, { position: pos });
+      state.player.position.x += x;
+      state.player.position.y += y;
     },
     SET_COMMAND_MODE(state, mode) {
       state.commandMode = mode;

@@ -304,28 +304,28 @@ export class Creature extends Entity {
       case 0:
         dispatchAction.MoveCreature({
           creature: this,
-          newPos: new Position(this.position.x, this.position.y - 1),
+          newPos: [this.position.x, this.position.y - 1],
         });
         this.position.y--;
         break;
       case 1:
         dispatchAction.MoveCreature({
           creature: this,
-          newPos: new Position(this.position.x, this.position.y + 1),
+          newPos: [this.position.x, this.position.y + 1],
         });
         this.position.y++;
         break;
       case 2:
         dispatchAction.MoveCreature({
           creature: this,
-          newPos: new Position(this.position.x - 1, this.position.y),
+          newPos: [this.position.x - 1, this.position.y],
         });
         this.position.x--;
         break;
       case 3:
         dispatchAction.MoveCreature({
           creature: this,
-          newPos: new Position(this.position.x + 1, this.position.y),
+          newPos: [this.position.x + 1, this.position.y],
         });
         this.position.x++;
         break;

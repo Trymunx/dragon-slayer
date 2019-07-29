@@ -2,7 +2,7 @@ import Chunk from "./Chunk";
 import { Creature } from "../entities/creatures";
 import genTree from "./genTree";
 import { Item } from "../../types";
-import Position from "./position";
+import { Vector } from "./position";
 
 type Terrain = "forest" | "mountain" | "hills" | "river";
 
@@ -11,13 +11,13 @@ export default class Tile {
   display: string;
   foreground: string;
   items: Item[];
-  relPos: Position;
+  relPos: Vector;
   spawnRateModifiers: Map<Creature, number>;
 
   constructor(x: number, y: number, chunk: Chunk, terrain?: Terrain) {
     this.chunk = chunk;
     this.items = [];
-    this.relPos = new Position(x, y);
+    this.relPos = [x, y];
 
     switch (terrain) {
       case "forest":

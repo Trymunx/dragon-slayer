@@ -1,22 +1,24 @@
 import Chunk from "./Chunk";
 import { Player } from "../entities/player";
-import Position from "./position";
 import { RNG } from "../utils/RNG";
 import Tile from "./Tile";
+import { Vector, VTS } from "./position";
 
 export default class World {
-  chunks: Map<string, Chunk>;
+  chunks: {
+    [origin: string]: Chunk;
+  };
   spawnChunk: Chunk;
 
   constructor() {
-    this.chunks = new Map();
+    this.chunks = {};
 
     // Generate starting chunk
-    this.spawnChunk = this.genChunk(new Position(0, 0));
+    this.spawnChunk = this.genChunk(0, 0);
     // Generate surrounding chunks
     [[0, 1], [0, -1], [1, 0], [-1, 0]].forEach(c => {
       // console.log("generating chunk", c[0], c[1]);
-      this.genChunk(new Position(c[0], c[1]));
+      this.genChunk(...(c as [number, number]));
     });
 
     // constructor(type, size) {
@@ -26,33 +28,30 @@ export default class World {
     //   let spawnChunk = this.genChunk(Math.floor(RNG(this.size)), Math.floor(RNG(this.size)));
   }
 
-  getChunk(pos: Position) {
-    return this.chunks.get(pos.key());
+  getChunk(x: number, y: number) {
+    return this.chunks[VTS(x, y)];
   }
 
-  chunkExists(pos: Position): boolean {
-    return this.chunks.has(pos.key());
+  chunkExists(x: number, y: number): boolean {
+    return this.chunks[VTS(x, y)] !== undefined;
   }
 
-  genChunk(pos: Position) {
-    let chunk = new Chunk(pos.x, pos.y, this);
-    this.chunks.set(pos.key(), chunk);
+  genChunk(x: number, y: number) {
+    let chunk = new Chunk(x, y, this);
+    this.chunks[VTS(x, y)] = chunk;
     return chunk;
   }
 
-  getChunkFromTile(tile: Position): Chunk {
-    const chunkCoords = new Position(
-      Math.floor(tile.x / Chunk.size),
-      Math.floor(tile.y / Chunk.size)
-    );
-    if (this.chunkExists(chunkCoords)) {
-      return this.getChunk(chunkCoords)!;
+  getChunkFromTile(x: number, y: number): Chunk {
+    const chunkCoords: Vector = [Math.floor(x / Chunk.size), Math.floor(y / Chunk.size)];
+    if (this.chunkExists(...chunkCoords)) {
+      return this.getChunk(...chunkCoords)!;
     } else {
-      return this.genChunk(chunkCoords);
+      return this.genChunk(...chunkCoords);
     }
   }
 
-  getTile(pos: Position): Tile {
-    return this.getChunkFromTile(pos).getTileFromWorldCoords(pos.x, pos.y);
+  getTile(x: number, y: number): Tile {
+    return this.getChunkFromTile(x, y).getTileFromWorldCoords(x, y);
   }
 }

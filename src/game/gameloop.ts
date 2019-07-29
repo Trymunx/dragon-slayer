@@ -8,15 +8,15 @@ const gameloop = {
     const player = store.getters.player;
     const playerPos = store.getters.playerPos;
 
-    const locationsToCreaturesMap = getCreaturesToUpdate(playerPos);
-    for (const [location, creatures] of locationsToCreaturesMap) {
+    const locationsToCreaturesMap: Record<string, Creature[]> = getCreaturesToUpdate(playerPos);
+    for (const [location, creatures] of Object.entries(locationsToCreaturesMap)) {
       const idleAggressive: Creature[] = creatures.filter(
         (creature: Creature) =>
           creature.aggressive && creature.currentActivityState === ActivityState.MOVING
       );
 
       // Attack player
-      if (location === store.getters.playerPos.key()) {
+      if (location === store.getters.playerPos.key) {
         idleAggressive.forEach(aggressiveCreature => aggressiveCreature.targetPlayer(player));
       }
 

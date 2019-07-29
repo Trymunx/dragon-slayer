@@ -1,10 +1,10 @@
 import { Creature } from "../game/entities/creatures";
 import { Item } from "../types";
 import { Player } from "../game/entities/player";
-import Position from "../game/world/position";
 import World from "../game/world/World";
 import { ActionContext, ActionTree, Store } from "vuex";
 import { Direction, parseDir } from "../game/utils/direction";
+import Position, { Vector } from "../game/world/position";
 import store, { InitialState } from "./store";
 
 function actionGen<P>(name: string) {
@@ -24,7 +24,7 @@ export const dispatchAction = {
   DropItems: actionGen<{ items: Item[]; pos: Position }>("dropItems"),
   EnterCommand: actionGen<string>("enterCommand"),
   Highlight: actionGen<Record<string, {} | { colour: string; symbol: string }>>("highlight"),
-  MoveCreature: actionGen<{ creature: Creature; newPos: Position }>("moveCreature"),
+  MoveCreature: actionGen<{ creature: Creature; newPos: Vector }>("moveCreature"),
   MovePlayer: actionGen<Direction>("movePlayer"),
   ParseCommand: actionGen<string>("parseCommand"),
   SetCommandMode: actionGen<string>("setCommandMode"),

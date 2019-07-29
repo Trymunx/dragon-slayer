@@ -92,7 +92,7 @@ export default {
     highlight(entity, locations) {
       if (entity) {
         let highlit = {
-          [entity.position.key()]: {
+          [entity.position.key]: {
             colour: entity.isDead() ? "#888" : levelColour(entity.level, 30),
             symbol: entity.symbol,
           },

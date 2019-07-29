@@ -1,19 +1,19 @@
 import { genCreatures } from "../entities/creatures";
-import Position from "./position";
 import store from "../../vuex/store";
 import Tile from "./Tile";
+import { Vector } from "./position";
 import World from "./World";
 import { Direction, parseDir } from "../utils/direction";
 
 const CHUNK_SIZE: number = 64;
 
 export default class Chunk {
-  pos: Position;
+  pos: Vector;
   world: World;
   tiles: Array<Tile[]>;
 
   constructor(x: number, y: number, world: World) {
-    this.pos = new Position(x, y);
+    this.pos = [x, y];
     // this.x = x;
     // this.y = y;
     this.world = world;
@@ -39,7 +39,7 @@ export default class Chunk {
 
   getAdjChunk(direction: Direction) {
     const [x, y] = parseDir(direction);
-    return this.world.getChunk(new Position(this.pos.x + x, this.pos.y + y));
+    return this.world.getChunk(this.pos[0] + x, this.pos[1] + y);
   }
 
   getTile(x: number, y: number) {
@@ -57,6 +57,6 @@ export default class Chunk {
     // console.info("Generating: %O", this);
     // Terrain -> structure -> creatures -> player
     let pLvl = store.getters.playerLevel;
-    genCreatures(Chunk.size, this.pos.x, this.pos.y, pLvl);
+    genCreatures(Chunk.size, this.pos[0], this.pos[1], pLvl);
   }
 }
