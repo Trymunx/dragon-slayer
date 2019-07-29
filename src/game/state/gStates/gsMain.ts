@@ -87,7 +87,7 @@ export class MainGameState extends GameState {
         case "a":
           const pos = store.getters.playerPos;
           const creatures = store.getters.creaturesAt(pos.x, pos.y);
-          if (creatures) {
+          if (creatures.length) {
             let target = 0;
             let haveFoundTarget = false;
             while (target < creatures.length && !haveFoundTarget) {
@@ -96,8 +96,9 @@ export class MainGameState extends GameState {
                 creatures[target].currentActivityState === ActivityState.MOVING
               ) {
                 haveFoundTarget = true;
+              } else {
+                target++;
               }
-              target++;
             }
 
             if (haveFoundTarget) {

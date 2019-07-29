@@ -255,14 +255,12 @@ export class Creature extends Entity {
           entity: this.species.name,
           message: this.getDeathMessage(),
         });
-        this.target.resetActivityState();
       } else if (this.target instanceof Creature) {
         dispatchAction.AddMessageAtPosition({
           entity: "",
           message: `The ${this.species.name} died and dropped ${this.getItemsPrettyOutput()}.`,
           position: this.position,
         });
-        this.target.resetActivityState();
       }
       this.currentActivityState = ActivityState.DEAD;
       this.dropItems();
@@ -344,7 +342,6 @@ export class Creature extends Entity {
         this.currentActivityState === ActivityState.MOVING &&
         c.currentActivityState === ActivityState.MOVING
       ) {
-        console.info(`${this.position.key()}: ${this.species.name} attacking ${c.species.name}`);
         this.currentActivityState = ActivityState.FIGHTING;
         c.currentActivityState = ActivityState.FIGHTING;
         this.target = c;
@@ -360,7 +357,6 @@ export class Creature extends Entity {
       this.currentActivityState === ActivityState.MOVING &&
       player.currentActivityState === ActivityState.MOVING
     ) {
-      console.info(`${this.position.key()}: ${this.species.name} attacking ${player.name}`);
       dispatchAction.AddMessage({
         entity: this.species.name,
         message: this.getSpawnMessage(),

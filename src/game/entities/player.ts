@@ -109,7 +109,7 @@ export class Player extends Entity {
   }
 
   attack() {
-    if (!this.target || this.target.isDead() || isPlayer(this.target)) {
+    if (this.target === undefined || this.target.isDead() || isPlayer(this.target)) {
       dispatchAction.AddMessage({
         entity: "Game",
         message: "There is nothing to attack!",
@@ -145,6 +145,7 @@ export class Player extends Entity {
     this.target.receiveDamage(damage);
 
     if (this.target.isDead()) {
+      this.addXP(Math.round((this.target.hp.max * this.target.level) / 1.5));
       this.currentActivityState = ActivityState.MOVING;
     }
   }
