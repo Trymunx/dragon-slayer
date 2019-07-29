@@ -1,3 +1,6 @@
+import { ActivityState } from "../../entities/entity";
+import { Direction } from "../../utils/direction";
+import { dispatchAction } from "../../../vuex/actions";
 import { display } from "../../overview/Display";
 import displayConf from "../../config/display.json";
 import gameloop from "../../gameloop";
@@ -15,7 +18,7 @@ export class MainGameState extends GameState {
     display.clear();
     display.setOptions(displayConf.main);
 
-    store.dispatch("setWorld", new World());
+    dispatchAction.SetWorld(new World());
 
     // Resize only after resetting font size to default
     const overviewDiv = document.querySelector("#overview");
@@ -38,19 +41,19 @@ export class MainGameState extends GameState {
 
     display.drawWorld();
 
-    store.dispatch("addMessage", {
+    dispatchAction.AddMessage({
       entity: "",
       message:
         "You find yourself in the middle of a forest. Looking around, you see trees extending " +
         "off into the distance.",
     });
-    store.dispatch("addMessage", {
+    dispatchAction.AddMessage({
       entity: "Controls:",
       message:
-        "Use the arrow keys to move around. Additionally, you can press 'enter' to enter command " +
-        "mode, where you can type commands to interact with the world. Try entering /help " +
-        "in this mode for a list of commands. You can press 'escape' to unfocus the command " +
-        "input to use arrow keys to move around.",
+        "Use the arrow keys to move around. Additionally, you can press 'enter' to enter " +
+        "command mode, where you can type commands to interact with the world. Try entering " +
+        "/help in this mode for a list of commands. You can press 'escape' to unfocus the " +
+        "command input to use arrow keys to move around.",
     });
 
     gameloop.run();
@@ -65,29 +68,68 @@ export class MainGameState extends GameState {
       // Handle as an instant command
       switch (input) {
         case "ArrowUp":
-        case "w":
-          store.dispatch("movePlayer", "north");
+          dispatchAction.MovePlayer(Direction.NORTH);
           display.drawWorld();
           break;
         case "ArrowDown":
-        case "s":
-          store.dispatch("movePlayer", "south");
+          dispatchAction.MovePlayer(Direction.SOUTH);
           display.drawWorld();
           break;
         case "ArrowLeft":
-        case "a":
-          store.dispatch("movePlayer", "west");
+          dispatchAction.MovePlayer(Direction.WEST);
           display.drawWorld();
           break;
         case "ArrowRight":
-        case "d":
-          store.dispatch("movePlayer", "east");
+          dispatchAction.MovePlayer(Direction.EAST);
           display.drawWorld();
           break;
+
+        case "a":
+          const pos = store.getters.playerPos;
+          const creatures = store.getters.creaturesAt(pos.x, pos.y);
+          if (creatures.length) {
+            let target = 0;
+            let haveFoundTarget = false;
+            while (target < creatures.length && !haveFoundTarget) {
+              if (
+                !creatures[target].isDead() &&
+                creatures[target].currentActivityState === ActivityState.MOVING
+              ) {
+                haveFoundTarget = true;
+              } else {
+                target++;
+              }
+            }
+
+            if (haveFoundTarget) {
+              dispatchAction.AddMessage({
+                entity: "",
+                message: `You attack the ${creatures[target].species.name}.`,
+              });
+              store.getters.player.targetCreature(creatures[target]);
+            } else {
+              dispatchAction.AddMessage({
+                entity: "",
+                message:
+                  "You cannot attack these creatures because they are dead or already fighting.",
+              });
+            }
+          } else {
+            dispatchAction.AddMessage({
+              entity: "",
+              message: "There is nothing here to attack.",
+            });
+          }
+          break;
+        case "r":
+          store.getters.player.run();
+          display.drawWorld();
+          break;
+
         default:
           break;
       }
-      store.dispatch("highlight");
+      dispatchAction.Highlight({});
     }
   }
 
@@ -100,18 +142,22 @@ export class MainGameState extends GameState {
   receiveInputText(input: string) {
     if (!store.getters.instantMode) {
       if (/^\/help$/.test(input)) {
-        store.dispatch("addMessage", {
+        dispatchAction.AddMessage({
           entity: "Help",
           message:
-            "Press 'enter' to enter typed command mode, and 'escape' to get back to command mode." +
-            "\nYou can right-click on the map to see what is on that tile.",
+            "Press 'enter' to enter typed command mode, and 'escape' to get back to command " +
+            "mode.\nYou can right-click on the map to see what is on that tile.",
         });
       } else {
-        // Handle as text command
-        store.dispatch("addMessage", {
-          entity: "Main state",
-          message: "Response to " + input,
-        });
+        if (/^run$/.test(input.trim())) {
+          store.getters.player.run();
+        } else {
+          // Handle as text command
+          dispatchAction.AddMessage({
+            entity: "Main state",
+            message: "Response to " + input,
+          });
+        }
       }
     }
   }

@@ -1,31 +1,44 @@
+import { ActivityState } from "./entities/entity";
 import { Creature } from "./entities/creatures";
 import { display } from "./overview/Display";
 import store from "../vuex/store";
 
 const gameloop = {
   run: () => {
-    const locationsToCreaturesMap = getCreaturesToUpdate();
-    for (const [location, creatures] of locationsToCreaturesMap) {
-      const aggressive: Creature[] = creatures.filter((creature: Creature) => creature.aggressive);
-      if (aggressive.length > 1 && creatures.length > 1) {
-        aggressive.forEach(aggressiveCreature => {
-          aggressiveCreature.targetCreatures(creatures);
-        });
+    const player = store.getters.player;
+    const playerPos = store.getters.playerPos;
+
+    const locationsToCreaturesMap: Record<string, Creature[]> = getCreaturesToUpdate(playerPos);
+    for (const [location, creatures] of Object.entries(locationsToCreaturesMap)) {
+      const idleAggressive: Creature[] = creatures.filter(
+        (creature: Creature) =>
+          creature.aggressive && creature.currentActivityState === ActivityState.MOVING
+      );
+
+      // Attack player
+      if (location === store.getters.playerPos.key) {
+        idleAggressive.forEach(aggressiveCreature => aggressiveCreature.targetPlayer(player));
       }
-      creatures.forEach((creature: Creature) => {
-        creature.update();
-      });
+
+      // Fight other creatures
+      if (idleAggressive.length > 1 && creatures.length > 1) {
+        idleAggressive.forEach(aggressiveCreature => aggressiveCreature.targetCreatures(creatures));
+      }
+
+      // Update cooldown
+      creatures.forEach((creature: Creature) => creature.update());
     }
+
+    player.update();
     display.drawWorld();
     window.requestAnimationFrame(gameloop.run);
   },
 };
 
-function getCreaturesToUpdate() {
+function getCreaturesToUpdate(playerPos: Position) {
   const dOpts = display.getOptions();
   const radius = Math.max(dOpts.width, dOpts.height);
 
-  const playerPos = store.getters.playerPos;
   if (!playerPos) console.error("No player position in game loop");
 
   return store.getters.creaturesWithinRadius(playerPos, radius);

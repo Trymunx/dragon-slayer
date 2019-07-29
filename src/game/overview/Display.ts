@@ -1,8 +1,8 @@
 import * as ROT from "rot-js";
 import { Creature } from "../entities/creatures";
+import { dispatchAction } from "../../vuex/actions";
 import { levelColour } from "../utils/colours";
 import { Player } from "../entities/player";
-import Position from "../world/position";
 import store from "../../vuex/store";
 import Tile from "../world/Tile";
 import World from "../world/World";
@@ -28,11 +28,11 @@ display.drawWorld = function() {
   let bot = Math.ceil(player.position.y + curOpts.height / 2);
   let left = Math.ceil(player.position.x - curOpts.width / 2);
   let right = Math.ceil(player.position.x + curOpts.width / 2);
-  store.dispatch("setDisplayOrigin", [left, top]);
+  dispatchAction.SetDisplayOrigin([left, top]);
 
   for (let i = 0, y = top; y < bot; y++) {
     for (let j = 0, x = left; x < right; x++) {
-      let tile: Tile = world.getTile(new Position(x, y));
+      let tile: Tile = world.getTile(x, y);
       let hl = store.getters.highlit[[x, y].join()];
       let symbol = tile.display;
       let fg = tile.foreground;

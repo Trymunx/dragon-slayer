@@ -1,10 +1,11 @@
 import * as ROT from "rot-js";
+import { attackSuccessChance } from "../utils/fighting";
 import CreaturesJSON from "./CreaturesTemplates.json";
+import { dispatchAction } from "../../vuex/actions";
 import gameItems from "../items/gameItems";
 import { Item } from "../../types";
 import { Player } from "./player";
 import { RNG } from "../utils/RNG";
-import store from "../../vuex/store";
 import { ActivityState, Entity, EntityType, HP } from "./entity";
 import Position, { getRandomPosInChunk } from "../world/position";
 
@@ -79,6 +80,10 @@ export class Creature extends Entity {
   aggressive: boolean;
   attacks: CreatureAttack[];
   attacksToWeightsMap: WeightedAttackMap;
+  messages: {
+    onDeath: string[];
+    onSpawn: string[];
+  };
   moveSpeed: number;
   slots?: any;
   species: {
@@ -145,6 +150,8 @@ export class Creature extends Entity {
       },
       {} as WeightedAttackMap
     );
+
+    this.messages = template.messages;
   }
 
   attack() {
@@ -152,15 +159,20 @@ export class Creature extends Entity {
       return;
     }
 
-    if (this.attributes.attackChance > RNG()) {
+    const successChance = attackSuccessChance(
+      this.attributes.attackChance,
+      this.target.attributes.dodgeChance
+    );
+
+    if (successChance < RNG()) {
       if (this.target instanceof Creature) {
-        store.dispatch("sendMessageAtPosition", {
+        dispatchAction.AddMessageAtPosition({
           entity: "",
           message: `The ${this.species.name} missed the ${this.target.species.name}.`,
           position: this.position,
         });
       } else if (this.target instanceof Player) {
-        store.dispatch("addMessage", {
+        dispatchAction.AddMessage({
           entity: this.species.name,
           message: `The ${this.species.name} missed you.`,
         });
@@ -177,7 +189,7 @@ export class Creature extends Entity {
     const damage = Math.floor((RNG(attack.minDamage, attack.maxDamage) * this.level) / 1.5);
 
     if (this.target instanceof Creature) {
-      store.dispatch("sendMessageAtPosition", {
+      dispatchAction.AddMessageAtPosition({
         entity: "",
         message: `The ${this.species.name} used ${attackName} on the ${
           this.target.species.name
@@ -186,8 +198,8 @@ export class Creature extends Entity {
       });
     } else if (this.target instanceof Player) {
       const attackMessage =
-        attack.messages[Math.floor(RNG(attack.messages.length))] + damage + " HP";
-      store.dispatch("addMessage", {
+        attack.messages[Math.floor(RNG(attack.messages.length))] + damage + " HP.";
+      dispatchAction.AddMessage({
         entity: this.species.name,
         message: attackMessage,
       });
@@ -202,6 +214,16 @@ export class Creature extends Entity {
     }
   }
 
+  getDeathMessage() {
+    const random = Math.floor(RNG() * this.messages.onDeath.length);
+    return this.messages.onDeath[random];
+  }
+
+  getSpawnMessage() {
+    const random = Math.floor(RNG() * this.messages.onSpawn.length);
+    return this.messages.onSpawn[random];
+  }
+
   printHPReport(global: boolean = false) {
     const totalBarLength = 40;
     const hpPercent = Math.round((this.hp.current / this.hp.max) * 100);
@@ -213,11 +235,11 @@ export class Creature extends Entity {
     // Disable eslint because it complains about ternary indentation
     /* eslint-disable */
     global
-      ? store.dispatch("addMessage", {
+      ? dispatchAction.AddMessage({
           entity: this.species.name,
           message: hpReportString,
         })
-      : store.dispatch("sendMessageAtPosition", {
+      : dispatchAction.AddMessageAtPosition({
           entity: this.species.name,
           message: hpReportString,
           position: this.position,
@@ -228,11 +250,18 @@ export class Creature extends Entity {
   receiveDamage(damage: number) {
     this.hp.current = Math.max(0, this.hp.current - damage);
     if (this.hp.current <= 0) {
-      store.dispatch("sendMessageAtPosition", {
-        entity: "",
-        message: `The ${this.species.name} died and dropped ${this.getItemsPrettyOutput()}.`,
-        position: this.position,
-      });
+      if (this.target instanceof Player) {
+        dispatchAction.AddMessage({
+          entity: this.species.name,
+          message: this.getDeathMessage(),
+        });
+      } else if (this.target instanceof Creature) {
+        dispatchAction.AddMessageAtPosition({
+          entity: "",
+          message: `The ${this.species.name} died and dropped ${this.getItemsPrettyOutput()}.`,
+          position: this.position,
+        });
+      }
       this.currentActivityState = ActivityState.DEAD;
       this.dropItems();
     } else {
@@ -267,36 +296,36 @@ export class Creature extends Entity {
   }
 
   dropItems() {
-    store.dispatch("dropItems", { items: this.items.splice(0), pos: this.position });
+    dispatchAction.DropItems({ items: this.items.splice(0), pos: this.position });
   }
 
   move() {
     switch (Math.floor(Math.random() * 4)) {
       case 0:
-        store.dispatch("moveCreature", {
+        dispatchAction.MoveCreature({
           creature: this,
-          newPos: new Position(this.position.x, this.position.y - 1),
+          newPos: [this.position.x, this.position.y - 1],
         });
         this.position.y--;
         break;
       case 1:
-        store.dispatch("moveCreature", {
+        dispatchAction.MoveCreature({
           creature: this,
-          newPos: new Position(this.position.x, this.position.y + 1),
+          newPos: [this.position.x, this.position.y + 1],
         });
         this.position.y++;
         break;
       case 2:
-        store.dispatch("moveCreature", {
+        dispatchAction.MoveCreature({
           creature: this,
-          newPos: new Position(this.position.x - 1, this.position.y),
+          newPos: [this.position.x - 1, this.position.y],
         });
         this.position.x--;
         break;
       case 3:
-        store.dispatch("moveCreature", {
+        dispatchAction.MoveCreature({
           creature: this,
-          newPos: new Position(this.position.x + 1, this.position.y),
+          newPos: [this.position.x + 1, this.position.y],
         });
         this.position.x++;
         break;
@@ -313,7 +342,6 @@ export class Creature extends Entity {
         this.currentActivityState === ActivityState.MOVING &&
         c.currentActivityState === ActivityState.MOVING
       ) {
-        console.info(`${this.position.key()}: ${this.species.name} attacking ${c.species.name}`);
         this.currentActivityState = ActivityState.FIGHTING;
         c.currentActivityState = ActivityState.FIGHTING;
         this.target = c;
@@ -321,6 +349,23 @@ export class Creature extends Entity {
         this.cooldown = this.attributes.attackSpeed;
         c.cooldown = c.attributes.attackSpeed + 10; // aggressor attacks first
       }
+    }
+  }
+
+  targetPlayer(player: Player) {
+    if (
+      this.currentActivityState === ActivityState.MOVING &&
+      player.currentActivityState === ActivityState.MOVING
+    ) {
+      dispatchAction.AddMessage({
+        entity: this.species.name,
+        message: this.getSpawnMessage(),
+      });
+      this.currentActivityState = ActivityState.FIGHTING;
+      player.currentActivityState = ActivityState.FIGHTING;
+      this.target = player;
+      player.target = this;
+      this.cooldown = this.attributes.attackSpeed;
     }
   }
 
@@ -393,7 +438,7 @@ export const genCreatures = (
         pos: pos,
         template: c,
       });
-      store.dispatch("addCreature", creature);
+      dispatchAction.AddCreature(creature);
     }
   });
 };
