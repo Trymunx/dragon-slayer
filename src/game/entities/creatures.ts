@@ -3,6 +3,7 @@ import { attackSuccessChance } from "../utils/fighting";
 import CreaturesJSON from "./CreaturesTemplates.json";
 import { dispatchAction } from "../../vuex/actions";
 import gameItems from "../items/gameItems";
+import { Gold } from "../items/items";
 import { Item } from "../../types";
 import { Player } from "./player";
 import { RNG } from "../utils/RNG";
@@ -137,8 +138,9 @@ export class Creature extends Entity {
         const quantity =
           item.quantity[1] !== 1 ? Math.floor(RNG(item.quantity[0], item.quantity[1])) : 1;
         return gameItems.get(item.name).newItem(quantity);
-      })
-      .concat(getGold(template.drops.gold));
+      });
+
+    this.gold = getGold(template.drops.gold);
 
     this.moveSpeed = moveSpeed;
 
@@ -391,13 +393,10 @@ export class Creature extends Entity {
   }
 }
 
-const getGold = ({ max, dropChance }: { max: number; dropChance: number }): Item[] => {
-  const gold = [];
-  if (RNG() < dropChance) {
-    const quantity = Math.floor(RNG(max));
-    for (let i = 0; i < quantity; i++) {
-      gold.push(gameItems.get("gold").newItem());
-    }
+const getGold = ({ max, dropChance }: { max: number; dropChance: number }): Gold => {
+  const gold = { amount: 0 };
+  if (dropChance > RNG()) {
+    gold.amount = Math.floor(RNG(1, max));
   }
   return gold;
 };

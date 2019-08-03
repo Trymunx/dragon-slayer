@@ -1,4 +1,5 @@
 import { Creature } from "./creatures";
+import { Gold } from "../items/items";
 import { Item } from "../../types";
 import { Player } from "./player";
 import Position from "../world/position";
@@ -69,6 +70,7 @@ export class Entity {
   cooldown: number;
   currentActivityState: ActivityState;
   equipmentSlots?: HumanoidBody;
+  gold: Gold;
   hp: HP;
   items: Item[];
   level: number;
@@ -82,6 +84,7 @@ export class Entity {
     cooldown,
     currentActivityState,
     equipmentSlots,
+    gold,
     hp,
     items,
     level,
@@ -94,6 +97,7 @@ export class Entity {
     cooldown: number;
     currentActivityState: ActivityState;
     equipmentSlots?: HumanoidBody;
+    gold?: Gold;
     hp: HP;
     items: Item[];
     level: number;
@@ -106,6 +110,7 @@ export class Entity {
     this.cooldown = cooldown;
     this.currentActivityState = currentActivityState;
     this.equipmentSlots = equipmentSlots;
+    this.gold = gold || { amount: 0 };
     this.hp = hp;
     this.items = items;
     this.level = level;
