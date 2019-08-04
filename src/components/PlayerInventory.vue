@@ -1,16 +1,26 @@
 <template>
-  <div id="player-inventory">
+  <div id="player-information">
+    <div class="player-name">{{player.name}}</div>
+    <div>Level: {{player.level}}
+      <span class="experience-bar">XP: {{experienceBar}}</span>
+    </div>
     <!-- At some point this will show player inventory, but for now it will show position -->
     Player position:
-    {{playerPos.x}},{{playerPos.y}}
+    {{player.position.x}},{{player.position.y}}
   </div>
 </template>
 
 <script>
 export default {
   computed: {
-    playerPos() {
-      return this.$store.getters.playerPos;
+    experienceBar() {
+      const barLength = 30;
+      const emptyLength = Math.round(barLength * this.$store.getters.player.xpPercentage);
+      const bar = "|".repeat(emptyLength).padEnd(barLength, " ");
+      return "[" + bar + "]";
+    },
+    player() {
+      return this.$store.getters.player;
     },
   },
   data() {
@@ -20,7 +30,11 @@ export default {
 </script>
 
 <style>
-#player-inventory {
+.experience-bar {
+  white-space: pre-wrap;
+}
+
+#player-information {
   padding: 10px;
   overflow-y: auto;
   color: var(--text-blur);
@@ -28,18 +42,23 @@ export default {
   border-color: var(--ui-border);
   font-family: "Ubuntu Mono", monospace;
   font-size: 0.85em;
-  white-space: pre-wrap;
 }
 
-#player-inventory::-webkit-scrollbar {
+#player-information::-webkit-scrollbar {
   width: 8px;
 }
 
-#player-inventory::-webkit-scrollbar-track {
+#player-information::-webkit-scrollbar-track {
   background-color: var(--ui-darker);
 }
 
-#player-inventory::-webkit-scrollbar-thumb {
+#player-information::-webkit-scrollbar-thumb {
   background-color: var(--ui-border);
+}
+
+.player-name {
+  font-size: 1.4em;
+  font-weight: bold;
+  text-align: center;
 }
 </style>
