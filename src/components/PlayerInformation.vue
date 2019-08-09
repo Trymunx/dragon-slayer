@@ -1,12 +1,14 @@
 <template>
   <div id="player-information">
-    <div class="player-name">{{player.name}}</div>
-    <div>Level: {{player.level}}
-      <span class="experience-bar">XP: {{experienceBar}}</span>
-    </div>
-    <!-- At some point this will show player inventory, but for now it will show position -->
-    Player position:
-    {{player.position.x}},{{player.position.y}}
+    <template v-if="worldExists">
+      <div class="player-name">{{player.name}}</div>
+      <div>Level: {{player.level}}
+        <span class="experience-bar">XP: {{experienceBar}}</span>
+      </div>
+      <!-- At some point this will show player inventory, but for now it will show position -->
+      Player position:
+      {{player.position.x}},{{player.position.y}}
+    </template>
   </div>
 </template>
 
@@ -21,6 +23,9 @@ export default {
     },
     player() {
       return this.$store.getters.player;
+    },
+    worldExists() {
+      return this.$store.getters.worldExists;
     },
   },
   data() {
