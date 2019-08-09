@@ -84,6 +84,10 @@ export default {
   --text: #daddd8;
   --text-blur: #bababa;
   --select: #323336;
+  /* HP colours */
+  --hp-green: #289259;
+  --hp-amber: #f4d35e;
+  --hp-red: #cc1531;
 }
 
 #app {
