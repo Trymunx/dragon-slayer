@@ -3,7 +3,7 @@
     <template v-if="worldExists">
       <div class="player-name">{{player.name}}</div>
       <div class="info-field">Level: {{player.level}}
-        <span class="bar-container">XP: [<span class="bar">{{experienceBar}}</span>]</span>
+        <span class="bar-container">XP: ▐<span class="xp-bar">{{experienceBar}}</span>▌</span>
       </div>
       <div class="info-field">
         <span>HP:
@@ -13,10 +13,9 @@
           <span>/ {{hp.max}}</span>
         </span>
         <span class="bar-container">
-          [<span
-            class="bar"
+          ▐<span
             :class="{'hp-green': hpHigh, 'hp-amber': hpMedium, 'hp-red': hpLow}"
-            >{{hpBar}}</span>]
+            >{{hpBar}}</span>▌
         </span>
       </div>
     </template>
@@ -27,22 +26,17 @@
 export default {
   computed: {
     experienceBar() {
-      const barLength = 30;
-      const xpBarLength = Math.round(barLength * this.$store.getters.player.xpPercentage);
-      return "|".repeat(xpBarLength).padEnd(barLength, " ");
+      return this.calculateBar(this.$store.getters.player.xpPercentage);
     },
     hp() {
       return this.$store.getters.player.hp;
     },
     hpBar() {
-      const barLength = 30;
-      const hpLength = Math.round(
-        barLength * this.$store.getters.player.hp.current / this.$store.getters.player.hp.max
-      );
-      return "|".repeat(hpLength).padEnd(barLength, " ");
+      const hpPercent = this.hp.current / this.hp.max;
+      return this.calculateBar(hpPercent);
     },
     hpHigh() {
-      return this.hp.current > 0.65 * this.hp.max;
+      return this.hp.current > 0.4 * this.hp.max;
     },
     hpLow() {
       return this.hp.current < 0.2 * this.hp.max;
@@ -57,19 +51,23 @@ export default {
       return this.$store.getters.worldExists;
     },
   },
-  data() {
-    return {};
+  methods: {
+    calculateBar(pc) {
+      const length = 25;
+      const chars = ["", "▌", "█"];
+      const bits = length * (chars.length - 1);
+      const wholePart = Math.floor(pc * length);
+      const partial = Math.floor(pc * bits) % (chars.length - 1);
+      return chars[2].repeat(wholePart) + chars[partial] + "░".repeat(length - wholePart - partial);
+    },
   },
 };
 </script>
 
 <style>
-.bar {
-  font-weight: bold;
-  white-space: pre-wrap;
-}
-
 .bar-container {
+  align-items: center;
+  display: flex;
   font-size: 13px;
 }
 
@@ -84,6 +82,7 @@ export default {
 }
 
 .info-field {
+  align-items: center;
   display: flex;
   font-size: 15px;
   justify-content: space-between;
@@ -116,5 +115,9 @@ export default {
   font-weight: bold;
   padding: 8px;
   text-align: center;
+}
+
+.xp-bar {
+  color: grey;
 }
 </style>
