@@ -21,10 +21,10 @@ export class Player extends Entity {
   constructor(name: string = "", level: number = 1) {
     super({
       attributes: {
-        armour: 0,
+        armour: calculateArmFromLevel(level),
         attackChance: 0.45,
         attackSpeed: 30,
-        damage: 10,
+        damage: calculateDmgFromLevel(level),
         dodgeChance: 0.15,
       },
       cooldown: 35,
@@ -77,8 +77,8 @@ export class Player extends Entity {
         waist: { equipped: null },
       },
       hp: {
-        current: 100,
-        max: 100,
+        current: calculateMaxHPFromLevel(level),
+        max: calculateMaxHPFromLevel(level),
       },
       items: [],
       level: level,
@@ -165,7 +165,7 @@ export class Player extends Entity {
     this.level++;
     this.attributes.damage += Math.round(this.level ** 0.5);
     this.attributes.armour += Math.round(this.level ** 0.5);
-    this.hp.max = 10 * Math.floor((10 * this.level ** 1.3 + 90) / 10);
+    this.hp.max = calculateMaxHPFromLevel(this.level);
 
     dispatchAction.AddMessage({
       entity: "Level up",
@@ -265,3 +265,14 @@ export class Player extends Entity {
     }
   }
 }
+
+const calculateMaxHPFromLevel = (level: number): number =>
+  10 * Math.floor((10 * level ** 1.3 + 90) / 10);
+
+const calculateDmgFromLevel = (level: number): number => 9 + sumToOneSqrt(level);
+const calculateArmFromLevel = (level: number): number => 9 + sumToOneSqrt(level);
+
+const sumToOneSqrt = (x: number): number => {
+  if (x === 1) return 1;
+  return Math.round(x ** 0.5) + sumToOneSqrt(x - 1);
+};
