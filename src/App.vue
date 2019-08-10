@@ -3,7 +3,7 @@
     <Output/>
     <Overview/>
     <surroundings/>
-    <player-inventory/>
+    <player-information/>
     <input-bar/>
     <context-menu/>
   </div>
@@ -14,7 +14,7 @@ import ContextMenu from "./components/ContextMenu";
 import InputBar from "./components/InputBar";
 import Output from "./components/Output";
 import Overview from "./components/Overview";
-import PlayerInventory from "./components/PlayerInventory";
+import PlayerInformation from "./components/PlayerInformation";
 import Surroundings from "./components/Surroundings";
 
 export default {
@@ -23,7 +23,7 @@ export default {
     InputBar,
     Output,
     Overview,
-    PlayerInventory,
+    PlayerInformation,
     Surroundings,
   },
   created() {
@@ -84,6 +84,10 @@ export default {
   --text: #daddd8;
   --text-blur: #bababa;
   --select: #323336;
+  /* HP colours */
+  --hp-green: #289259;
+  --hp-amber: #f4d35e;
+  --hp-red: #cc1531;
 }
 
 #app {
@@ -93,9 +97,8 @@ export default {
   color: #2c3e50;
   display: grid;
   grid-template-columns: 1fr 350px;
-  grid-template-rows: auto 2fr 1fr 30px;
+  grid-template-rows: 2fr 1fr 30px;
   grid-template-areas:
-    "upper-main upper-right-col"
     "upper-main upper-right-col"
     "lower-main lower-right-col"
     "bottom-bar lower-right-col";
@@ -129,7 +132,7 @@ export default {
       "bottom-bar";
   }
 
-  #player-inventory,
+  #player-information,
   #surroundings-output {
     display: none;
   }
@@ -151,7 +154,7 @@ export default {
   grid-area: upper-right-col;
 }
 
-#player-inventory {
+#player-information {
   grid-area: lower-right-col;
 }
 

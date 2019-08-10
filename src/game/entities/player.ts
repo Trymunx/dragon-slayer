@@ -92,20 +92,24 @@ export class Player extends Entity {
     this.xp = 0;
   }
 
-  get xpToNextLevel(): number {
-    return Math.round(50 * this.level ** 1.3);
-  }
-
   get isFullHealth(): boolean {
     return this.hp.current >= this.hp.max;
   }
 
+  get xpPercentage(): number {
+    return this.xp / this.xpToNextLevel;
+  }
+
+  get xpToNextLevel(): number {
+    return Math.round(50 * this.level ** 1.3);
+  }
+
   addXP(xp: number) {
-    while (this.xpToNextLevel < xp) {
-      xp -= this.xpToNextLevel;
+    this.xp += xp;
+    while (this.xpToNextLevel < this.xp) {
+      this.xp -= this.xpToNextLevel;
       this.levelUp();
     }
-    this.xp = xp;
   }
 
   attack() {
