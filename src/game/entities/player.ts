@@ -243,11 +243,11 @@ export class Player extends Entity {
       message: creature.getSpawnMessage(),
     });
 
-    this.attack();
-
     creature.target = this;
     creature.currentActivityState = ActivityState.FIGHTING;
     creature.cooldown = 20;
+
+    this.attack();
   }
 
   update() {
