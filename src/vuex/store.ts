@@ -83,6 +83,11 @@ const store = new Vuex.Store({
     movePlayer({ state, commit }, dir: Direction) {
       if (state.player.currentActivityState === ActivityState.MOVING) {
         commit("MOVE_PLAYER", parseDir(dir));
+      } else if (state.player.currentActivityState === ActivityState.DEAD) {
+        commit("ADD_MESSAGE", {
+          entity: "",
+          message: "You cannot move when you are dead.",
+        });
       } else {
         commit("ADD_MESSAGE", {
           entity: "Can't esacpe!",

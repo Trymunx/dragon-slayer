@@ -102,10 +102,6 @@ export class MainGameState extends GameState {
             }
 
             if (haveFoundTarget) {
-              dispatchAction.AddMessage({
-                entity: "",
-                message: `You attack the ${creatures[target].species.name}.`,
-              });
               store.getters.player.targetCreature(creatures[target]);
             } else {
               dispatchAction.AddMessage({

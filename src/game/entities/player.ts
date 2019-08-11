@@ -113,6 +113,8 @@ export class Player extends Entity {
   }
 
   attack() {
+    if (this.checkIfDead()) return;
+
     if (this.target === undefined || this.target.isDead() || isPlayer(this.target)) {
       dispatchAction.AddMessage({
         entity: "Game",
@@ -154,7 +156,20 @@ export class Player extends Entity {
     }
   }
 
+  checkIfDead(): boolean {
+    if (this.isDead()) {
+      dispatchAction.AddMessage({
+        entity: "",
+        message: "You cannot do this when you are dead.",
+      });
+      return true;
+    }
+    return false;
+  }
+
   heal(amount: number): number {
+    if (this.checkIfDead()) return 0;
+
     const healed = Math.min(this.hp.max - this.hp.current, amount);
     this.hp.current += healed;
 
@@ -200,6 +215,8 @@ export class Player extends Entity {
   }
 
   run(dir?: Direction) {
+    if (this.checkIfDead()) return;
+
     if (!this.target || this.target instanceof Player) {
       dispatchAction.AddMessage({
         entity: "",
@@ -235,8 +252,15 @@ export class Player extends Entity {
   }
 
   targetCreature(creature: Creature) {
+    if (this.checkIfDead()) return;
+
     this.target = creature;
     this.currentActivityState = ActivityState.FIGHTING;
+
+    dispatchAction.AddMessage({
+      entity: this.name,
+      message: `You attack the ${creature.species.name}.`,
+    });
 
     dispatchAction.AddMessage({
       entity: "",
