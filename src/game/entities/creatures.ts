@@ -188,7 +188,7 @@ export class Creature extends Entity {
       console.error(attackName + " doesn't exist for " + this.species.name);
       return;
     }
-    const damage = Math.floor((RNG(attack.minDamage, attack.maxDamage) * this.level) / 1.5);
+    const damage = Math.ceil((RNG(attack.minDamage, attack.maxDamage) * this.level) / 1.5);
 
     if (this.target instanceof Creature) {
       dispatchAction.AddMessageAtPosition({
