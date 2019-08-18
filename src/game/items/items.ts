@@ -5,8 +5,6 @@ enum ItemType {
   Trophy,
 }
 
-export type Gold = { amount: number };
-
 interface Item {
   components: ItemType[];
   name: string;

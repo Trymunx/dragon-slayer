@@ -21,7 +21,7 @@ export const dispatchAction = {
     "addMessageAtPosition"
   ),
   ClearHighlight: actionGen<null>("clearHighlight"),
-  DropItems: actionGen<{ items: Item[]; pos: Position }>("dropItems"),
+  DropItems: actionGen<{ gold: number; items: Item[]; pos: Position }>("dropItems"),
   EnterCommand: actionGen<string>("enterCommand"),
   Highlight: actionGen<Record<string, {} | { colour: string; symbol: string }>>("highlight"),
   MoveCreature: actionGen<{ creature: Creature; newPos: Vector }>("moveCreature"),

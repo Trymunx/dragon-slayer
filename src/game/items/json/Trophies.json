@@ -4,12 +4,11 @@
     "val": [10, 80]
   },
   {
-    "name": "dragon claws",
-    "plural": "dragon claws",
+    "name": "dragon claw",
     "val": [40, 135]
   },
   {
-    "name": "dragon teeth",
+    "name": "dragon tooth",
     "plural": "dragon teeth",
     "val": [40, 135]
   },
@@ -46,8 +45,7 @@
     "val": [8, 25]
   },
   {
-    "name": "wolf claws",
-    "plural": "wolf claws",
+    "name": "wolf claw",
     "val": [5, 15]
   },
   {
@@ -63,7 +61,7 @@
     "val": [5, 20]
   },
   {
-    "name": "wolf teeth",
+    "name": "wolf tooth",
     "plural": "wolf teeth",
     "val": [6, 15]
   }

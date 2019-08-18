@@ -10,12 +10,14 @@ export default class Tile {
   chunk: Chunk;
   display: string;
   foreground: string;
+  gold: number;
   items: Item[];
   relPos: Vector;
   spawnRateModifiers: Map<Creature, number>;
 
   constructor(x: number, y: number, chunk: Chunk, terrain?: Terrain) {
     this.chunk = chunk;
+    this.gold = 0;
     this.items = [];
     this.relPos = [x, y];
 

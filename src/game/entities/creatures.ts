@@ -3,7 +3,6 @@ import { attackSuccessChance } from "../utils/fighting";
 import CreaturesJSON from "./CreaturesTemplates.json";
 import { dispatchAction } from "../../vuex/actions";
 import gameItems from "../items/gameItems";
-import { Gold } from "../items/items";
 import { Item } from "../../types";
 import { Player } from "./player";
 import { RNG } from "../utils/RNG";
@@ -289,6 +288,9 @@ export class Creature extends Entity {
         return `${items[itemName]} ${this.items.find(el => el.name === itemName)!.plural}`;
       }
     });
+    if (this.gold) {
+      outputs.push(`${this.gold} gold`);
+    }
     const output =
       outputs.length > 1
         ? outputs.slice(0, -1).join(", ") + ", and " + outputs.slice(-1)
@@ -298,7 +300,7 @@ export class Creature extends Entity {
   }
 
   dropItems() {
-    dispatchAction.DropItems({ items: this.items.splice(0), pos: this.position });
+    dispatchAction.DropItems({ gold: this.gold, items: this.items.splice(0), pos: this.position });
   }
 
   move() {
@@ -393,12 +395,11 @@ export class Creature extends Entity {
   }
 }
 
-const getGold = ({ max, dropChance }: { max: number; dropChance: number }): Gold => {
-  const gold = { amount: 0 };
+const getGold = ({ max, dropChance }: { max: number; dropChance: number }): number => {
   if (dropChance > RNG()) {
-    gold.amount = Math.floor(RNG(1, max));
+    return Math.floor(RNG(1, max));
   }
-  return gold;
+  return 0;
 };
 
 const getItems = (creatureItemsArray: HarvestItems): Item[] => {

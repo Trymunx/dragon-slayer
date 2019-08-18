@@ -90,16 +90,6 @@ Food.forEach(i => {
   gameItems.set(item.name, item);
 });
 
-// Gold
-// if (!gameItems.has("gold")) {
-//   const gold = new ItemFactory({
-//     name: "gold",
-//     plural: "gold",
-//     value: [() => 1],
-//   });
-//   gameItems.set("gold", gold);
-// }
-
 Ingredients.forEach(i => {
   let item;
   if (!gameItems.has(i.name)) {

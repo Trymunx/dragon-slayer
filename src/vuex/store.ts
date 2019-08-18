@@ -151,6 +151,10 @@ const store = new Vuex.Store({
       return creatures;
     },
     displayOrigin: state => state.displayOrigin,
+    goldOnTile: state => (x: number, y: number) => {
+      const tile = state.world && state.world.getTile(x, y);
+      return tile ? tile.gold : 0;
+    },
     highlit: state => state.highlit || {},
     inputText: state => state.inputText,
     instantMode: state => state.commandMode === "instant",
@@ -234,6 +238,43 @@ const store = new Vuex.Store({
               }
             });
           }
+          if (tile.gold) {
+            if (surr.items["gold"]) {
+              surr.items["gold"].count++;
+              surr.items["gold"].locations[VTS(...pos)] = {};
+              surr.items["gold"].expanded[VTS(x, y)] = {
+                count: tile.gold,
+                dir: getDirStringFromVector(x, y),
+                loc: {
+                  [VTS(...pos)]: {},
+                },
+                name: "gold",
+                plural: "gold",
+                totalValue: tile.gold,
+              };
+            } else {
+              surr.items["gold"] = {
+                count: tile.gold,
+                expanded: {
+                  [VTS(x, y)]: {
+                    count: tile.gold,
+                    dir: getDirStringFromVector(x, y),
+                    loc: {
+                      [VTS(...pos)]: {},
+                    },
+                    name: "gold",
+                    plural: "gold",
+                    totalValue: tile.gold,
+                  },
+                },
+                locations: {
+                  [VTS(...pos)]: {},
+                },
+                name: "gold",
+                plural: "gold",
+              };
+            }
+          }
         }
       }
 
@@ -273,9 +314,10 @@ const store = new Vuex.Store({
     CLEAR_HIGHLIGHTED(state) {
       state.highlit = {};
     },
-    DROP_ITEMS(state, { items, pos }: { items: Item[]; pos: Position }) {
+    DROP_ITEMS(state, { gold, items, pos }: { gold: number; items: Item[]; pos: Position }) {
       const tile = state.world!.getTile(pos.x, pos.y);
       tile.items.push(...items);
+      tile.gold += gold;
     },
     HIGHLIGHT_TILES(state, tiles) {
       state.highlit = tiles;

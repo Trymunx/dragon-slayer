@@ -6,9 +6,9 @@
 <script lang="ts">
 import _ from "lodash";
 import { Creature } from "../game/entities/creatures";
+import { dispatchAction } from "../vuex/actions";
 import { display } from "../game/overview/Display";
 import { Item } from "../types/item";
-import store from "../vuex/store";
 import Vue from "vue";
 
 export default Vue.extend({
@@ -70,7 +70,7 @@ export default Vue.extend({
           val.val += item.val;
           val.text = `${val.count} ${val.count === 1 ? val.name : val.plural} (${val.val})`;
           val.action = () => {
-            store.dispatch("addMessage", {
+            dispatchAction.AddMessage({
               entity: "",
               message: `You examine the ${val.plural}. It is worth ${val.val} gold.`,
             });
@@ -78,7 +78,7 @@ export default Vue.extend({
         } else {
           let newItemEntry = {
             action: () => {
-              store.dispatch("addMessage", {
+              dispatchAction.AddMessage({
                 entity: "",
                 message: `You examine the ${item.name}. It is worth ${item.val} gold.`,
               });
@@ -94,7 +94,30 @@ export default Vue.extend({
         return arr;
       }, []);
 
-      return [...creaturesOnTile, ...itemsOnTile];
+      const menuItems = [...creaturesOnTile, ...itemsOnTile];
+
+      const gold = this.$store.getters.goldOnTile(
+        displayX + displayOriginX,
+        displayY + displayOriginY,
+      );
+
+      if (gold) {
+        menuItems.push({
+          action: () => {
+            dispatchAction.AddMessage({
+              entity: "",
+              message: `A stack of ${gold} gold.`,
+            });
+          },
+          count: gold,
+          name: "gold",
+          plural: "gold",
+          text: `${gold} gold`,
+          val: gold,
+        });
+      }
+
+      return menuItems;
     },
     resizeOverview() {
       if (!this.$store.getters.splash) {
