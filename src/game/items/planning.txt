@@ -132,3 +132,6 @@ would it be desirable for old weapons to show up repeatedly for the player? woul
   to include a mechanic to make them disappear forever if they aren't used every time they appear.
 
 Thieves and other creatures should pick up equipment and some items from the floor when they're dropped.
+
+Should add more crafting items like logs, twigs, branches, kindling, then use these for firemaking.
+Can show fires with a symbol, and vary the colour randomly every draw to make it flicker.
