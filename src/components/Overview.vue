@@ -21,35 +21,45 @@ export default Vue.extend({
       const displayX = Math.floor((pos.x - canvas.offsetLeft) * dOpts.width / canvas.offsetWidth);
       const displayY = Math.floor((pos.y - canvas.offsetTop) * dOpts.height / canvas.offsetHeight);
       const [displayOriginX, displayOriginY] = this.$store.getters.displayOrigin;
-      console.log(displayOriginX, displayOriginY);
 
-      const creaturesOnTile = this.$store.getters.creaturesAt(
+      const [aliveCreatures, deadCreatures] = this.$store.getters.creaturesAt(
         displayX + displayOriginX,
         displayY + displayOriginY,
-      ).map((creature: Creature) => {
-        return {
-          action: () => {
-            if (creature.isDead()) {
-              this.$store.dispatch("addMessage", {
-                entity: `Examine ${creature.species.name}:`,
-                message: `The ${creature.species.name} is dead.`,
-              });
-            } else {
-              const itemDrops = creature.getItemsPrettyOutput();
-              this.$store.dispatch("addMessage", {
-                entity: `Examine ${creature.species.name}:`,
-                message: `The ${creature.species.name} is level ${creature.level} and has ` +
+      ).reduce((allCreatures: [Creature[], Creature[]], creature: Creature) => {
+        if (!creature.isDead()) {
+          return [
+            [ ...allCreatures[0], {
+              action: () => {
+                const itemDrops = creature.getItemsPrettyOutput();
+                this.$store.dispatch("addMessage", {
+                  entity: `Examine ${creature.species.name}:`,
+                  message: `The ${creature.species.name} is level ${creature.level} and has ` +
                   `${creature.hp.current}HP. It will drop ${itemDrops || "nothing"}.`,
-              });
-              this.$store.dispatch("addMessage", {
-                entity: "",
-                message: creature.printHPReport(true),
-              });
-            }
-          },
-          text: `Examine ${creature.isDead() ? "dead" : ""} ${creature.species.name}`,
-        };
-      });
+                });
+                this.$store.dispatch("addMessage", {
+                  entity: "",
+                  message: creature.printHPReport(true),
+                });
+              },
+              text: `Examine ${creature.species.name}`,
+            }],
+            allCreatures[1],
+          ];
+        } else {
+          return [
+            allCreatures[0],
+            [ ...allCreatures[1], {
+              action: () => {
+                this.$store.dispatch("addMessage", {
+                  entity: `Examine ${creature.species.name}:`,
+                  message: `The ${creature.species.name} is dead.`,
+                });
+              },
+              text: `Examine dead ${creature.species.name}`,
+            }],
+          ];
+        }
+      }, [[], []]);
 
       interface ExamineItem {
         action: () => void;
@@ -64,15 +74,19 @@ export default Vue.extend({
         displayX + displayOriginX,
         displayY + displayOriginY,
       ).reduce((arr: ExamineItem[], item: Item) => {
-        const val = arr.find(el => el.name === item.name);
-        if (val) {
-          val.count++;
-          val.val += item.val;
-          val.text = `${val.count} ${val.count === 1 ? val.name : val.plural} (${val.val})`;
-          val.action = () => {
+        const existingItem = arr.find(el => el.name === item.name);
+        if (existingItem) {
+          existingItem.count++;
+          existingItem.val += item.val;
+          existingItem.text =
+            `${existingItem.count} ${
+              existingItem.count === 1 ? existingItem.name : existingItem.plural
+            } (${existingItem.val})`;
+          existingItem.action = () => {
             dispatchAction.AddMessage({
               entity: "",
-              message: `You examine the ${val.plural}. It is worth ${val.val} gold.`,
+              message:
+                `You examine the ${existingItem.plural}. It is worth ${existingItem.val} gold.`,
             });
           };
         } else {
@@ -92,9 +106,9 @@ export default Vue.extend({
           arr.push(newItemEntry);
         }
         return arr;
-      }, []);
+      }, []).sort((a: Item, b: Item) => b.val - a.val);
 
-      const menuItems = [...creaturesOnTile, ...itemsOnTile];
+      const menuItems = [...aliveCreatures, ...itemsOnTile, ...deadCreatures];
 
       const gold = this.$store.getters.goldOnTile(
         displayX + displayOriginX,
