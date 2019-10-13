@@ -4,8 +4,8 @@ import { Creature } from "../game/entities/creatures";
 import { Player } from "../game/entities/player";
 import Vue from "vue";
 import Vuex from "vuex";
-import World from "../game/world/World";
 import { Direction, getDirStringFromVector, parseDir } from "../game/utils/direction";
+import { getTile, World } from "../game/world/World";
 import { Item, Message, SurroundingsItem } from "../types";
 import Position, { Vector, VTS } from "../game/world/position";
 
@@ -152,15 +152,21 @@ const store = new Vuex.Store({
     },
     displayOrigin: state => state.displayOrigin,
     goldOnTile: state => (x: number, y: number) => {
-      const tile = state.world && state.world.getTile(x, y);
-      return tile ? tile.gold : 0;
+      if (state.world) {
+        const { tile } = getTile(state.world, x, y);
+        return tile.gold;
+      }
+      return 0;
     },
     highlit: state => state.highlit || {},
     inputText: state => state.inputText,
     instantMode: state => state.commandMode === "instant",
     itemsOnTile: state => (x: number, y: number) => {
-      const tile = state.world && state.world.getTile(x, y);
-      return tile ? tile.items : [];
+      if (state.world) {
+        const { tile } = getTile(state.world, x, y);
+        return tile.items;
+      }
+      return [];
     },
     messages: state => state.messages,
     player: state => state.player,
@@ -169,6 +175,10 @@ const store = new Vuex.Store({
     playerPos: state => state.player.position || new Position(0, 0),
     splash: state => state.splash,
     surroundings: state => (radius: number = 2) => {
+      if (!state.world) {
+        return;
+      }
+
       let surr: Surroundings = {
         creatures: [],
         items: {},
@@ -193,7 +203,7 @@ const store = new Vuex.Store({
             surr.creatures = surr.creatures.concat(creaturesHere);
           }
 
-          const tile = state.world!.getTile(...pos);
+          const { tile } = getTile(state.world, ...pos);
           if (tile.items.length) {
             tile.items.forEach((item: Item) => {
               if (surr.items[item.name]) {
@@ -315,7 +325,7 @@ const store = new Vuex.Store({
       state.highlit = {};
     },
     DROP_ITEMS(state, { gold, items, pos }: { gold: number; items: Item[]; pos: Position }) {
-      const tile = state.world!.getTile(pos.x, pos.y);
+      const { tile } = getTile(state.world!, pos.x, pos.y);
       tile.items.push(...items);
       tile.gold += gold;
     },

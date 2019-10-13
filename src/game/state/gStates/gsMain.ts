@@ -5,9 +5,9 @@ import { display } from "../../overview/Display";
 import displayConf from "../../config/display.json";
 import gameloop from "../../gameloop";
 import { GameState } from "../GameState";
+import { generateWorld } from "../../world/World";
 import { gsMan } from "../gsMan";
 import store from "../../../vuex/store";
-import World from "../../world/World";
 
 export class MainGameState extends GameState {
   constructor() {
@@ -18,7 +18,7 @@ export class MainGameState extends GameState {
     display.clear();
     display.setOptions(displayConf.main);
 
-    dispatchAction.SetWorld(new World());
+    dispatchAction.SetWorld(generateWorld());
 
     // Resize only after resetting font size to default
     const overviewDiv = document.querySelector("#overview");

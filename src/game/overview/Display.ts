@@ -4,8 +4,7 @@ import { dispatchAction } from "../../vuex/actions";
 import { levelColour } from "../utils/colours";
 import { Player } from "../entities/player";
 import store from "../../vuex/store";
-import Tile from "../world/Tile";
-import World from "../world/World";
+import { getTile, World } from "../world/World";
 
 export interface Display extends ROT.Display {
   drawWorld: () => void;
@@ -19,8 +18,12 @@ export const display = new ROT.Display({
 }) as Display;
 
 display.drawWorld = function() {
-  const world: World = store.getters.world;
+  const gameWorld: World = store.getters.world;
   const player: Player = store.getters.player;
+
+  if (!gameWorld || !player) {
+    return;
+  }
 
   this.clear();
   const curOpts = this.getOptions();
@@ -32,10 +35,13 @@ display.drawWorld = function() {
 
   for (let i = 0, y = top; y < bot; y++) {
     for (let j = 0, x = left; x < right; x++) {
-      let tile: Tile = world.getTile(x, y);
-      let hl = store.getters.highlit[[x, y].join()];
-      let symbol = tile.display;
-      let fg = tile.foreground;
+      const { tile, world } = getTile(gameWorld, x, y);
+      if (!tile || !world) {
+        return;
+      }
+      const hl = store.getters.highlit[[x, y].join()];
+      let symbol = tile.tileTemplate.display;
+      let fg = tile.tileTemplate.foreground;
       let bg = "#1e1e1e";
       const creatures: Creature[] = store.getters.creaturesAt(x, y);
       if (creatures) {

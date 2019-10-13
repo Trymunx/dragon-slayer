@@ -5,9 +5,9 @@ import { dispatchAction } from "../../vuex/actions";
 import gameItems from "../items/gameItems";
 import { Item } from "../../types";
 import { Player } from "./player";
+import Position from "../world/position";
 import { RNG } from "../utils/RNG";
 import { ActivityState, Entity, EntityType, HP } from "./entity";
-import Position, { getRandomPosInChunk } from "../world/position";
 
 export type CreatureName =
   | "dragon"
@@ -30,7 +30,7 @@ export type CreatureName =
   | "pig"
   | "rabbit";
 
-const AllCreatures = new Map(Object.entries(CreaturesJSON));
+export const AllCreatures = new Map(Object.entries(CreaturesJSON));
 
 interface CreatureAttack {
   chance: number;
@@ -420,25 +420,4 @@ const getItems = (creatureItemsArray: HarvestItems): Item[] => {
     }
   });
   return items;
-};
-
-export const genCreatures = (
-  chunkSize: number,
-  left: number,
-  top: number,
-  playerLevel: number = 1
-) => {
-  AllCreatures.forEach(c => {
-    let numberInChunk = Math.round(c.attributes.spawnChance * 0.5 * chunkSize ** 2);
-    for (let i = 0; i < numberInChunk; i++) {
-      let creatureLevel = Math.ceil(Math.random() * playerLevel * 1.5);
-      let pos = getRandomPosInChunk(chunkSize, left, top);
-      let creature = new Creature({
-        level: creatureLevel,
-        pos: pos,
-        template: c,
-      });
-      dispatchAction.AddCreature(creature);
-    }
-  });
 };

@@ -1,7 +1,7 @@
 import { Creature } from "../game/entities/creatures";
 import { Item } from "../types";
 import { Player } from "../game/entities/player";
-import World from "../game/world/World";
+import { World } from "../game/world/World";
 import { ActionContext, ActionTree, Store } from "vuex";
 import { Direction, parseDir } from "../game/utils/direction";
 import Position, { Vector } from "../game/world/position";

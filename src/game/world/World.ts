@@ -1,57 +1,91 @@
-import Chunk from "./Chunk";
+import { dispatchAction } from "../../vuex/actions";
+import { generateTiles } from "./tiles";
+import { Item } from "../../types";
 import { Player } from "../entities/player";
 import { RNG } from "../utils/RNG";
-import Tile from "./Tile";
-import { Vector, VTS } from "./position";
+import store from "../../vuex/store";
+import { AllCreatures, Creature } from "../entities/creatures";
+import { getRandomPosInChunk, Vector, VTS } from "./position";
 
-export default class World {
+export type GenericTile = {
+  display: string;
+  foreground: string;
+}
+export type Tile = {
+  gold: number;
+  items: Item[];
+  tileTemplate: GenericTile;
+}
+type Chunk = {
+  pos: Vector;
+  tiles: Array<Tile[]>;
+}
+export type World = {
   chunks: {
     [origin: string]: Chunk;
   };
-  spawnChunk: Chunk;
-
-  constructor() {
-    this.chunks = {};
-
-    // Generate starting chunk
-    this.spawnChunk = this.genChunk(0, 0);
-    // Generate surrounding chunks
-    [[0, 1], [0, -1], [1, 0], [-1, 0]].forEach(c => {
-      // console.log("generating chunk", c[0], c[1]);
-      this.genChunk(...(c as [number, number]));
-    });
-
-    // constructor(type, size) {
-    //   this.chunks = new Map();
-    //   this.type = type; // Example types: dungeon, forest, dragon-lair
-    //   this.size = size > 0 ? size : 8; // Arbitrary limit for player spawn chunk
-    //   let spawnChunk = this.genChunk(Math.floor(RNG(this.size)), Math.floor(RNG(this.size)));
-  }
-
-  getChunk(x: number, y: number) {
-    return this.chunks[VTS(x, y)];
-  }
-
-  chunkExists(x: number, y: number): boolean {
-    return this.chunks[VTS(x, y)] !== undefined;
-  }
-
-  genChunk(x: number, y: number) {
-    let chunk = new Chunk(x, y, this);
-    this.chunks[VTS(x, y)] = chunk;
-    return chunk;
-  }
-
-  getChunkFromTile(x: number, y: number): Chunk {
-    const chunkCoords: Vector = [Math.floor(x / Chunk.size), Math.floor(y / Chunk.size)];
-    if (this.chunkExists(...chunkCoords)) {
-      return this.getChunk(...chunkCoords)!;
-    } else {
-      return this.genChunk(...chunkCoords);
-    }
-  }
-
-  getTile(x: number, y: number): Tile {
-    return this.getChunkFromTile(x, y).getTileFromWorldCoords(x, y);
-  }
+  size: number;
 }
+
+// Generation is faster with a smaller chunk size.
+const CHUNK_SIZE = 12;
+export function generateWorld(): World {
+  const world: World = {
+    chunks: {},
+    size: 0,
+  };
+  const chunk = generateChunk(world, 0, 0);
+  world.chunks[VTS(0, 0)] = chunk;
+  world.size++;
+
+  return world;
+};
+
+function generateChunk(world: World, x: number, y: number): Chunk {
+  if (hasChunk(world, x, y)) {
+    console.warn(`Chunk already exists at x: ${x}, y: ${y}`);
+    return world.chunks[VTS(x, y)];
+  }
+
+  genCreatures(CHUNK_SIZE, x, y, store.getters.playerLevel);
+  return {
+    pos: [x, y],
+    tiles: generateTiles(CHUNK_SIZE),
+  };
+};
+
+const hasChunk = (world: World, x: number, y: number): boolean =>
+  world.chunks[VTS(x, y)] !== undefined;
+
+export function getTile(world: World, x: number, y: number) {
+  const chunkCoords: Vector = [Math.floor(x / CHUNK_SIZE), Math.floor(y / CHUNK_SIZE)];
+  if (!hasChunk(world, ...chunkCoords)) {
+    world.chunks[VTS(...chunkCoords)] = generateChunk(world, ...chunkCoords);
+  }
+  const [xOffset, yOffset] = chunkCoords.map(coord => coord * CHUNK_SIZE);
+  return {
+    tile: world.chunks[VTS(...chunkCoords)].tiles[x - xOffset][y - yOffset],
+    world,
+  };
+};
+
+const genCreatures = (
+  chunkSize: number,
+  left: number,
+  top: number,
+  playerLevel: number = 1
+) => {
+  AllCreatures.forEach(c => {
+    let numberInChunk = Math.round(c.attributes.spawnChance * 0.5 * chunkSize ** 2);
+    for (let i = 0; i < numberInChunk; i++) {
+      let creatureLevel = Math.ceil(Math.random() * playerLevel * 1.5);
+      let pos = getRandomPosInChunk(chunkSize, left, top);
+      let creature = new Creature({
+        level: creatureLevel,
+        pos: pos,
+        template: c,
+      });
+      dispatchAction.AddCreature(creature);
+    }
+  });
+};
