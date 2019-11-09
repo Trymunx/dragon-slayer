@@ -5,6 +5,12 @@ import store from "../vuex/store";
 
 const gameloop = {
   run: () => {
+    if (store.getters.gamePaused) {
+      display.drawPaused();
+      window.requestAnimationFrame(gameloop.run);
+      return;
+    }
+
     const player = store.getters.player;
     const playerPos = store.getters.playerPos;
 

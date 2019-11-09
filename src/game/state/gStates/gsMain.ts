@@ -122,6 +122,10 @@ export class MainGameState extends GameState {
           display.drawWorld();
           break;
 
+        case "p":
+          dispatchAction.TogglePaused();
+          break;
+
         default:
           break;
       }

@@ -8,6 +8,7 @@ import { getTile, World } from "../world/World";
 
 export interface Display extends ROT.Display {
   drawWorld: () => void;
+  drawPaused: () => void;
 }
 
 export const display = new ROT.Display({
@@ -26,6 +27,7 @@ display.drawWorld = function() {
   }
 
   this.clear();
+
   const curOpts = this.getOptions();
   let top = Math.ceil(player.position.y - curOpts.height / 2);
   let bot = Math.ceil(player.position.y + curOpts.height / 2);
@@ -88,4 +90,9 @@ display.drawWorld = function() {
     }
     i++;
   }
+};
+
+display.drawPaused = function() {
+  const curOpts = this.getOptions();
+  this.draw(curOpts.width / 2 - 0.5, curOpts.height / 2 - 1.5, "[ Paused ]", "#fff", "#00000000");
 };

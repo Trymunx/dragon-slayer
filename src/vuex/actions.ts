@@ -34,6 +34,7 @@ export const dispatchAction = {
   SetPlayerName: actionGen<string>("setPlayerName"),
   SetSplash: actionGen<boolean>("setSplash"),
   SetWorld: actionGen<World>("setWorld"),
+  TogglePaused: actionGen<null>("togglePaused"),
 };
 
 // type ActionKey = keyof IActions;
@@ -83,6 +84,7 @@ interface IActions extends ActionTree<InitialState, InitialState> {
   setPlayerName: ActionHandlerWithPayload<InitialState, InitialState, string>;
   setSplash: ActionHandlerWithPayload<InitialState, InitialState, boolean>;
   setWorld: ActionHandlerWithPayload<InitialState, InitialState, World>;
+  togglePaused: ActionHandlerWithPayload<InitialState, InitialState, null>;
 }
 
 export const actions: IActions = {
@@ -146,5 +148,8 @@ export const actions: IActions = {
   },
   setWorld({ commit }, world) {
     commit("SET_WORLD", world);
+  },
+  togglePaused({ commit }) {
+    commit("TOGGLE_PAUSED");
   },
 };

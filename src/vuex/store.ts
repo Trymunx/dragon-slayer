@@ -28,6 +28,7 @@ export interface InitialState {
     [location: string]: Creature[];
   };
   displayOrigin: [number, number];
+  gamePaused: boolean;
   highlit: Record<string, {} | { colour: string; symbol: string }>;
   inputText: string;
   messages: Message[];
@@ -40,6 +41,7 @@ const InitialState: InitialState = {
   commandMode: "text",
   creatures: {},
   displayOrigin: [0, 0],
+  gamePaused: false,
   highlit: {},
   inputText: "",
   messages: [],
@@ -122,6 +124,9 @@ const store = new Vuex.Store({
     setWorld({ commit }, world) {
       commit("SET_WORLD", world);
     },
+    togglePaused({ commit }) {
+      commit("TOGGLE_PAUSED");
+    },
     // startGame({ commit }) {
     // commit("START_GAME");
     // },
@@ -151,6 +156,7 @@ const store = new Vuex.Store({
       return creatures;
     },
     displayOrigin: state => state.displayOrigin,
+    gamePaused: state => state.gamePaused,
     goldOnTile: state => (x: number, y: number) => {
       if (state.world) {
         const { tile } = getTile(state.world, x, y);
@@ -379,6 +385,9 @@ const store = new Vuex.Store({
     },
     START_GAME() {
       console.log("Probably not going to work here buddy");
+    },
+    TOGGLE_PAUSED(state) {
+      state.gamePaused = !state.gamePaused;
     },
   },
 
