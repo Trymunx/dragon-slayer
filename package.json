@@ -12,6 +12,7 @@
     "@types/lodash": "^4.14.136",
     "core-js": "^2.6.5",
     "lodash": "^4.17.15",
+    "open-simplex-noise": "^1.6.0",
     "rot-js": "^2.0.3",
     "vue": "^2.6.10",
     "vuex": "^3.0.1"

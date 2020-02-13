@@ -1,5 +1,6 @@
-import { VTS } from "./position";
+import OpenSimplexNoise from "open-simplex-noise";
 import { GenericTile, Tile } from "./World";
+import { Vector, VTS } from "./position";
 
 const trees = [
   {
@@ -63,23 +64,33 @@ const tiles = trees
       probability: tree.prob,
     };
   })
-  .concat([{
-    display: ".",
-    foreground: "#855e40",
-    probability: 100,
-  }])
+  // .concat([{
+  //   display: ".",
+  //   foreground: "#855e40",
+  //   probability: 100,
+  // }])
   .sort((a, b) => b.probability - a.probability);
 
 // Calculate the total of all of the tile probabilities for randomising the tiles
 const total = tiles.reduce((sum: number, tile): number => tile.probability + sum, 0);
 
-function getRandomTileTemplate(): GenericTile {
+const Noise = new OpenSimplexNoise(2431);
+
+const divisor = 16;
+
+function getRandomTileTemplate(x: number, y: number): GenericTile {
+  const noiseValue = Noise.noise2D(x / divisor, y / divisor);
+  if (noiseValue > 0.2) {
+    return {
+      display: ".",
+      foreground: "#855e40",
+    };
+  }
   const rand = Math.floor(Math.random() * total);
-  const chosenTile = tiles.find(tile => tile.probability < rand);
-  return chosenTile || tiles[0];
+  return tiles.find(tile => tile.probability < rand) || tiles[0];
 }
 
-export function generateTiles(chunkSize: number): Array<Tile[]> {
+export function generateTiles(chunkSize: number, offset: Vector): Array<Tile[]> {
   const tiles: Array<Tile[]> = [];
   for (let x = 0; x < chunkSize; x++) {
     tiles[x] = [];
@@ -87,7 +98,7 @@ export function generateTiles(chunkSize: number): Array<Tile[]> {
       tiles[x][y] = {
         gold: 0,
         items: [],
-        tileTemplate: getRandomTileTemplate(),
+        tileTemplate: getRandomTileTemplate(x + offset[0] * chunkSize, y + offset[1] * chunkSize),
       };
     }
   }

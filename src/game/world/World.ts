@@ -28,7 +28,7 @@ export type World = {
 }
 
 // Generation is faster with a smaller chunk size.
-const CHUNK_SIZE = 12;
+const CHUNK_SIZE = 24;
 export function generateWorld(): World {
   const world: World = {
     chunks: {},
@@ -50,7 +50,7 @@ function generateChunk(world: World, x: number, y: number): Chunk {
   genCreatures(CHUNK_SIZE, x, y, store.getters.playerLevel);
   return {
     pos: [x, y],
-    tiles: generateTiles(CHUNK_SIZE),
+    tiles: generateTiles(CHUNK_SIZE, [x, y]),
   };
 };
 
