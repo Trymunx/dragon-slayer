@@ -1,11 +1,12 @@
 import { Creature } from "../game/entities/creatures";
 import { Item } from "../types";
 import { Player } from "../game/entities/player";
+import { Map as ROTMap } from "rot-js";
 import { World } from "../game/world/World";
 import { ActionContext, ActionTree, Store } from "vuex";
 import { Direction, parseDir } from "../game/utils/direction";
 import Position, { Vector } from "../game/world/position";
-import store, { InitialState } from "./store";
+import store, { IState } from "./store";
 
 function actionGen<P>(name: string) {
   return (payload?: P) => store.dispatch(name, payload);
@@ -29,11 +30,13 @@ export const dispatchAction = {
   ParseCommand: actionGen<string>("parseCommand"),
   SetCommandMode: actionGen<string>("setCommandMode"),
   SetDisplayOrigin: actionGen<[number, number]>("setDisplayOrigin"),
+  SetDungeon: actionGen<number[][]>("setDungeon"),
   SetInputText: actionGen<string>("setInputText"),
   SetPlayer: actionGen<Player>("setPlayer"),
   SetPlayerName: actionGen<string>("setPlayerName"),
   SetSplash: actionGen<boolean>("setSplash"),
   SetWorld: actionGen<World>("setWorld"),
+  ToggleDrawDungeon: actionGen<null>("toggleDrawDungeon"),
   TogglePaused: actionGen<null>("togglePaused"),
 };
 
@@ -50,41 +53,41 @@ type ActionHandlerWithPayload<S, R, P> = (
   payload: P
 ) => any;
 
-interface IActions extends ActionTree<InitialState, InitialState> {
-  addCreature: ActionHandlerWithPayload<InitialState, InitialState, Creature>;
+interface IActions extends ActionTree<IState, IState> {
+  addCreature: ActionHandlerWithPayload<IState, IState, Creature>;
   addMessage: ActionHandlerWithPayload<
-    InitialState,
-    InitialState,
+    IState,
+    IState,
     { entity: string; message: string }
   >;
   addMessageAtPosition: ActionHandlerWithPayload<
-    InitialState,
-    InitialState,
+    IState,
+    IState,
     { entity: string; message: string; position: Position }
   >;
-  clearHighlight: ActionHandlerWithPayload<InitialState, InitialState, null>;
-  dropItems: ActionHandlerWithPayload<InitialState, InitialState, { items: Item[]; pos: Position }>;
-  enterCommand: ActionHandlerWithPayload<InitialState, InitialState, string>;
+  clearHighlight: ActionHandlerWithPayload<IState, IState, null>;
+  dropItems: ActionHandlerWithPayload<IState, IState, { items: Item[]; pos: Position }>;
+  enterCommand: ActionHandlerWithPayload<IState, IState, string>;
   highlight: ActionHandlerWithPayload<
-    InitialState,
-    InitialState,
+    IState,
+    IState,
     Record<string, {} | { colour: string; symbol: string }>
   >;
   moveCreature: ActionHandlerWithPayload<
-    InitialState,
-    InitialState,
+    IState,
+    IState,
     { creature: Creature; newPos: Position }
   >;
-  movePlayer: ActionHandlerWithPayload<InitialState, InitialState, Direction>;
-  parseCommand: ActionHandlerWithPayload<InitialState, InitialState, string>;
-  setCommandMode: ActionHandlerWithPayload<InitialState, InitialState, string>;
-  setDisplayOrigin: ActionHandlerWithPayload<InitialState, InitialState, [number, number]>;
-  setInputText: ActionHandlerWithPayload<InitialState, InitialState, string>;
-  setPlayer: ActionHandlerWithPayload<InitialState, InitialState, Player>;
-  setPlayerName: ActionHandlerWithPayload<InitialState, InitialState, string>;
-  setSplash: ActionHandlerWithPayload<InitialState, InitialState, boolean>;
-  setWorld: ActionHandlerWithPayload<InitialState, InitialState, World>;
-  togglePaused: ActionHandlerWithPayload<InitialState, InitialState, null>;
+  movePlayer: ActionHandlerWithPayload<IState, IState, Direction>;
+  parseCommand: ActionHandlerWithPayload<IState, IState, string>;
+  setCommandMode: ActionHandlerWithPayload<IState, IState, string>;
+  setDisplayOrigin: ActionHandlerWithPayload<IState, IState, [number, number]>;
+  setInputText: ActionHandlerWithPayload<IState, IState, string>;
+  setPlayer: ActionHandlerWithPayload<IState, IState, Player>;
+  setPlayerName: ActionHandlerWithPayload<IState, IState, string>;
+  setSplash: ActionHandlerWithPayload<IState, IState, boolean>;
+  setWorld: ActionHandlerWithPayload<IState, IState, World>;
+  togglePaused: ActionHandlerWithPayload<IState, IState, null>;
 }
 
 export const actions: IActions = {

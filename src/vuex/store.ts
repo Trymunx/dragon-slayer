@@ -2,6 +2,7 @@
 import { ActivityState } from "../game/entities/entity";
 import { Creature } from "../game/entities/creatures";
 import { Player } from "../game/entities/player";
+import { Map as ROTMap } from "rot-js";
 import Vue from "vue";
 import Vuex from "vuex";
 import { Direction, getDirStringFromVector, parseDir } from "../game/utils/direction";
@@ -22,12 +23,14 @@ interface Surroundings {
   };
 }
 
-export interface InitialState {
+export interface IState {
   commandMode: string;
   creatures: {
     [location: string]: Creature[];
   };
   displayOrigin: [number, number];
+  drawDungeon: boolean;
+  dungeon?: Partial<typeof ROTMap>;
   gamePaused: boolean;
   highlit: Record<string, {} | { colour: string; symbol: string }>;
   inputText: string;
@@ -37,10 +40,12 @@ export interface InitialState {
   world?: World;
 }
 
-const InitialState: InitialState = {
+const InitialState: IState = {
   commandMode: "text",
   creatures: {},
   displayOrigin: [0, 0],
+  drawDungeon: false,
+  dungeon: undefined,
   gamePaused: false,
   highlit: {},
   inputText: "",
@@ -109,6 +114,9 @@ const store = new Vuex.Store({
     setDisplayOrigin({ commit }, vector) {
       commit("SET_DISPLAY_ORIGIN", vector);
     },
+    setDungeon({ commit }, dungeon) {
+      commit("SET_DUNGEON", dungeon);
+    },
     setInputText({ commit }, text) {
       commit("SET_INPUT_TEXT", text);
     },
@@ -123,6 +131,9 @@ const store = new Vuex.Store({
     },
     setWorld({ commit }, world) {
       commit("SET_WORLD", world);
+    },
+    toggleDrawDungeon({ commit }) {
+      commit("TOGGLE_DRAW_DUNGEON");
     },
     togglePaused({ commit }) {
       commit("TOGGLE_PAUSED");
@@ -156,6 +167,8 @@ const store = new Vuex.Store({
       return creatures;
     },
     displayOrigin: state => state.displayOrigin,
+    drawDungeon: state => state.drawDungeon,
+    dungeon: state => state.dungeon,
     gamePaused: state => state.gamePaused,
     goldOnTile: state => (x: number, y: number) => {
       if (state.world) {
@@ -368,6 +381,9 @@ const store = new Vuex.Store({
     SET_DISPLAY_ORIGIN(state, vector) {
       state.displayOrigin = vector;
     },
+    SET_DUNGEON(state, dungeon) {
+      state.dungeon = dungeon;
+    },
     SET_INPUT_TEXT(state, text) {
       state.inputText = text;
     },
@@ -385,6 +401,9 @@ const store = new Vuex.Store({
     },
     START_GAME() {
       console.log("Probably not going to work here buddy");
+    },
+    TOGGLE_DRAW_DUNGEON(state) {
+      state.drawDungeon = !state.drawDungeon;
     },
     TOGGLE_PAUSED(state) {
       state.gamePaused = !state.gamePaused;

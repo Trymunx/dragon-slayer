@@ -1,4 +1,4 @@
-import OpenSimplexNoise from "open-simplex-noise";
+import * as ROT from "rot-js";
 import { GenericTile, Tile } from "./World";
 import { Vector, VTS } from "./position";
 
@@ -74,13 +74,13 @@ const tiles = trees
 // Calculate the total of all of the tile probabilities for randomising the tiles
 const total = tiles.reduce((sum: number, tile): number => tile.probability + sum, 0);
 
-const Noise = new OpenSimplexNoise(2431);
+const Noise = new ROT.Noise.Simplex(2431);
 
-const divisor = 16;
+const divisor = 32;
 
 function getRandomTileTemplate(x: number, y: number): GenericTile {
-  const noiseValue = Noise.noise2D(x / divisor, y / divisor);
-  if (noiseValue > 0.2) {
+  const noiseValue = Noise.get(x / divisor / 2, y / divisor);
+  if (noiseValue > 0) {
     return {
       display: ".",
       foreground: "#855e40",

@@ -27,7 +27,7 @@ export type World = {
   size: number;
 }
 
-// Generation is faster with a smaller chunk size.
+// TODO: Generation is faster with a smaller chunk size.
 const CHUNK_SIZE = 24;
 export function generateWorld(): World {
   const world: World = {
@@ -46,12 +46,13 @@ function generateChunk(world: World, x: number, y: number): Chunk {
     console.warn(`Chunk already exists at x: ${x}, y: ${y}`);
     return world.chunks[VTS(x, y)];
   }
-
-  genCreatures(CHUNK_SIZE, x, y, store.getters.playerLevel);
-  return {
+  const chunk: Chunk = {
     pos: [x, y],
     tiles: generateTiles(CHUNK_SIZE, [x, y]),
   };
+
+  genCreatures(CHUNK_SIZE, x, y, store.getters.playerLevel);
+  return chunk;
 };
 
 const hasChunk = (world: World, x: number, y: number): boolean =>
@@ -69,6 +70,7 @@ export function getTile(world: World, x: number, y: number) {
   };
 };
 
+// TODO: pass in chunk to get the structures in a chunk
 const genCreatures = (
   chunkSize: number,
   left: number,
@@ -76,7 +78,7 @@ const genCreatures = (
   playerLevel: number = 1
 ) => {
   AllCreatures.forEach(c => {
-    let numberInChunk = Math.round(c.attributes.spawnChance * 0.5 * chunkSize ** 2);
+    let numberInChunk = Math.round(c.attributes.spawnChance * 0.2 * chunkSize ** 2);
     for (let i = 0; i < numberInChunk; i++) {
       let creatureLevel = Math.ceil(Math.random() * playerLevel * 1.5);
       let pos = getRandomPosInChunk(chunkSize, left, top);

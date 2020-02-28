@@ -5,6 +5,7 @@ import { display } from "../../overview/Display";
 import displayConf from "../../config/display.json";
 import gameloop from "../../gameloop";
 import { GameState } from "../GameState";
+import { generateDungeon } from "../../overview/Dungeons";
 import { generateWorld } from "../../world/World";
 import { gsMan } from "../gsMan";
 import store from "../../../vuex/store";
@@ -38,6 +39,8 @@ export class MainGameState extends GameState {
 
     display.drawText(0, 0, "Main state initialised");
     display.drawText(2, 2, "Player: " + store.getters.playerName);
+
+    dispatchAction.SetDungeon(generateDungeon(width * 8, height * 4));
 
     display.drawWorld();
 
@@ -124,6 +127,10 @@ export class MainGameState extends GameState {
 
         case "p":
           dispatchAction.TogglePaused();
+          break;
+
+        case "o":
+          dispatchAction.ToggleDrawDungeon();
           break;
 
         default:

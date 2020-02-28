@@ -1,6 +1,7 @@
 import * as ROT from "rot-js";
 import { Creature } from "../entities/creatures";
 import { dispatchAction } from "../../vuex/actions";
+import { drawDungeon } from "./Dungeons";
 import { levelColour } from "../utils/colours";
 import { Player } from "../entities/player";
 import store from "../../vuex/store";
@@ -26,9 +27,18 @@ display.drawWorld = function() {
     return;
   }
 
-  this.clear();
+  if (store.getters.drawDungeon) {
+    drawDungeon(this);
+    return;
+  }
 
-  const curOpts = this.getOptions();
+  drawOverworld(this, player, gameWorld);
+};
+
+const drawOverworld = (d: Display, player: Player, gameWorld: World) => {
+  d.clear();
+
+  const curOpts = d.getOptions();
   let top = Math.ceil(player.position.y - curOpts.height / 2);
   let bot = Math.ceil(player.position.y + curOpts.height / 2);
   let left = Math.ceil(player.position.x - curOpts.width / 2);
@@ -85,7 +95,7 @@ display.drawWorld = function() {
         }
       }
 
-      this.draw(j, i, symbol, fg, bg);
+      d.draw(j, i, symbol, fg, bg);
       j++;
     }
     i++;
