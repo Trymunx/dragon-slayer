@@ -187,6 +187,7 @@ const store = new Vuex.Store({
       }
       return creatures;
     },
+    currentDungeon: (state): Dungeon => state.dungeons[state.player.position.key],
     currentDungeonWalls: (state): number[][] => {
       const pos = state.player.position;
       const dungeon = state.dungeons[pos.key];

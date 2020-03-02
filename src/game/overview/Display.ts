@@ -1,8 +1,10 @@
 import * as ROT from "rot-js";
 import { Creature } from "../entities/creatures";
 import { dispatchAction } from "../../vuex/actions";
+import { Dungeon } from "../dungeons/dungeon";
 import { levelColour } from "../utils/colours";
 import { Player } from "../entities/player";
+import { Vector } from "../world/position";
 import { getTile, World } from "../world/World";
 import store, { WorldState } from "../../vuex/store";
 
@@ -37,14 +39,7 @@ display.drawWorld = function() {
 };
 
 const drawOverworld = (d: Display, player: Player, gameWorld: World) => {
-  d.clear();
-
-  const curOpts = d.getOptions();
-  let top = Math.ceil(player.position.y - curOpts.height / 2);
-  let bot = Math.ceil(player.position.y + curOpts.height / 2);
-  let left = Math.ceil(player.position.x - curOpts.width / 2);
-  let right = Math.ceil(player.position.x + curOpts.width / 2);
-  dispatchAction.SetDisplayOrigin([left, top]);
+  const { bot, left, right, top } = centreDisplay([player.position.x, player.position.y], d);
 
   for (let i = 0, y = top; y < bot; y++) {
     for (let j = 0, x = left; x < right; x++) {
@@ -109,18 +104,48 @@ display.drawPaused = function() {
 };
 
 const drawDungeon = (d: Display) => {
-  const dungeon: number[][] = store.getters.currentDungeonWalls;
-  const { width, height } = d.getOptions();
+  const dungeon: Dungeon = store.getters.currentDungeon;
 
-  if (dungeon) {
-    for (let x = 0; x < dungeon.length; x++) {
-      for (let y = 0; y < dungeon[x].length; y++) {
-        if (dungeon[x][y]) {
-          d.draw(x, y, " ", "#1e1e1e", "#000");
-        } else {
-          d.draw(x, y, " ", "#fff", "#1e1e1e");
-        }
-      }
-    }
+  const { bot, left, right, top } = centreDisplay(dungeon.playerPos, d);
+
+  if (!dungeon || !dungeon.walls) {
+    return;
   }
+
+  let bg: string, fg: string;
+
+  for (let i = 0, y = top; y < bot; y++) {
+    for (let j = 0, x = left; x < right; x++) {
+      if (dungeon.walls[x][y]) {
+        fg = "#1e1e1e";
+        bg = "#000";
+      } else {
+        fg = "#fff";
+        bg = "#1e1e1e";
+      }
+      // for (let x = 0; x < dungeon.walls.length; x++) {
+      //   for (let y = 0; y < dungeon.walls[x].length; y++) {
+      //     if (dungeon.walls[x][y]) {
+      //       d.draw(x, y, " ", "#1e1e1e", "#000");
+      //     } else {
+      //       d.draw(x, y, " ", "#fff", "#1e1e1e");
+      //     }
+      //   }
+      // }
+      d.draw(i, j, " ", fg, bg);
+      j++;
+    }
+    i++;
+  }
+};
+
+const centreDisplay = (playerPos: Vector, d: Display) => {
+  d.clear();
+  const { width, height } = d.getOptions();
+  let top = Math.ceil(playerPos[1] - height / 2);
+  let bot = Math.ceil(playerPos[1] + height / 2);
+  let left = Math.ceil(playerPos[0] - width / 2);
+  let right = Math.ceil(playerPos[0] + width / 2);
+  dispatchAction.SetDisplayOrigin([left, top]);
+  return { bot, left, right, top };
 };
