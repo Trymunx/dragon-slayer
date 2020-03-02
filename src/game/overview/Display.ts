@@ -1,11 +1,10 @@
 import * as ROT from "rot-js";
 import { Creature } from "../entities/creatures";
 import { dispatchAction } from "../../vuex/actions";
-import { drawDungeon } from "./Dungeons";
 import { levelColour } from "../utils/colours";
 import { Player } from "../entities/player";
-import store from "../../vuex/store";
 import { getTile, World } from "../world/World";
+import store, { WorldState } from "../../vuex/store";
 
 export interface Display extends ROT.Display {
   drawWorld: () => void;
@@ -27,12 +26,14 @@ display.drawWorld = function() {
     return;
   }
 
-  if (store.getters.drawDungeon) {
-    drawDungeon(this);
-    return;
+  switch (store.getters.worldState) {
+    case WorldState.Overworld:
+      drawOverworld(this, player, gameWorld);
+      break;
+    case WorldState.Dungeon:
+      drawDungeon(this);
+      break;
   }
-
-  drawOverworld(this, player, gameWorld);
 };
 
 const drawOverworld = (d: Display, player: Player, gameWorld: World) => {
@@ -105,4 +106,21 @@ const drawOverworld = (d: Display, player: Player, gameWorld: World) => {
 display.drawPaused = function() {
   const curOpts = this.getOptions();
   this.draw(curOpts.width / 2 - 0.5, curOpts.height / 2 - 1.5, "[ Paused ]", "#fff", "#00000000");
+};
+
+const drawDungeon = (d: Display) => {
+  const dungeon: number[][] = store.getters.currentDungeonWalls;
+  const { width, height } = d.getOptions();
+
+  if (dungeon) {
+    for (let x = 0; x < dungeon.length; x++) {
+      for (let y = 0; y < dungeon[x].length; y++) {
+        if (dungeon[x][y]) {
+          d.draw(x, y, " ", "#1e1e1e", "#000");
+        } else {
+          d.draw(x, y, " ", "#fff", "#1e1e1e");
+        }
+      }
+    }
+  }
 };

@@ -6,6 +6,7 @@ import { Map as ROTMap } from "rot-js";
 import Vue from "vue";
 import Vuex from "vuex";
 import { Direction, getDirStringFromVector, parseDir } from "../game/utils/direction";
+import { Dungeon, generateRandomDungeon } from "../game/dungeons/dungeon";
 import { getTile, World } from "../game/world/World";
 import { Item, Message, SurroundingsItem } from "../types";
 import Position, { Vector, VTS } from "../game/world/position";
@@ -23,14 +24,20 @@ interface Surroundings {
   };
 }
 
+type DungeonState = { [overworldEntrance: string]: Dungeon }
+
+export enum WorldState {
+  Overworld = "OVERWORLD",
+  Dungeon = "DUNGEON",
+}
+
 export interface IState {
   commandMode: string;
   creatures: {
     [location: string]: Creature[];
   };
   displayOrigin: [number, number];
-  drawDungeon: boolean;
-  dungeon?: Partial<typeof ROTMap>;
+  dungeons: DungeonState;
   gamePaused: boolean;
   highlit: Record<string, {} | { colour: string; symbol: string }>;
   inputText: string;
@@ -38,20 +45,21 @@ export interface IState {
   player: Player;
   splash: boolean;
   world?: World;
+  worldState: WorldState;
 }
 
 const InitialState: IState = {
   commandMode: "text",
   creatures: {},
   displayOrigin: [0, 0],
-  drawDungeon: false,
-  dungeon: undefined,
+  dungeons: {},
   gamePaused: false,
   highlit: {},
   inputText: "",
   messages: [],
   player: new Player(),
   splash: true,
+  worldState: WorldState.Overworld,
 };
 
 const store = new Vuex.Store({
@@ -80,6 +88,20 @@ const store = new Vuex.Store({
         message: text,
       });
       commit("SET_INPUT_TEXT", "");
+    },
+    enterDungeon({ commit, state }, pos: Vector) {
+      if (state.dungeons[pos.toString()]) {
+        console.log("entering old dungeon");
+        commit("SET_WORLD_STATE", WorldState.Dungeon);
+      } else {
+        console.log("new dungeon now");
+        const dungeon: Dungeon = generateRandomDungeon(pos);
+        commit("SET_DUNGEON", dungeon);
+        commit("SET_WORLD_STATE", WorldState.Dungeon);
+      }
+    },
+    exitDungeon({ commit }) {
+      commit("SET_WORLD_STATE", WorldState.Overworld);
     },
     highlight({ commit }, tiles) {
       commit("HIGHLIGHT_TILES", tiles);
@@ -114,7 +136,7 @@ const store = new Vuex.Store({
     setDisplayOrigin({ commit }, vector) {
       commit("SET_DISPLAY_ORIGIN", vector);
     },
-    setDungeon({ commit }, dungeon) {
+    setDungeon({ commit }, dungeon: Dungeon) {
       commit("SET_DUNGEON", dungeon);
     },
     setInputText({ commit }, text) {
@@ -144,10 +166,9 @@ const store = new Vuex.Store({
   },
 
   getters: {
-    creatures: state => state.creatures,
-    creaturesAt: state => (x: number, y: number): Array<Creature> => {
-      return state.creatures[VTS(x, y)] || [];
-    },
+    creatures: (state): {[location: string]: Creature[]} => state.creatures,
+    creaturesAt: (state): (x: number, y: number) => Creature[] => (x, y) =>
+      state.creatures[VTS(x, y)] || [],
     creaturesWithinRadius: state => (
       pos: Position,
       radius: number = 10
@@ -166,9 +187,13 @@ const store = new Vuex.Store({
       }
       return creatures;
     },
+    currentDungeonWalls: (state): number[][] => {
+      const pos = state.player.position;
+      const dungeon = state.dungeons[pos.key];
+      return dungeon.walls;
+    },
     displayOrigin: state => state.displayOrigin,
-    drawDungeon: state => state.drawDungeon,
-    dungeon: state => state.dungeon,
+    dungeon: state => (pos: Vector) => state.dungeons[pos.toString()],
     gamePaused: state => state.gamePaused,
     goldOnTile: state => (x: number, y: number) => {
       if (state.world) {
@@ -191,7 +216,7 @@ const store = new Vuex.Store({
     player: state => state.player,
     playerLevel: state => state.player.level,
     playerName: state => state.player.name,
-    playerPos: state => state.player.position || new Position(0, 0),
+    playerPos: (state): Position => state.player.position || new Position(0, 0),
     splash: state => state.splash,
     surroundings: state => (radius: number = 2) => {
       if (!state.world) {
@@ -321,6 +346,7 @@ const store = new Vuex.Store({
     },
     world: state => state.world,
     worldExists: state => !!state.world,
+    worldState: state => state.worldState,
   },
 
   mutations: {
@@ -381,8 +407,12 @@ const store = new Vuex.Store({
     SET_DISPLAY_ORIGIN(state, vector) {
       state.displayOrigin = vector;
     },
-    SET_DUNGEON(state, dungeon) {
-      state.dungeon = dungeon;
+    SET_DUNGEON(state, dungeon: Dungeon) {
+      if (!state.dungeons[dungeon.worldEntrancePos.toString()]) {
+        state.dungeons[dungeon.worldEntrancePos.toString()] = dungeon;
+      } else {
+        console.error(`Dungeon already exists at ${dungeon.worldEntrancePos}`);
+      }
     },
     SET_INPUT_TEXT(state, text) {
       state.inputText = text;
@@ -399,11 +429,11 @@ const store = new Vuex.Store({
     SET_WORLD(state, world) {
       Vue.set(state, "world", world);
     },
+    SET_WORLD_STATE(state, ws: WorldState) {
+      state.worldState = ws;
+    },
     START_GAME() {
       console.log("Probably not going to work here buddy");
-    },
-    TOGGLE_DRAW_DUNGEON(state) {
-      state.drawDungeon = !state.drawDungeon;
     },
     TOGGLE_PAUSED(state) {
       state.gamePaused = !state.gamePaused;
