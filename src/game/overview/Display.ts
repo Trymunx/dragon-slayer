@@ -116,23 +116,17 @@ const drawDungeon = (d: Display) => {
 
   for (let i = 0, y = top; y < bot; y++) {
     for (let j = 0, x = left; x < right; x++) {
-      if (dungeon.walls[x][y]) {
+      if (dungeon.playerPos[0] === x && dungeon.playerPos[1] === y) {
+        fg = "#000";
+        bg = "#fff";
+      } else if (!(x in dungeon.walls && y in dungeon.walls[x]) || dungeon.walls[x][y]) {
         fg = "#1e1e1e";
         bg = "#000";
       } else {
         fg = "#fff";
         bg = "#1e1e1e";
       }
-      // for (let x = 0; x < dungeon.walls.length; x++) {
-      //   for (let y = 0; y < dungeon.walls[x].length; y++) {
-      //     if (dungeon.walls[x][y]) {
-      //       d.draw(x, y, " ", "#1e1e1e", "#000");
-      //     } else {
-      //       d.draw(x, y, " ", "#fff", "#1e1e1e");
-      //     }
-      //   }
-      // }
-      d.draw(i, j, " ", fg, bg);
+      d.draw(j, i, " ", fg, bg);
       j++;
     }
     i++;

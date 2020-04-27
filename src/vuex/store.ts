@@ -110,18 +110,32 @@ const store = new Vuex.Store({
       commit("MOVE_CREATURE", { creature, newPos });
     },
     movePlayer({ state, commit }, dir: Direction) {
-      if (state.player.currentActivityState === ActivityState.MOVING) {
-        commit("MOVE_PLAYER", parseDir(dir));
-      } else if (state.player.currentActivityState === ActivityState.DEAD) {
+      if (state.player.currentActivityState === ActivityState.DEAD) {
         commit("ADD_MESSAGE", {
           entity: "",
           message: "You cannot move when you are dead.",
         });
-      } else {
+        return;
+      }
+      if (state.player.currentActivityState === ActivityState.FIGHTING) {
         commit("ADD_MESSAGE", {
           entity: "Can't esacpe!",
           message: "You can't move while you're being attacked. Use \"r\" to attempt to run away.",
         });
+        return;
+      }
+
+      if (state.worldState === WorldState.Overworld) {
+        commit("MOVE_PLAYER", parseDir(dir));
+      } else if (state.worldState === WorldState.Dungeon) {
+        const dungeon = state.dungeons[state.player.position.key];
+        const vec = parseDir(dir);
+        const newPosition = [dungeon.playerPos[0] + vec[0], dungeon.playerPos[1] + vec[1]];
+
+        // Don't move through walls
+        if (!dungeon.walls[newPosition[0]][newPosition[1]]) {
+          commit("MOVE_PLAYER_IN_DUNGEON", { dungeon, newPosition });
+        }
       }
     },
     parseCommand(_, command) {
@@ -401,6 +415,9 @@ const store = new Vuex.Store({
     MOVE_PLAYER(state, [x, y]) {
       state.player.position.x += x;
       state.player.position.y += y;
+    },
+    MOVE_PLAYER_IN_DUNGEON(state, { dungeon, newPosition }) {
+      state.dungeons[dungeon.worldEntrancePos].playerPos = newPosition;
     },
     SET_COMMAND_MODE(state, mode) {
       state.commandMode = mode;
