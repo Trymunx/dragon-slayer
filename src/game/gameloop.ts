@@ -1,7 +1,7 @@
 import { ActivityState } from "./entities/entity";
 import { Creature } from "./entities/creatures";
 import { display } from "./overview/Display";
-import store from "../vuex/store";
+import store, { WorldState } from "../vuex/store";
 
 const gameloop = {
   run: () => {
@@ -12,9 +12,8 @@ const gameloop = {
     }
 
     const player = store.getters.player;
-    const playerPos = store.getters.playerPos;
 
-    const locationsToCreaturesMap: Record<string, Creature[]> = getCreaturesToUpdate(playerPos);
+    const locationsToCreaturesMap: Record<string, Creature[]> = getCreaturesToUpdate();
     for (const [location, creatures] of Object.entries(locationsToCreaturesMap)) {
       const idleAggressive: Creature[] = creatures.filter(
         (creature: Creature) =>
@@ -41,13 +40,19 @@ const gameloop = {
   },
 };
 
-function getCreaturesToUpdate(playerPos: Position) {
-  const dOpts = display.getOptions();
-  const radius = Math.max(dOpts.width, dOpts.height);
+function getCreaturesToUpdate(): {[location: string]: Creature[]} {
+  const ws = store.getters.worldState;
+  if (ws === WorldState.Overworld) {
+    const playerPos = store.getters.playerPos;
+    if (!playerPos) console.error("No player position in game loop");
+    const dOpts = display.getOptions();
+    const radius = Math.max(dOpts.width, dOpts.height);
 
-  if (!playerPos) console.error("No player position in game loop");
-
-  return store.getters.creaturesWithinRadius(playerPos, radius);
+    return store.getters.creaturesWithinRadius(playerPos, radius);
+  } else if (ws === WorldState.Dungeon) {
+    return store.getters.creaturesInDungeon;
+  }
+  return {};
 }
 
 export default gameloop;

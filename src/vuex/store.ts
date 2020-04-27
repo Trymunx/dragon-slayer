@@ -183,13 +183,14 @@ const store = new Vuex.Store({
     creatures: (state): {[location: string]: Creature[]} => state.creatures,
     creaturesAt: (state): (x: number, y: number) => Creature[] => (x, y) =>
       state.creatures[VTS(x, y)] || [],
+    creaturesInDungeon: (state): {[location: string]: Creature[]} => ({}),
     creaturesWithinRadius: state => (
       pos: Position,
       radius: number = 10
     ): Record<string, Creature[]> => {
       if (!pos) {
-        console.warn("No player position in creatureWithinRadius, returning all creatures");
-        return state.creatures;
+        console.warn("Missing position in creatureWithinRadius");
+        return {};
       }
       const creatures: Record<string, Creature[]> = {};
       for (let y = pos.y - radius; y < pos.y + radius; y++) {
