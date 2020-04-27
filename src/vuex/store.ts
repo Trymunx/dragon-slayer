@@ -235,7 +235,8 @@ const store = new Vuex.Store({
     playerPos: (state): Position => state.player.position || new Position(0, 0),
     splash: state => state.splash,
     surroundings: state => (radius: number = 2) => {
-      if (!state.world) {
+      if (!state.world ||
+        (state.worldState === WorldState.Dungeon && !state.dungeons[state.player.position.key])) {
         return;
       }
 
@@ -244,51 +245,37 @@ const store = new Vuex.Store({
         items: {},
       };
 
-      for (let y = -radius; y <= radius; y++) {
-        for (let x = -radius; x <= radius; x++) {
-          const pos: Vector = [state.player.position.x + x, state.player.position.y + y];
+      if (state.worldState === WorldState.Overworld) {
+        for (let y = -radius; y <= radius; y++) {
+          for (let x = -radius; x <= radius; x++) {
+            const pos: Vector = [state.player.position.x + x, state.player.position.y + y];
 
-          const creatures = state.creatures[VTS(...pos)];
+            const creatures = state.creatures[VTS(...pos)];
 
-          if (creatures && creatures.length > 0) {
-            const dir = getDirStringFromVector(x, y);
-            const dist = Math.abs(x) + Math.abs(y);
-            const creaturesHere = creatures
-              .filter((creature: Creature) => !creature.isDead())
-              .map((creature: Creature) => ({
-                creature,
-                dir,
-                dist,
-              }));
-            surr.creatures = surr.creatures.concat(creaturesHere);
-          }
+            if (creatures && creatures.length > 0) {
+              const dir = getDirStringFromVector(x, y);
+              const dist = Math.abs(x) + Math.abs(y);
+              const creaturesHere = creatures
+                .filter((creature: Creature) => !creature.isDead())
+                .map((creature: Creature) => ({
+                  creature,
+                  dir,
+                  dist,
+                }));
+              surr.creatures = surr.creatures.concat(creaturesHere);
+            }
 
-          const { tile } = getTile(state.world, ...pos);
-          if (tile.items.length) {
-            tile.items.forEach((item: Item) => {
-              if (surr.items[item.name]) {
-                surr.items[item.name].count++;
-                surr.items[item.name].locations[VTS(...pos)] = {};
-                if (surr.items[item.name].expanded[VTS(x, y)]) {
-                  surr.items[item.name].expanded[VTS(x, y)].count++;
-                  surr.items[item.name].expanded[VTS(x, y)].totalValue += item.val;
-                } else {
-                  surr.items[item.name].expanded[VTS(x, y)] = {
-                    count: 1,
-                    dir: getDirStringFromVector(x, y),
-                    loc: {
-                      [VTS(...pos)]: {},
-                    },
-                    name: item.name,
-                    plural: item.plural,
-                    totalValue: item.val,
-                  };
-                }
-              } else {
-                surr.items[item.name] = {
-                  count: 1,
-                  expanded: {
-                    [VTS(x, y)]: {
+            const { tile } = getTile(state.world, ...pos);
+            if (tile.items.length) {
+              tile.items.forEach((item: Item) => {
+                if (surr.items[item.name]) {
+                  surr.items[item.name].count++;
+                  surr.items[item.name].locations[VTS(...pos)] = {};
+                  if (surr.items[item.name].expanded[VTS(x, y)]) {
+                    surr.items[item.name].expanded[VTS(x, y)].count++;
+                    surr.items[item.name].expanded[VTS(x, y)].totalValue += item.val;
+                  } else {
+                    surr.items[item.name].expanded[VTS(x, y)] = {
                       count: 1,
                       dir: getDirStringFromVector(x, y),
                       loc: {
@@ -297,55 +284,73 @@ const store = new Vuex.Store({
                       name: item.name,
                       plural: item.plural,
                       totalValue: item.val,
+                    };
+                  }
+                } else {
+                  surr.items[item.name] = {
+                    count: 1,
+                    expanded: {
+                      [VTS(x, y)]: {
+                        count: 1,
+                        dir: getDirStringFromVector(x, y),
+                        loc: {
+                          [VTS(...pos)]: {},
+                        },
+                        name: item.name,
+                        plural: item.plural,
+                        totalValue: item.val,
+                      },
+                    },
+                    locations: {
+                      [VTS(...pos)]: {},
+                    },
+                    name: item.name,
+                    plural: item.plural,
+                  };
+                }
+              });
+            }
+            if (tile.gold) {
+              if (surr.items["gold"]) {
+                surr.items["gold"].count++;
+                surr.items["gold"].locations[VTS(...pos)] = {};
+                surr.items["gold"].expanded[VTS(x, y)] = {
+                  count: tile.gold,
+                  dir: getDirStringFromVector(x, y),
+                  loc: {
+                    [VTS(...pos)]: {},
+                  },
+                  name: "gold",
+                  plural: "gold",
+                  totalValue: tile.gold,
+                };
+              } else {
+                surr.items["gold"] = {
+                  count: tile.gold,
+                  expanded: {
+                    [VTS(x, y)]: {
+                      count: tile.gold,
+                      dir: getDirStringFromVector(x, y),
+                      loc: {
+                        [VTS(...pos)]: {},
+                      },
+                      name: "gold",
+                      plural: "gold",
+                      totalValue: tile.gold,
                     },
                   },
                   locations: {
                     [VTS(...pos)]: {},
                   },
-                  name: item.name,
-                  plural: item.plural,
+                  name: "gold",
+                  plural: "gold",
                 };
               }
-            });
-          }
-          if (tile.gold) {
-            if (surr.items["gold"]) {
-              surr.items["gold"].count++;
-              surr.items["gold"].locations[VTS(...pos)] = {};
-              surr.items["gold"].expanded[VTS(x, y)] = {
-                count: tile.gold,
-                dir: getDirStringFromVector(x, y),
-                loc: {
-                  [VTS(...pos)]: {},
-                },
-                name: "gold",
-                plural: "gold",
-                totalValue: tile.gold,
-              };
-            } else {
-              surr.items["gold"] = {
-                count: tile.gold,
-                expanded: {
-                  [VTS(x, y)]: {
-                    count: tile.gold,
-                    dir: getDirStringFromVector(x, y),
-                    loc: {
-                      [VTS(...pos)]: {},
-                    },
-                    name: "gold",
-                    plural: "gold",
-                    totalValue: tile.gold,
-                  },
-                },
-                locations: {
-                  [VTS(...pos)]: {},
-                },
-                name: "gold",
-                plural: "gold",
-              };
             }
           }
         }
+      } else if (state.worldState === WorldState.Dungeon) {
+
       }
 
       surr.creatures.sort((a, b) => {
